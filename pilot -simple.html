@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pilot experiment - hysteresis in category boundaries</title>
+    <script src="jspsych-6.1.0/jspsych.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-animation.js"></script>
+    <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+  </head>
+  <body></body>
+  <script>
+
+    /* create timeline */
+    var timeline = [];
+
+    /* define welcome message trial */
+    var welcome = {
+      type: "html-keyboard-response",
+      stimulus: "Welcome to the pilot experiment. Press any key to begin."
+    };
+    timeline.push(welcome);
+
+    /* define instructions trial */
+    var instructions = {
+      type: "html-keyboard-response",
+      stimulus: "<p>In this experiment, a sequence of in-door-scenes images will appear in the center " +
+          "of the screen.</p>" +
+          "<p>When you feel the category is changing, press the key </p>" +
+          "<p>Press space bar to begin.</p>",
+      post_trial_gap: 2000,
+      choices: ['space']
+    };
+    timeline.push(instructions);
+
+    /* test trials */
+
+    var test_stimuli = [
+      { stimulus: "img/blue.png", data: { test_part: 'test' } },
+      { stimulus: "img/orange.png", data: { test_part: 'test'} }
+    ];
+
+    var blank = {
+      stimulus: "img/grey.jpg",
+      trial_duration: 300,
+      data: {test_part: 'blank'}
+    }
+
+    var test = {
+      stimulus: jsPsych.timelineVariable('stimulus'),
+      trial_duration: 200,
+      data: jsPsych.timelineVariable('data')
+    }
+
+    var animation_trial = {
+        type: 'animation',
+        stimuli: test_stimuli,
+        sequence_reps: 1,
+        timeline: [test, blank],
+        choices:['space'],
+        response_ends_trial: false,
+    };
+    timeline.push(animation_trial);
+
+    var debrief_block = {
+      type: "html-keyboard-response",
+      choices: jsPsych.NO_KEYS,
+      stimulus: function() {
+        var trial = jsPsych.data.get();
+      }
+    };
+    timeline.push(debrief_block);
+
+    /* start the experiment */
+    jsPsych.init({
+      timeline: timeline,
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
+  </script>
+</html>
