@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pilot experiment - hysteresis in category boundaries</title>
+    <script src="jspsych-6.1.0/jspsych.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js"></script>
+    <script src="utils.js"></script>
+    <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+  </head>
+  <body></body>
+  <script>
+
+    /* create timeline */
+    var timeline = [];
+
+    /* define welcome message trial */
+    var welcome = {
+      type: "html-keyboard-response",
+      stimulus: "Welcome to the pilot experiment. Press any key to begin."
+    };
+    timeline.push(welcome);
+
+    /* define instructions trial */
+    var instructions = {
+      type: "html-keyboard-response",
+      stimulus: "<p>In this experiment, a sequence of in-door-scenes images will appear at the center " +
+          "of the screen.</p>" +
+          "<p>When you feel a change in terms of category, press the space bar to respond </p>" +
+          "<p>Now please press space bar to BEGIN.</p>",
+      post_trial_gap: 2000,
+      choices: ['space']
+    };
+    timeline.push(instructions);
+
+    /* test trials */
+
+    var stimuli = imgSelect(121, 241, 4, "stimuli/Archive/b2l_set2");
+    var test_stimuli = [];
+
+    for (var i = 0; i<stimuli.length; i++){
+        test_stimuli.push({ stimulus: stimuli[i], data: { test_part: 'test' } });
+    }
+
+
+    var blank = {
+      type: 'image-keyboard-response',
+      stimulus: "img/null.png",
+      choices: ['space'],
+      trial_duration: 200,
+      response_ends_trial: false,
+      data: {test_part: 'blank'}
+    }
+
+    var test = {
+      type: "image-keyboard-response",
+      stimulus: jsPsych.timelineVariable('stimulus'),
+      choices: ['space'],
+      trial_duration: 300,
+      response_ends_trial: false,
+      data: jsPsych.timelineVariable('data')
+    }
+
+    var test_procedure = {
+      timeline: [test, blank],
+      timeline_variables: test_stimuli
+    }
+    timeline.push(test_procedure);
+
+    /* define debrief */
+
+    var debrief_block = {
+      type: "html-keyboard-response",
+      stimulus: function() {
+
+        var trials = jsPsych.data.get();
+
+        stimuli, responses
+        jspsych.data.get().responses
+
+        var rt = Math.round(correct_trials.select('rt').mean());
+
+        return "<p>Press any key to complete the experiment. Thank you!</p>";
+
+      }
+    };
+    timeline.push(debrief_block);
+
+    /* start the experiment */
+    jsPsych.init({
+      timeline: timeline,
+    });
+  </script>
+</html>
