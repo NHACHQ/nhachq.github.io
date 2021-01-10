@@ -6,6 +6,7 @@
     <script src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-animation.js"></script>
+    <script src="utils.js"></script>
     <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
   </head>
   <body></body>
@@ -17,66 +18,63 @@
     /* define welcome message trial */
     var welcome = {
       type: "html-keyboard-response",
-      stimulus: "Welcome to the pilot experiment. Press any key to begin."
+      stimulus: "Welcome to the experiment. Press any key to begin."
     };
     timeline.push(welcome);
 
     /* define instructions trial */
     var instructions = {
       type: "html-keyboard-response",
-      stimulus: "<p>In this experiment, a sequence of in-door-scenes images will appear in the center " +
+      stimulus: "<p>This is a small pilot experiment. In this experiment, a sequence of in-door-scenes images will appear in the center " +
           "of the screen.</p>" +
-          "<p>When you feel the category is changing, press the key </p>" +
-          "<p>Press space bar to begin.</p>",
+          "<p>When you notice the category of the images has changed, press the space bar to respond.</p>" +
+          "<p>If your response is successful, the word RESPONDED will appear on the screen</p>"+
+          "<p>If you are ready, press the 'Y' to begin.</p>",
       post_trial_gap: 2000,
-      choices: ['space']
+      choices: ['y']
     };
     timeline.push(instructions);
 
     /* test trials */
 
-    var test_stimuli = [
-      { stimulus: "img/blue.png", data: { test_part: 'test' } },
-      { stimulus: "img/orange.png", data: { test_part: 'test'} }
-    ];
+    //generate arrays of images
 
-    var blank = {
-      stimulus: "img/grey.jpg",
-      trial_duration: 300,
-      data: {test_part: 'blank'}
-    }
+    var test_stimuli = [];
+
+    test_stimuli.push({ stimulus: imgSelect(0, 120, 4, "stimuli/Archive/b2l_set1")});
+    test_stimuli.push({ stimulus: imgSelect(121, 241, 4, "stimuli/Archive/b2l_set2") });
+    test_stimuli.push({ stimulus: imgSelect(0, 120, 4, "stimuli/Archive/d2b_set1") });
+    test_stimuli.push({ stimulus: imgSelect(121, 241, 4, "stimuli/Archive/d2b_set2") });
+    test_stimuli.push({ stimulus: imgSelect(0, 120, 4, "stimuli/Archive/l2d_set1") });
+    test_stimuli.push({ stimulus: imgSelect(121, 241, 4, "stimuli/Archive/l2d_set2") });
+
 
     var test = {
-      stimulus: jsPsych.timelineVariable('stimulus'),
-      trial_duration: 200,
-      data: jsPsych.timelineVariable('data')
+        type: 'animation',
+        stimuli: jsPsych.timelineVariable('stimulus'),
+        frame_time: 300,
+        frame_isi: 300,
+        choices:['space']
     }
 
-    var animation_trial = {
-        type: 'animation',
-        stimuli: test_stimuli,
-        sequence_reps: 1,
-        timeline: [test, blank],
-        choices:['space'],
-        response_ends_trial: false,
-    };
-    timeline.push(animation_trial);
-
-    var debrief_block = {
+    var gap = {
       type: "html-keyboard-response",
-      choices: jsPsych.NO_KEYS,
-      stimulus: function() {
-        var trial = jsPsych.data.get();
-      }
-    };
-    timeline.push(debrief_block);
+      stimulus: "<p> If you are ready, please press 'Y' to start the next trial.</p>",
+      post_trial_gap: 2000,
+      choices: ['y']
+    }
+
+
+    var test_procedure = {
+      timeline: [gap, test],
+      timeline_variables: test_stimuli,
+      randomize_order: true
+    }
+    timeline.push(test_procedure);
 
     /* start the experiment */
     jsPsych.init({
-      timeline: timeline,
-      on_finish: function() {
-        jsPsych.data.displayData();
-      }
+      timeline: timeline
     });
   </script>
-</html>
+  </html>
