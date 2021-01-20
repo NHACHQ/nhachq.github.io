@@ -8,35 +8,40 @@
     <script src="jspsych-6.1.0/plugins/jspsych-animation.js"></script>
     <script src="utils.js"></script>
     <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
-    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-database.js"></script>
-    <!-- TODO: Add SDKs for Firebase products that you want to use
-         https://firebase.google.com/docs/web/setup#available-libraries -->
-    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-analytics.js"></script>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.3/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.3/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.3/firebase-database.js"></script>
+
+
 
   </head>
   <body></body>
 
+  <script>
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyBvy4J-k9RM7tPZq_Fzsveo0-qUBrkqpKA",
+      authDomain: "pilot-e3b0c.firebaseapp.com",
+      databaseURL: "https://pilot-e3b0c-default-rtdb.firebaseio.com",
+      projectId: "pilot-e3b0c",
+      storageBucket: "pilot-e3b0c.appspot.com",
+      messagingSenderId: "677239736982",
+      appId: "1:677239736982:web:e6fd97490987a9e0d110b7",
+      measurementId: "G-7GCBZREB6V"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
 
-    <!-- <script>
-      // Your web app's Firebase configuration
-      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-      var firebaseConfig = {
-        apiKey: "AIzaSyBvy4J-k9RM7tPZq_Fzsveo0-qUBrkqpKA",
-        authDomain: "pilot-e3b0c.firebaseapp.com",
-        projectId: "pilot-e3b0c",
-        storageBucket: "pilot-e3b0c.appspot.com",
-        messagingSenderId: "677239736982",
-        appId: "1:677239736982:web:e6fd97490987a9e0d110b7",
-        measurementId: "G-7GCBZREB6V"
-      };
-      // Initialize Firebase
-      firebase.initializeApp(firebaseConfig);
-      firebase.analytics();
-    </script> -->
+  </script>
+
 
   <script>
+
 
     /* create timeline */
     var timeline = [];
@@ -73,14 +78,14 @@
         var b2l = imgSelect(0, 119, 4, "stimuli/"+i);
         test_stimuli.push({ stimulus: b2l[0], data: {trial_tag: c} });
         test_stimuli.push({ stimulus: b2l[1], data: {trial_tag: c+'r'} });
-        c++;
-        var l2d = imgSelect(120, 239, 4, "stimuli/"+c);
-        test_stimuli.push({ stimulus: l2d[0], data: {trial_tag: c} });
-        test_stimuli.push({ stimulus: l2d[1], data: {trial_tag: c+'r'} });
-        c++;
-        var d2b = imgSelect(240, 359, 4, "stimuli/"+i);
-        test_stimuli.push({ stimulus: d2b[0], data: {trial_tag: c} });
-        test_stimuli.push({ stimulus: d2b[1], data: {trial_tag: c+'r'} });
+        // c++;
+        // var l2d = imgSelect(120, 239, 4, "stimuli/"+c);
+        // test_stimuli.push({ stimulus: l2d[0], data: {trial_tag: c} });
+        // test_stimuli.push({ stimulus: l2d[1], data: {trial_tag: c+'r'} });
+        // c++;
+        // var d2b = imgSelect(240, 359, 4, "stimuli/"+i);
+        // test_stimuli.push({ stimulus: d2b[0], data: {trial_tag: c} });
+        // test_stimuli.push({ stimulus: d2b[1], data: {trial_tag: c+'r'} });
     }
 
     var test = {
@@ -111,7 +116,16 @@
     jsPsych.init({
       timeline: timeline,
       on_finish: function() {
-        jsPsych.data.displayData();
+          firebase!
+          var tmp = new Uint32Array(1);
+          tmp = window.crypto.getRandomValues(tmp);
+          var dbpath = firebase.auth().currentUser.uid+'/'+tmp;
+          firebase.database().ref(dbpath).set({
+              data: jsPsych.data.get().values(),
+              study: 'hysteresis-ambiguity',
+              date: Date()
+          });
+          jsPsych.data.displayData();
       }
     });
   </script>
