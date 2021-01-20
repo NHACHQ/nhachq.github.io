@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pilot experiment - hysteresis in category boundaries</title>
+    <script src="jspsych-6.1.0/jspsych.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-animation.js"></script>
+    <script src="utils.js"></script>
+    <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-database.js"></script>
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+         https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-analytics.js"></script>
+
+  </head>
+  <body></body>
+
+
+    <!-- <script>
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      var firebaseConfig = {
+        apiKey: "AIzaSyBvy4J-k9RM7tPZq_Fzsveo0-qUBrkqpKA",
+        authDomain: "pilot-e3b0c.firebaseapp.com",
+        projectId: "pilot-e3b0c",
+        storageBucket: "pilot-e3b0c.appspot.com",
+        messagingSenderId: "677239736982",
+        appId: "1:677239736982:web:e6fd97490987a9e0d110b7",
+        measurementId: "G-7GCBZREB6V"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      firebase.analytics();
+    </script> -->
+
+  <script>
+
+    /* create timeline */
+    var timeline = [];
+
+    /* define welcome message trial */
+    var welcome = {
+      type: "html-keyboard-response",
+      stimulus: "Welcome to the experiment. Press any key to begin."
+    };
+    timeline.push(welcome);
+
+    /* define instructions trial */
+    var instructions = {
+      type: "html-keyboard-response",
+      stimulus: "<p>This is a small pilot experiment. In this experiment, a sequence of in-door-scenes images will appear in the center " +
+          "of the screen.</p>" +
+          "<p>When you notice the category of the images has changed, press the space bar to respond.</p>" +
+          "<p>Your first response of each image sequence will be recorded. </p>"+
+         // "<p>If your response is successful, the word RESPONDED will appear on the screen</p>"+
+          "<p>If you are ready, press the 'Y' to begin.</p>",
+      post_trial_gap: 2000,
+      choices: ['y']
+    };
+    timeline.push(instructions);
+
+    /* test trials */
+
+    var fileNames = ['0'];
+    //var fileNames = ['b21_set1','b21_set2','d2b_set1','d2b_set2','l2d_set1','l2d_set'];
+    //generate arrays of images
+
+    var test_stimuli = [];
+
+    // test_stimuli.push({ stimulus: imgSelect(0, 120, 4, "stimuli/Archive/b2l_set1"), data: {tiral_tag: 'b21_set1'}});
+    // test_stimuli.push({ stimulus: imgSelect(121, 241, 4, "stimuli/Archive/b2l_set2"), data: {tiral_tag: 'b21_set2'} });
+    // test_stimuli.push({ stimulus: imgSelect(0, 120, 4, "stimuli/Archive/d2b_set1"), data: {tiral_tag: 'd2b_set1'} });
+    // test_stimuli.push({ stimulus: imgSelect(121, 241, 4, "stimuli/Archive/d2b_set2"), data: {tiral_tag: 'd2b_set2'} });
+    // test_stimuli.push({ stimulus: imgSelect(0, 120, 4, "stimuli/Archive/l2d_set1"), data: {tiral_tag: 'l2d_set1'} });
+    // test_stimuli.push({ stimulus: imgSelect(121, 241, 4, "stimuli/Archive/l2d_set2"), data: {tiral_tag: 'l2d_set'} });
+
+    for(var i = 0; i<fileNames.length; i++){
+        images = imgSelect(0, 120, 4, "stimuli/"+fileNames[i]);
+        test_stimuli.push({ stimulus: images[0], data: {trial_tag: fileNames[i]} });
+        test_stimuli.push({ stimulus: images[1], data: {trial_tag: fileNames[i]+'r'} });
+    }
+
+    var test = {
+        type: 'animation',
+        stimuli: jsPsych.timelineVariable('stimulus'),
+        frame_time: 300,
+        frame_isi: 300,
+        choices:['space'],
+        data: jsPsych.timelineVariable('data')
+    }
+
+    var gap = {
+      type: "html-keyboard-response",
+      stimulus: "<p> Take a break. If you are ready, please press 'Y' to start the next trial.</p>",
+      post_trial_gap: 2000,
+      choices: ['y']
+    }
+
+
+    var test_procedure = {
+      timeline: [gap, test],
+      timeline_variables: test_stimuli,
+      randomize_order: true
+    }
+    timeline.push(test_procedure);
+
+    /* start the experiment */
+    jsPsych.init({
+      timeline: timeline,
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
+  </script>
+  </html>
