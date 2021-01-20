@@ -64,23 +64,23 @@
 
     /* test trials */
 
-    var fileNames = ['0'];
-    //var fileNames = ['b21_set1','b21_set2','d2b_set1','d2b_set2','l2d_set1','l2d_set'];
     //generate arrays of images
 
     var test_stimuli = [];
-
-    // test_stimuli.push({ stimulus: imgSelect(0, 120, 4, "stimuli/Archive/b2l_set1"), data: {tiral_tag: 'b21_set1'}});
-    // test_stimuli.push({ stimulus: imgSelect(121, 241, 4, "stimuli/Archive/b2l_set2"), data: {tiral_tag: 'b21_set2'} });
-    // test_stimuli.push({ stimulus: imgSelect(0, 120, 4, "stimuli/Archive/d2b_set1"), data: {tiral_tag: 'd2b_set1'} });
-    // test_stimuli.push({ stimulus: imgSelect(121, 241, 4, "stimuli/Archive/d2b_set2"), data: {tiral_tag: 'd2b_set2'} });
-    // test_stimuli.push({ stimulus: imgSelect(0, 120, 4, "stimuli/Archive/l2d_set1"), data: {tiral_tag: 'l2d_set1'} });
-    // test_stimuli.push({ stimulus: imgSelect(121, 241, 4, "stimuli/Archive/l2d_set2"), data: {tiral_tag: 'l2d_set'} });
-
-    for(var i = 0; i<fileNames.length; i++){
-        images = imgSelect(0, 120, 4, "stimuli/"+fileNames[i]);
-        test_stimuli.push({ stimulus: images[0], data: {trial_tag: fileNames[i]} });
-        test_stimuli.push({ stimulus: images[1], data: {trial_tag: fileNames[i]+'r'} });
+    var c=0;
+    for(var i = 0; i<1; i++){
+        c = 3*i;
+        var b2l = imgSelect(0, 119, 4, "stimuli/"+i);
+        test_stimuli.push({ stimulus: b2l[0], data: {trial_tag: c} });
+        test_stimuli.push({ stimulus: b2l[1], data: {trial_tag: c+'r'} });
+        c++;
+        var l2d = imgSelect(120, 239, 4, "stimuli/"+c);
+        test_stimuli.push({ stimulus: l2d[0], data: {trial_tag: c} });
+        test_stimuli.push({ stimulus: l2d[1], data: {trial_tag: c+'r'} });
+        c++;
+        var d2b = imgSelect(240, 359, 4, "stimuli/"+i);
+        test_stimuli.push({ stimulus: d2b[0], data: {trial_tag: c} });
+        test_stimuli.push({ stimulus: d2b[1], data: {trial_tag: c+'r'} });
     }
 
     var test = {
