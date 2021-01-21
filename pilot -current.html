@@ -20,18 +20,21 @@
       <script src="https://www.gstatic.com/firebasejs/8.2.3/firebase-database.js"></script>
 </body>
 
-  <script>
+  <script type="text/javascirpt">
       var firebaseConfig = {
           apiKey: "AIzaSyDMRhw1P0_yfb3nv1mdEfvTtH8NwyJprSQ",
           authDomain: "primal-stock-265501.firebaseapp.com",
           projectId: "primal-stock-265501",
           storageBucket: "primal-stock-265501.appspot.com",
           messagingSenderId: "938762109945",
-          appId: "1:938762109945:web:73290be234c06e8eee3328",
-          measurementId: "G-WLYJ0LR46G"
+          appId: "1:938762109945:web:73290be234c06e8eee3328"
     };
 // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
+    firebase.auth().signInAnonymously().catch(function(error) {
+           var errorCode = error.code;
+           var errorMessage = error.message;
+       });
     // // Your web app's Firebase configuration
     // // For Firebase JS SDK v7.20.0 and later, measurementId is optional
     // // For Firebase JS SDK v7.20.0 and later, measurementId is optional
