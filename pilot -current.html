@@ -123,10 +123,7 @@
       timeline: timeline,
       on_finish: function() {
           //firebase!
-<<<<<<< HEAD
           jsPsych.data.displayData();
-=======
->>>>>>> d7976949a7faa77c74ce483882d1c4397e30cc7b
           var tmp = new Uint32Array(1);
           tmp = window.crypto.getRandomValues(tmp);
           var dbpath = firebase.auth().currentUser.uid+'/'+tmp;
