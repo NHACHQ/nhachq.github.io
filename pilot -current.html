@@ -228,7 +228,6 @@
       timeline: timeline,
       on_finish: function() {
           //firebase!
-          jsPsych.data.displayData();
           var tmp = new Uint32Array(1);
           tmp = window.crypto.getRandomValues(tmp);
           var dbpath = firebase.auth().currentUser.uid+'/'+tmp;
@@ -237,7 +236,7 @@
               study: 'hysteresis-ambiguity',
               date: Date()
           });
-          jsPsych.data.displayData();
+         // jsPsych.data.displayData();
       }
     });
   </script>
