@@ -49,38 +49,55 @@
     /* define instructions trial */
     var instructions = {
       type: "html-keyboard-response",
-      stimulus: "<p>This is a small pilot experiment. In this experiment, a sequence of in-door-scenes images will appear in the center " +
+      stimulus: "<p>This is a small pilot experiment. In each trial, a sequence of in-door-scenes images will appear on the center " +
           "of the screen.</p>" +
-          "<p>When you notice the category of the images has changed, press the space bar to respond.</p>" +
+          "<p>When you notice the category of the images has changed, press the SPACE BAR to respond.</p>" +
           "<p>Your first response of each image sequence will be recorded. </p>"+
          // "<p>If your response is successful, the word RESPONDED will appear on the screen</p>"+
+          "<p>You will first start with a practice trial, and then 4 blocks of test trials.</p>" +
           "<p>If you are ready, press the 'Y' to begin.</p>",
       post_trial_gap: 2000,
       choices: ['y']
     };
     timeline.push(instructions);
 
-    /* test trials */
 
     //generate arrays of images
 
-    var test_stimuli = [];
+    var test_stimuli = []; //0-32
+    var test_stimuli_opp = []; // 0r - 32r
     var c=0;
-    for(var i = 0; i<11; i++){
+    for(var i = 0; i<2; i++){
         c = 3*i;
         var b2l = imgSelect(0, 119, 4, "stimuli/"+i);
         test_stimuli.push({ stimulus: b2l[0], data: {trial_tag: c} });
-        test_stimuli.push({ stimulus: b2l[1], data: {trial_tag: c+'r'} });
+        test_stimuli_opp.push({ stimulus: b2l[1], data: {trial_tag: c+'r'} });
         c++;
         var l2d = imgSelect(120, 239, 4, "stimuli/"+i);
         test_stimuli.push({ stimulus: l2d[0], data: {trial_tag: c} });
-        test_stimuli.push({ stimulus: l2d[1], data: {trial_tag: c+'r'} });
+        test_stimuli_opp.push({ stimulus: l2d[1], data: {trial_tag: c+'r'} });
         c++;
         var d2b = imgSelect(240, 359, 4, "stimuli/"+i);
         test_stimuli.push({ stimulus: d2b[0], data: {trial_tag: c} });
-        test_stimuli.push({ stimulus: d2b[1], data: {trial_tag: c+'r'} });
+        test_stimuli_opp.push({ stimulus: d2b[1], data: {trial_tag: c+'r'} });
     }
 
+    // setting up stimuli for every test block
+    // stimuli_b12 = shuffle(test_stimuli[1:17].concat(test_stimuli_opp[1:17]));
+    // stimuli_b1 = stimuli_b12[0:16];
+    // stimuli_b2 = stimuli_b12[16:];
+    // stimuli_b3 = shuffle(test_stimuli[17:]);
+    // stimuli_b4 = shuffle(test_stimuli[17:]);
+
+    //only for debugging
+    stimuli_b12 = shuffle((test_stimuli.slice(0,3)).concat(test_stimuli_opp.slice(0,3)));
+    stimuli_b1 = stimuli_b12.slice(0,3);
+    stimuli_b2 = stimuli_b12.slice(3,6);
+    stimuli_b3 = shuffle(test_stimuli.slice(3,6));
+    stimuli_b4 = shuffle(test_stimuli_opp.slice(3,6));
+
+
+    //timeline variables
     var test = {
         type: 'animation',
         stimuli: jsPsych.timelineVariable('stimulus'),
@@ -90,26 +107,118 @@
         data: jsPsych.timelineVariable('data')
     }
 
-    var gap = {
+    var gap1 = {
       type: "html-keyboard-response",
-      stimulus: "<p> Take a break. If you are ready, please press 'Y' to start the next trial.</p>",
+      stimulus: "<p> Good job! You hava completed the block 1 of four blocks. Now take a break. If you are ready, please press 'Y' to start the next trial block.</p>"+
+                "<p> Remember, for the next trials, press the SPACE BAR to indicate your responses </p>",
       post_trial_gap: 1000,
       choices: ['y']
     }
+    var gap2 = {
+      type: "html-keyboard-response",
+      stimulus: "<p> Good job! You hava completed the block 2 of four blocks. Now take a break. If you are ready, please press 'Y' to start the next trial block.</p>"+
+                "<p> Remember, for the next trials, press the SPACE BAR to indicate your responses </p>",
+      post_trial_gap: 1000,
+      choices: ['y']
+    }
+    var gap3 = {
+      type: "html-keyboard-response",
+      stimulus: "<p> Good job! You hava completed the block 3 of four blocks. Only one last block of trials.  Now take a break. If you are ready, please press 'Y' to start the next trial block.</p>"+
+                "<p> Remember, for the next trials, press the SPACE BAR to indicate your responses </p>",
+      post_trial_gap: 1000,
+      choices: ['y']
+    }
+
 
     var fixation = {
       type: 'html-keyboard-response',
       stimulus: '<div style="font-size:60px;">+</div>',
       choices: jsPsych.NO_KEYS,
-      trial_duration: 1000
+      trial_duration: 1000,
+      post_trial_gap: 1000
     }
 
-    var test_procedure = {
-      timeline: [gap,fixation,test],
-      timeline_variables: test_stimuli,
+
+    var practice = {
+        type: 'animation',
+        stimuli: test_stimuli[0]['stimulus'],
+        frame_time: 300,
+        frame_isi: 300,
+        prompt: 'Press the space bar to respond if you think the category of the image has been changed',
+        choices: ['space'],
+    }
+
+
+
+    // var response = {
+    //   type: 'html-keyboard-response',
+    //   stimulus: function(){
+    //     var last_trial_correct = jsPsych.data.getLastTimelineData();
+    //     if(last_trial_correct['responses'].length >1){
+    //       return "<p>Good job! You responded with the right key. Now press any key to continue </p>";
+    //     } else {
+    //       return "<p>You responded with the wrong key/ you forgot to respond. </p>"+
+    //       "<p> Please remember to press the space bar to respond. Now press any key to continue </p>"
+    //     }
+    //   }
+    // }
+
+
+    var start = {
+        type: "html-keyboard-response",
+        stimulus: "<p> Now we will start the test trials. If you are ready, please press 'Y' to start the next trial block.</p>"+
+                  "<p> Remember, for the next trials, press the SPACE BAR to indicate your responses </p>",
+        post_trial_gap: 1000,
+        choices: ['y']
+    }
+
+    var block1 = {
+      timeline: [fixation,test],
+      timeline_variables: stimuli_b1,
       randomize_order: true
     }
-    timeline.push(test_procedure);
+
+    var block2 = {
+      timeline: [fixation,test],
+      timeline_variables: stimuli_b2,
+      randomize_order: true
+    }
+
+    var block3 = {
+      timeline: [fixation,test],
+      timeline_variables: stimuli_b3,
+      randomize_order: true
+    }
+    var block4 = {
+      timeline: [fixation,test],
+      timeline_variables: stimuli_b4,
+      randomize_order: true
+    }
+
+    var debriefing = {
+        type: "html-keyboard-response",
+        stimulus: "<p> This is the end of the experiment </p> " +
+            "<p>Thank you for your participation!</p>" +
+            "<p>Now you can press any key to end the experiment or simply close the website</p>",
+        post_trial_gap: 2000,
+        choices: null
+    }
+
+    //timeline manipulation
+    timeline.push(practice);
+//    timeline.push(response);
+    timeline.push(start);
+    timeline.push(block1);
+    timeline.push(gap1);
+    timeline.push(block2);
+    timeline.push(gap2);
+    timeline.push(block3);
+    timeline.push(gap3);
+    timeline.push(block4);
+    timeline.push(debriefing);
+
+
+
 
     /* start the experiment */
     jsPsych.init({
@@ -130,4 +239,3 @@
     });
   </script>
   </html>
-
