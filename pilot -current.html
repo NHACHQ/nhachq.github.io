@@ -69,15 +69,15 @@
     var c=0;
     for(var i = 0; i<2; i++){
         c = 3*i;
-        var b2l = imgSelect(0, 119, 4, "stimuli/"+i);
+        var b2l = imgSelect(0, 119, 4, "stimuli/"+i+'/webp');
         test_stimuli.push({ stimulus: b2l[0], data: {trial_tag: c} });
         test_stimuli_opp.push({ stimulus: b2l[1], data: {trial_tag: c+'r'} });
         c++;
-        var l2d = imgSelect(120, 239, 4, "stimuli/"+i);
+        var l2d = imgSelect(120, 239, 4, "stimuli/"+i+'/webp');
         test_stimuli.push({ stimulus: l2d[0], data: {trial_tag: c} });
         test_stimuli_opp.push({ stimulus: l2d[1], data: {trial_tag: c+'r'} });
         c++;
-        var d2b = imgSelect(240, 359, 4, "stimuli/"+i);
+        var d2b = imgSelect(240, 359, 4, "stimuli/"+i+'/webp');
         test_stimuli.push({ stimulus: d2b[0], data: {trial_tag: c} });
         test_stimuli_opp.push({ stimulus: d2b[1], data: {trial_tag: c+'r'} });
     }
