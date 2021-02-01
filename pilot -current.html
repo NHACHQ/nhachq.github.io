@@ -50,8 +50,10 @@
     var instructions = {
       type: "html-keyboard-response",
       stimulus: "<p>This is a small pilot experiment. In each trial, a sequence of in-door-scenes images will appear on the center " +
-          "of the screen.</p>" +
-          "<p>When you notice the category of the images has changed, press the SPACE BAR to respond.</p>" +
+          "of the screen. You will find three categories of the in-door-scenes: bedroom, living room and dining room.</p>" +
+          "<p>You will be presented with a staring scene of one of the three categories, which will gradually change to another category.
+           For example, you first see an image of bedroom on the screen, which may gradually change to an image of  living room or dining room.
+           When you notice the category of the images has changed, press the SPACE BAR to respond.</p>" +
           "<p>Your first response of each image sequence will be recorded. </p>"+
          // "<p>If your response is successful, the word RESPONDED will appear on the screen</p>"+
           "<p>You will first start with a practice trial, and then 4 blocks of test trials.</p>" +
@@ -67,7 +69,7 @@
     var test_stimuli = []; //0-32
     var test_stimuli_opp = []; // 0r - 32r
     var c=0;
-    for(var i = 0; i<2; i++){
+    for(var i = 0; i<11; i++){
         c = 3*i;
         var b2l = imgSelect(0, 119, 4, "stimuli/"+i+'/webp');
         test_stimuli.push({ stimulus: b2l[0], data: {trial_tag: c} });
@@ -82,19 +84,20 @@
         test_stimuli_opp.push({ stimulus: d2b[1], data: {trial_tag: c+'r'} });
     }
 
-    // setting up stimuli for every test block
-    // stimuli_b12 = shuffle(test_stimuli[1:17].concat(test_stimuli_opp[1:17]));
-    // stimuli_b1 = stimuli_b12[0:16];
-    // stimuli_b2 = stimuli_b12[16:];
-    // stimuli_b3 = shuffle(test_stimuli[17:]);
-    // stimuli_b4 = shuffle(test_stimuli[17:]);
-
     //only for debugging
-    stimuli_b12 = shuffle((test_stimuli.slice(0,3)).concat(test_stimuli_opp.slice(0,3)));
-    stimuli_b1 = stimuli_b12.slice(0,3);
-    stimuli_b2 = stimuli_b12.slice(3,6);
-    stimuli_b3 = shuffle(test_stimuli.slice(3,6));
-    stimuli_b4 = shuffle(test_stimuli_opp.slice(3,6));
+    // stimuli_b12 = shuffle((test_stimuli.slice(0,3)).concat(test_stimuli_opp.slice(0,3)));
+    // stimuli_b1 = stimuli_b12.slice(0,3);
+    // stimuli_b2 = stimuli_b12.slice(3,6);
+    // stimuli_b3 = shuffle(test_stimuli.slice(3,6));
+    // stimuli_b4 = shuffle(test_stimuli_opp.slice(3,6));
+
+
+    // setting up stimuli for every test block
+    stimuli_b12 = shuffle((test_stimuli.slice(1,17)).concat(test_stimuli_opp.slice(1,17)));
+    stimuli_b1 = stimuli_b12.slice(0,16);
+    stimuli_b2 = stimuli_b12.slice(16,32);
+    stimuli_b3 = shuffle(test_stimuli.slice(17,33));
+    stimuli_b4 = shuffle(test_stimuli_opp.slice(17,33));
 
 
     //timeline variables
