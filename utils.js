@@ -6,9 +6,15 @@ function imgSelect(start, end, interval, path){
     var s;
     var images = [];
     var images_r = [];
+    var c;
     for (var i = start ;i<=end; i++){
+        if (i>359){
+            c = i%360;
+        }else {
+            c = i;
+        }
         if (i%interval == 0){
-            s = "000000" + i;
+            s = "000000" + c;
             s = s.substr(s.length-size);
             // images.push(path+"/"+s+".jpg");
             // images_r.unshift(path+"/"+s+".jpg");
