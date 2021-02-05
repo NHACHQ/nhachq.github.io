@@ -69,7 +69,7 @@
 
 
     //generate arrays of images
-
+    var paths = [];
     var test_stimuli = []; //0-32
     var test_stimuli_opp = []; // 0r - 32r
     var boundaries = [[85.0, 178.0, 315.0],
@@ -112,7 +112,9 @@
         var d2b = imgSelect(deviation[0]+boundaries[i][2], deviation[1]+boundaries[i][2], 3, "stimuli/"+i+'/webp');
         test_stimuli.push({ stimulus: d2b[0], data: {trial_tag: c} });
         test_stimuli_opp.push({ stimulus: d2b[1], data: {trial_tag: c+'r'} });
+        paths.push(b2l,l2d,d2b);
     }
+
 
     //only for debugging
     // stimuli_b12 = shuffle((test_stimuli.slice(0,3)).concat(test_stimuli_opp.slice(0,3)));
@@ -251,11 +253,10 @@
     timeline.push(debriefing);
 
 
-
-
     /* start the experiment */
     jsPsych.init({
       timeline: timeline,
+      preload_images: paths,
       on_finish: function() {
           //firebase!
           var tmp = new Uint32Array(1);
