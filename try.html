@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pilot experiment - hysteresis in category boundaries</title>
+    <script src="jspsych-6.1.0/jspsych.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-animation.js"></script>
+    <script src="utils.js"></script>
+    <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-database.js"></script>
+​
+​
+  </head>
+​
+
+​
+  <script>
+
+  var firebaseConfig = {
+        apiKey: "AIzaSyBvy4J-k9RM7tPZq_Fzsveo0-qUBrkqpKA",
+        authDomain: "pilot-e3b0c.firebaseapp.com",
+        databaseURL: "https://pilot-e3b0c-default-rtdb.firebaseio.com",
+        projectId: "pilot-e3b0c",
+        storageBucket: "pilot-e3b0c.appspot.com",
+        messagingSenderId: "677239736982",
+        appId: "1:677239736982:web:e6fd97490987a9e0d110b7",
+        measurementId: "G-7GCBZREB6V"
+      };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    // login anonymous user
+    firebase.auth().signInAnonymously().catch(function(error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+    });
+    /* create timeline */
+    var timeline = [];
+
+    /* define welcome message trial */
+    var welcome = {
+      type: "html-keyboard-response",
+      stimulus: "<p>Welcome to the experiment.</p>"+
+      " <p>The experiment itself takes about 20 minutes, and the overall"+
+      " time may vary due to how mucn break you decide to take in the middle of the experiment."+
+      " Please allocate about 30 mimutes for this experiment.</p>"+
+      "<p>Press any key to see the detailed instructions.</p>"
+    };
+    timeline.push(welcome);
+
+    /* define instructions trial */
+    var instructions = {
+      type: "html-keyboard-response",
+      stimulus: "<p>In each trial, a sequence of in-door-scenes images will appear on the center " +
+          "of the screen. You will find three categories of the in-door-scenes: bedroom, living room and dining room.</p>" +
+          "<p>You will be presented with a staring scene of one of the three categories, which will gradually change to another category."+
+          " For example, you first see an image of bedroom on the screen, which may gradually change to an image of  living room or dining room."+
+          " When you notice the category of the images has changed, press the SPACE BAR to respond.</p>" +
+          "<p>Your first response of each image sequence will be recorded. </p>"+
+         // "<p>If your response is successful, the word RESPONDED will appear on the screen</p>"+
+          "<p>You will now start with a practice trial, and then 4 blocks of test trials.</p>" +
+          "<p>If you are ready, press the 'Y' to begin.</p>",
+      post_trial_gap: 2000,
+      choices: ['y']
+    };
+    timeline.push(instructions);
+
+
+    //generate arrays of images
+    var paths = [];
+    var test_stimuli = []; //0-32
+    var test_stimuli_opp = []; // 0r - 32r
+    var boundaries = [[85.0, 178.0, 315.0],
+                        [81.0, 170.0, 333.0],
+                        [87.0, 174.0, 330.0],
+                         [90.0, 170.0, 321.0],
+                         [83.0, 171.0, 325.0],
+                        [84.0, 171.0, 326.0],
+                        [77.0, 169.0, 325.0],
+                         [85.0, 169.0, 331.0],
+                         [87.0, 177.0, 318.0],
+                         [88.0, 175.0, 320.0],
+                         [82.0, 169.0, 324.0]];
+
+
+    var c=0;
+    var deviation;
+    for(var i = 0; i<11; i++){
+        c = 3*i;
+        //caliberation
+        if (i%3==0){
+            deviation = [-60,30];
+        }
+        else if (i%3==1){
+            deviation = [-45,45];
+        }
+        else {
+            deviation = [-30,60];
+        }
+
+
+        var b2l = imgSelect(deviation[0]+boundaries[i][0], deviation[1]+boundaries[i][0], 3, "stimuli/"+i+'/webp');
+        test_stimuli.push({ stimulus: b2l[0], data: {trial_tag: c} });
+        test_stimuli_opp.push({ stimulus: b2l[1], data: {trial_tag: c+'r'} });
+        c++;
+        var l2d = imgSelect(deviation[0]+boundaries[i][1], deviation[1]+boundaries[i][1], 3, "stimuli/"+i+'/webp');
+        test_stimuli.push({ stimulus: l2d[0], data: {trial_tag: c} });
+        test_stimuli_opp.push({ stimulus: l2d[1], data: {trial_tag: c+'r'} });
+        c++;
+        var d2b = imgSelect(deviation[0]+boundaries[i][2], deviation[1]+boundaries[i][2], 3, "stimuli/"+i+'/webp');
+        test_stimuli.push({ stimulus: d2b[0], data: {trial_tag: c} });
+        test_stimuli_opp.push({ stimulus: d2b[1], data: {trial_tag: c+'r'} });
+        paths.push(b2l,l2d,d2b);
+    }
+
+
+    //only for debugging
+    stimuli_b12 = shuffle((test_stimuli.slice(0,3)).concat(test_stimuli_opp.slice(0,3)));
+    stimuli_b1 = stimuli_b12.slice(0,3);
+    stimuli_b2 = stimuli_b12.slice(3,6);
+    stimuli_b3 = shuffle(test_stimuli.slice(3,6));
+    stimuli_b4 = shuffle(test_stimuli_opp.slice(3,6));
+
+
+    // setting up stimuli for every test block
+    //stimuli_b12 = shuffle((test_stimuli.slice(1,17)).concat(test_stimuli_opp.slice(1,17)));
+    //stimuli_b1 = stimuli_b12.slice(0,16);
+    //stimuli_b2 = stimuli_b12.slice(16,32);
+    //stimuli_b3 = shuffle(test_stimuli.slice(17,33));
+    //stimuli_b4 = shuffle(test_stimuli_opp.slice(17,33));
+
+
+    //timeline variables
+    var test = {
+        type: 'animation',
+        stimuli: jsPsych.timelineVariable('stimulus'),
+        frame_time: 200,
+        frame_isi: 300,
+        choices:['space'],
+        data: jsPsych.timelineVariable('data')
+    }
+
+    var gap1 = {
+      type: "html-keyboard-response",
+      stimulus: "<p> Good job! You hava completed the block 1 of four blocks. Now take a break. If you are ready, please press 'Y' to start the next trial block.</p>"+
+                "<p> Remember, for the next trials, press the SPACE BAR to indicate your responses </p>",
+      post_trial_gap: 1000,
+      choices: ['y']
+    }
+    var gap2 = {
+      type: "html-keyboard-response",
+      stimulus: "<p> Good job! You hava completed the block 2 of four blocks. Now take a break. If you are ready, please press 'Y' to start the next trial block.</p>"+
+                "<p> Remember, for the next trials, press the SPACE BAR to indicate your responses </p>",
+      post_trial_gap: 1000,
+      choices: ['y']
+    }
+    var gap3 = {
+      type: "html-keyboard-response",
+      stimulus: "<p> Good job! You hava completed the block 3 of four blocks. Only one last block of trials.  Now take a break. If you are ready, please press 'Y' to start the next trial block.</p>"+
+                "<p> Remember, for the next trials, press the SPACE BAR to indicate your responses </p>",
+      post_trial_gap: 1000,
+      choices: ['y']
+    }
+
+
+    var fixation = {
+      type: 'html-keyboard-response',
+      stimulus: '<div style="font-size:60px;">+</div>',
+      choices: jsPsych.NO_KEYS,
+      trial_duration: 1000,
+      post_trial_gap: 1000
+    }
+
+
+    var practice = {
+        type: 'animation',
+        stimuli: test_stimuli[0]['stimulus'],
+        frame_time: 200,
+        frame_isi: 300,
+        prompt: 'Press the space bar to respond if you think the category of the image has been changed',
+        choices: ['space']
+    }
+
+
+
+    // var response = {
+    //   type: 'html-keyboard-response',
+    //   stimulus: function(){
+    //     var last_trial_correct = jsPsych.data.getLastTimelineData();
+    //     if(last_trial_correct['responses'].length >1){
+    //       return "<p>Good job! You responded with the right key. Now press any key to continue </p>";
+    //     } else {
+    //       return "<p>You responded with the wrong key/ you forgot to respond. </p>"+
+    //       "<p> Please remember to press the space bar to respond. Now press any key to continue </p>"
+    //     }
+    //   }
+    // }
+
+
+    var start = {
+        type: "html-keyboard-response",
+        stimulus: "<p> Now we will start the test trials. If you are ready, please press 'Y' to start the next trial block.</p>"+
+                  "<p> Remember, for the next trials, press the SPACE BAR to indicate your responses </p>",
+        post_trial_gap: 1000,
+        choices: ['y']
+    }
+
+    var block1 = {
+      timeline: [fixation,test],
+      timeline_variables: stimuli_b1,
+      randomize_order: true
+    }
+
+    var block2 = {
+      timeline: [fixation,test],
+      timeline_variables: stimuli_b2,
+      randomize_order: true
+    }
+
+    var block3 = {
+      timeline: [fixation,test],
+      timeline_variables: stimuli_b3,
+      randomize_order: true
+    }
+    var block4 = {
+      timeline: [fixation,test],
+      timeline_variables: stimuli_b4,
+      randomize_order: true
+    }
+
+    var debriefing = {
+        type: "html-keyboard-response",
+        stimulus: "<p> This is the end of the experiment </p> " +
+            "<p>Thank you for your participation!</p>" +
+            "<p>Now please press any key to end the experiment.</p>",
+        post_trial_gap: 2000,
+        choices: null
+    }
+
+    //timeline manipulation
+    timeline.push(practice);
+//    timeline.push(response);
+    timeline.push(start);
+    timeline.push(block1);
+    timeline.push(gap1);
+    timeline.push(block2);
+    timeline.push(gap2);
+    timeline.push(block3);
+    timeline.push(gap3);
+    timeline.push(block4);
+    timeline.push(debriefing);
+
+
+    /* start the experiment */
+    jsPsych.init({
+      timeline: timeline,
+      preload_images: paths,
+      on_finish: function() {
+          //firebase!
+          var tmp = new Uint32Array(1);
+          tmp = window.crypto.getRandomValues(tmp);
+          var dbpath = firebase.auth().currentUser.uid+'/'+tmp;
+          firebase.database().ref(dbpath).set({
+              data: jsPsych.data.get().values(),
+              study: 'hysteresis-ambiguity',
+              date: Date()
+          });
+         // jsPsych.data.displayData();
+      }
+    });
+  </script>
+  </html>
