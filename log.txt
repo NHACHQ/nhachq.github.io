@@ -1,0 +1,27 @@
+
+
+version after 2021-02-10 12:42--------------------------------------------------------------
+1. experiment design:
+    # instead of divide into 4 blocks, let participants self-pregress
+    # response ends trial, and with a notice after RESPONDED
+2. code structure:
+    # created new plugin jspsych-animation-response based on the original one,
+        but added early stopping by response. Removed the data collection of
+        stimuli, as it can be traced by trial tags.
+
+**To-Do**
+1. add progress bar
+2. save data directly to github
+
+**error report**
+-----------------------
+jspsych-animation-response.js:166 Uncaught TypeError: Cannot read property 'className' of null
+    at Object.after_response [as callback_function] (jspsych-animation-response.js:166)
+    at Object.listener_function [as fn] (jspsych.js:2064)
+    at HTMLBodyElement.root_keydown_listener (jspsych.js:1983)
+after_response	@	jspsych-animation-response.js:166
+listener_function	@	jspsych.js:2064
+root_keydown_listener	@	jspsych.js:1983
+----------------------------
+info: this error also happens with the original plugin "animaion", when pressing
+buttons for nultiple times very quickly at the start of the animation trial

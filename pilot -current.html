@@ -6,6 +6,7 @@
     <script src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-animation.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-animation-response.js"></script>
     <script src="utils.js"></script>
     <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
     <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-app.js"></script>
@@ -71,6 +72,7 @@
     //generate arrays of images
     var paths = [];
     var test_stimuli = []; //0-32, 0r-32r
+    var practice_stimuli ;
     var boundaries = [[85.0, 178.0, 315.0],
                         [81.0, 170.0, 333.0],
                         [87.0, 174.0, 330.0],
@@ -86,7 +88,7 @@
 
     var c=0;
     var deviation;
-    for(var i = 0; i<1; i++){
+    for(var i = 0; i<2; i++){
         c = 3*i;
         //caliberation
         if (i%3==0){
@@ -103,24 +105,32 @@
         var b2l = imgSelect(deviation[0]+boundaries[i][0], deviation[1]+boundaries[i][0], 3, "stimuli/"+i+'/webp');
         test_stimuli.push({ stimulus: b2l[0], data: {trial_tag: c} });
         test_stimuli.push({ stimulus: b2l[1], data: {trial_tag: c+'r'} });
-        c++;
-        var l2d = imgSelect(deviation[0]+boundaries[i][1], deviation[1]+boundaries[i][1], 3, "stimuli/"+i+'/webp');
-        test_stimuli.push({ stimulus: l2d[0], data: {trial_tag: c} });
-        test_stimuli.push({ stimulus: l2d[1], data: {trial_tag: c+'r'} });
-        c++;
-        var d2b = imgSelect(deviation[0]+boundaries[i][2], deviation[1]+boundaries[i][2], 3, "stimuli/"+i+'/webp');
-        test_stimuli.push({ stimulus: d2b[0], data: {trial_tag: c} });
-        test_stimuli.push({ stimulus: d2b[1], data: {trial_tag: c+'r'} });
-        paths.push(b2l,l2d,d2b);
+        // c++;
+        // var l2d = imgSelect(deviation[0]+boundaries[i][1], deviation[1]+boundaries[i][1], 3, "stimuli/"+i+'/webp');
+        // test_stimuli.push({ stimulus: l2d[0], data: {trial_tag: c} });
+        // test_stimuli.push({ stimulus: l2d[1], data: {trial_tag: c+'r'} });
+        // c++;
+        // var d2b = imgSelect(deviation[0]+boundaries[i][2], deviation[1]+boundaries[i][2], 3, "stimuli/"+i+'/webp');
+        // test_stimuli.push({ stimulus: d2b[0], data: {trial_tag: c} });
+        // test_stimuli.push({ stimulus: d2b[1], data: {trial_tag: c+'r'} });
+        //paths.push(b2l,l2d,d2b);
+        paths.push(b2l);
     }
 
+    practice_stimuli=test_stimuli[0]['stimulus'];
+    //remove 0 and 0r
+    test_stimuli.shift();
+    test_stimuli.shift();
+
     var practice = {
-        type: 'animation',
-        stimuli: test_stimuli[0]['stimulus'],
+        //type: 'animation',
+        type: 'animation-response',
+        stimuli: practice_stimuli,
         frame_time: 200,
         frame_isi: 300,
         prompt: 'Press the space bar to respond if you think the category of the image has been changed',
-        choices: ['space']
+        choices: ['space'],
+        response_ends_trial: true
     }
 
     var start = {
@@ -132,12 +142,15 @@
     }
 
     var test = {
-        type: 'animation',
+        //type: 'animation',
+        type: 'animation-response',
         stimuli: jsPsych.timelineVariable('stimulus'),
         frame_time: 300,
         frame_isi: 300,
         choices:['space'],
-        data: jsPsych.timelineVariable('data')
+        data: jsPsych.timelineVariable('data'),
+        response_ends_trial: true,
+        post_trial_gap: 300
     }
 
     var gap = {
@@ -154,9 +167,16 @@
       trial_duration: 1000
     }
 
+    var feedback = {
+        type: 'html-keyboard-response',
+        stimulus: '<p style="font-size:20px; color:green;">Responded!</p>',
+        choices: jsPsych.NO_KEYS,
+        trial_duration: 500
+    }
+
     var test_procedure = {
-      timeline: [gap,fixation,test],
-      timeline_variables: test_stimuli,
+      timeline: [gap,fixation,test,feedback],
+      timeline_variables: test_stimuli.slice(),
       randomize_order: true
     }
 
@@ -193,6 +213,7 @@
     }
 
     timeline.push(practice);
+    timeline.push(feedback);
     timeline.push(test_procedure);
     timeline.push(save_data);
     timeline.push(debriefing);
