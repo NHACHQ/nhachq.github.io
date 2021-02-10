@@ -7,6 +7,7 @@
     <script src="jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-animation.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-animation-response.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-animation-feedback.js"></script>
     <script src="utils.js"></script>
     <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
     <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-app.js"></script>
@@ -136,13 +137,18 @@
 
     var practice = {
         //type: 'animation',
-        type: 'animation-response',
+        type: 'animation-feedback',
         stimuli: practice_stimuli,
         frame_time: 200,
         frame_isi: 300,
         prompt: '<p>Press the space bar to respond if you think the category of the image has been changed</p>',
         choices: ['space'],
-        response_ends_trial: false
+        on_finish: function() {
+            // at the end of each trial, update the progress bar
+            // based on the current value and the proportion to update for each trial
+            var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
+            jsPsych.setProgressBar(curr_progress_bar_value + (1/num_trials));
+        }
     }
 
     var start = {
@@ -150,19 +156,24 @@
         stimulus: "<p> Now we will start the test trials.  </p>",
         post_trial_gap: 1000,
         choices: ['y'],
-        trial_duration: 3000
+        trial_duration: 2000
     }
 
     var test = {
         //type: 'animation',
-        type: 'animation-response',
+        type: 'animation-feedback',
         stimuli: jsPsych.timelineVariable('stimulus'),
         frame_time: 300,
         frame_isi: 300,
         choices:['space'],
         data: jsPsych.timelineVariable('data'),
-        response_ends_trial: false,
-        post_trial_gap: 300
+        post_trial_gap: 300,
+        on_finish: function() {
+            // at the end of each trial, update the progress bar
+            // based on the current value and the proportion to update for each trial
+            var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
+            jsPsych.setProgressBar(curr_progress_bar_value + (1/num_trials));
+        }
     }
 
     var gap = {
@@ -181,21 +192,9 @@
       trial_duration: 1000
     }
 
-    var feedback = {
-        type: 'html-keyboard-response',
-        stimulus: '<p style="font-size:20px; color:green;">Responded!</p>',
-        choices: jsPsych.NO_KEYS,
-        trial_duration: 500,
-        on_finish: function() {
-            // at the end of each trial, update the progress bar
-            // based on the current value and the proportion to update for each trial
-            var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
-            jsPsych.setProgressBar(curr_progress_bar_value + (1/num_trials));
-        }
-    }
 
     var test_procedure = {
-      timeline: [gap,fixation,test,feedback],
+      timeline: [gap,fixation,test],
       timeline_variables: test_stimuli.slice(),
       randomize_order: true
     }
@@ -238,7 +237,6 @@
 
     timeline.push(fixation);
     timeline.push(practice);
-    timeline.push(feedback);
     timeline.push(start);
     timeline.push(test_procedure);
     timeline.push(save_data);
