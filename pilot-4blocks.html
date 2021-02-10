@@ -62,7 +62,7 @@
          // "<p>If your response is successful, the word RESPONDED will appear on the screen</p>"+
           "<p>You will now start with a practice trial, and then 4 blocks of test trials.</p>" +
           "<p>If you are ready, press the 'Y' to begin.</p>",
-      post_trial_gap: 1000,
+      post_trial_gap: 2000,
       choices: ['y']
     };
     timeline.push(instructions);
@@ -117,19 +117,19 @@
 
 
     //only for debugging
-    stimuli_b12 = shuffle((test_stimuli.slice(0,3)).concat(test_stimuli_opp.slice(0,3)));
-    stimuli_b1 = stimuli_b12.slice(0,3);
-    stimuli_b2 = stimuli_b12.slice(3,6);
-    stimuli_b3 = shuffle(test_stimuli.slice(3,6));
-    stimuli_b4 = shuffle(test_stimuli_opp.slice(3,6));
+    // stimuli_b12 = shuffle((test_stimuli.slice(0,3)).concat(test_stimuli_opp.slice(0,3)));
+    // stimuli_b1 = stimuli_b12.slice(0,3);
+    // stimuli_b2 = stimuli_b12.slice(3,6);
+    // stimuli_b3 = shuffle(test_stimuli.slice(3,6));
+    // stimuli_b4 = shuffle(test_stimuli_opp.slice(3,6));
 
 
     // setting up stimuli for every test block
-    //stimuli_b12 = shuffle((test_stimuli.slice(1,17)).concat(test_stimuli_opp.slice(1,17)));
-    //stimuli_b1 = stimuli_b12.slice(0,16);
-    //stimuli_b2 = stimuli_b12.slice(16,32);
-    //stimuli_b3 = shuffle(test_stimuli.slice(17,33));
-    //stimuli_b4 = shuffle(test_stimuli_opp.slice(17,33));
+    stimuli_b12 = shuffle((test_stimuli.slice(1,17)).concat(test_stimuli_opp.slice(1,17)));
+    stimuli_b1 = stimuli_b12.slice(0,16);
+    stimuli_b2 = stimuli_b12.slice(16,32);
+    stimuli_b3 = shuffle(test_stimuli.slice(17,33));
+    stimuli_b4 = shuffle(test_stimuli_opp.slice(17,33));
 
 
     //timeline variables
@@ -140,12 +140,6 @@
         frame_isi: 300,
         choices:['space'],
         data: jsPsych.timelineVariable('data'),
-        // on_start: function(test){
-        //     var x = event.keyCode;
-        //     if( x == 32){
-        //         console.log("You have successfully responded with the SPACEBAR");
-        //     }
-        // }
     }
 
     var gap1 = {
@@ -186,18 +180,7 @@
         frame_time: 200,
         frame_isi: 300,
         prompt: 'Press the space bar to respond if you think the category of the image has been changed',
-        choices: ['space'],
-        on_trial_start: function(practice){
-            var current_node_id = jsPsych.currentTimelineNodeID();
-            console.log("Current node ID is：" +current_node_id);
-            var data = jsPsych.data.getDataByTimelineNode(current_node_id);
-            if(data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode('space')){
-                jsPsych.finishTrial(null);
-            } else{
-                console.log("nothing changed");
-            }
-
-        }
+        choices: ['space']
     }
 
 
@@ -247,15 +230,6 @@
       randomize_order: true
     }
 
-    var debriefing = {
-        type: "html-keyboard-response",
-        stimulus: "<p> This is the end of the experiment </p> " +
-            "<p>Thank you for your participation!</p>" +
-            "<p>Now please press any key to end the experiment.</p>",
-        post_trial_gap: 2000,
-        choices: null
-    }
-
     var save_data = {
         type: "html-keyboard-response",
         stimulus: "<p> Saving data, please stay at this page.</p> ",
@@ -275,10 +249,27 @@
            // jsPsych.data.displayData();
         }
     }
+
+    var debriefing = {
+        type: "html-keyboard-response",
+        stimulus: "<p> This is the end of the experiment </p> " +
+            "<p>Thank you for your participation!</p>" +
+            "<p>Now please press any key to end the experiment. ",
+        post_trial_gap: 500,
+        choices: null
+    }
+
     //timeline manipulation
     timeline.push(practice);
 //    timeline.push(response);
     timeline.push(start);
+    timeline.push(block1);
+    timeline.push(gap1);
+    timeline.push(block2);
+    timeline.push(gap2);
+    timeline.push(block3);
+    timeline.push(gap3);
+    timeline.push(block4);
     timeline.push(save_data);
     timeline.push(debriefing);
 
@@ -286,9 +277,7 @@
     /* start the experiment */
     jsPsych.init({
       timeline: timeline,
-      preload_images: paths,
-      // jsPsych.data.displayData();
-
+      preload_images: paths
     });
   </script>
   </html>

@@ -70,8 +70,7 @@
 
     //generate arrays of images
     var paths = [];
-    var test_stimuli = []; //0-32
-    var test_stimuli_opp = []; // 0r - 32r
+    var test_stimuli = []; //0-32, 0r-32r
     var boundaries = [[85.0, 178.0, 315.0],
                         [81.0, 170.0, 333.0],
                         [87.0, 174.0, 330.0],
@@ -87,7 +86,7 @@
 
     var c=0;
     var deviation;
-    for(var i = 0; i<11; i++){
+    for(var i = 0; i<1; i++){
         c = 3*i;
         //caliberation
         if (i%3==0){
@@ -103,76 +102,17 @@
 
         var b2l = imgSelect(deviation[0]+boundaries[i][0], deviation[1]+boundaries[i][0], 3, "stimuli/"+i+'/webp');
         test_stimuli.push({ stimulus: b2l[0], data: {trial_tag: c} });
-        test_stimuli_opp.push({ stimulus: b2l[1], data: {trial_tag: c+'r'} });
+        test_stimuli.push({ stimulus: b2l[1], data: {trial_tag: c+'r'} });
         c++;
         var l2d = imgSelect(deviation[0]+boundaries[i][1], deviation[1]+boundaries[i][1], 3, "stimuli/"+i+'/webp');
         test_stimuli.push({ stimulus: l2d[0], data: {trial_tag: c} });
-        test_stimuli_opp.push({ stimulus: l2d[1], data: {trial_tag: c+'r'} });
+        test_stimuli.push({ stimulus: l2d[1], data: {trial_tag: c+'r'} });
         c++;
         var d2b = imgSelect(deviation[0]+boundaries[i][2], deviation[1]+boundaries[i][2], 3, "stimuli/"+i+'/webp');
         test_stimuli.push({ stimulus: d2b[0], data: {trial_tag: c} });
-        test_stimuli_opp.push({ stimulus: d2b[1], data: {trial_tag: c+'r'} });
+        test_stimuli.push({ stimulus: d2b[1], data: {trial_tag: c+'r'} });
         paths.push(b2l,l2d,d2b);
     }
-
-
-    //only for debugging
-    // stimuli_b12 = shuffle((test_stimuli.slice(0,3)).concat(test_stimuli_opp.slice(0,3)));
-    // stimuli_b1 = stimuli_b12.slice(0,3);
-    // stimuli_b2 = stimuli_b12.slice(3,6);
-    // stimuli_b3 = shuffle(test_stimuli.slice(3,6));
-    // stimuli_b4 = shuffle(test_stimuli_opp.slice(3,6));
-
-
-    // setting up stimuli for every test block
-    stimuli_b12 = shuffle((test_stimuli.slice(1,17)).concat(test_stimuli_opp.slice(1,17)));
-    stimuli_b1 = stimuli_b12.slice(0,16);
-    stimuli_b2 = stimuli_b12.slice(16,32);
-    stimuli_b3 = shuffle(test_stimuli.slice(17,33));
-    stimuli_b4 = shuffle(test_stimuli_opp.slice(17,33));
-
-
-    //timeline variables
-    var test = {
-        type: 'animation',
-        stimuli: jsPsych.timelineVariable('stimulus'),
-        frame_time: 200,
-        frame_isi: 300,
-        choices:['space'],
-        data: jsPsych.timelineVariable('data')
-    }
-
-    var gap1 = {
-      type: "html-keyboard-response",
-      stimulus: "<p> Good job! You hava completed the block 1 of four blocks. Now take a break. If you are ready, please press 'Y' to start the next trial block.</p>"+
-                "<p> Remember, for the next trials, press the SPACE BAR to indicate your responses </p>",
-      post_trial_gap: 1000,
-      choices: ['y']
-    }
-    var gap2 = {
-      type: "html-keyboard-response",
-      stimulus: "<p> Good job! You hava completed the block 2 of four blocks. Now take a break. If you are ready, please press 'Y' to start the next trial block.</p>"+
-                "<p> Remember, for the next trials, press the SPACE BAR to indicate your responses </p>",
-      post_trial_gap: 1000,
-      choices: ['y']
-    }
-    var gap3 = {
-      type: "html-keyboard-response",
-      stimulus: "<p> Good job! You hava completed the block 3 of four blocks. Only one last block of trials.  Now take a break. If you are ready, please press 'Y' to start the next trial block.</p>"+
-                "<p> Remember, for the next trials, press the SPACE BAR to indicate your responses </p>",
-      post_trial_gap: 1000,
-      choices: ['y']
-    }
-
-
-    var fixation = {
-      type: 'html-keyboard-response',
-      stimulus: '<div style="font-size:60px;">+</div>',
-      choices: jsPsych.NO_KEYS,
-      trial_duration: 1000,
-      post_trial_gap: 1000
-    }
-
 
     var practice = {
         type: 'animation',
@@ -183,22 +123,6 @@
         choices: ['space']
     }
 
-
-
-    // var response = {
-    //   type: 'html-keyboard-response',
-    //   stimulus: function(){
-    //     var last_trial_correct = jsPsych.data.getLastTimelineData();
-    //     if(last_trial_correct['responses'].length >1){
-    //       return "<p>Good job! You responded with the right key. Now press any key to continue </p>";
-    //     } else {
-    //       return "<p>You responded with the wrong key/ you forgot to respond. </p>"+
-    //       "<p> Please remember to press the space bar to respond. Now press any key to continue </p>"
-    //     }
-    //   }
-    // }
-
-
     var start = {
         type: "html-keyboard-response",
         stimulus: "<p> Now we will start the test trials. If you are ready, please press 'Y' to start the next trial block.</p>"+
@@ -207,69 +131,77 @@
         choices: ['y']
     }
 
-    var block1 = {
-      timeline: [fixation,test],
-      timeline_variables: stimuli_b1,
+    var test = {
+        type: 'animation',
+        stimuli: jsPsych.timelineVariable('stimulus'),
+        frame_time: 300,
+        frame_isi: 300,
+        choices:['space'],
+        data: jsPsych.timelineVariable('data')
+    }
+
+    var gap = {
+      type: "html-keyboard-response",
+      stimulus: "<p> Take a break. If you are ready, please press 'Y' to start the next trial.</p>",
+      post_trial_gap: 1000,
+      choices: ['y']
+    }
+
+    var fixation = {
+      type: 'html-keyboard-response',
+      stimulus: '<div style="font-size:60px;">+</div>',
+      choices: jsPsych.NO_KEYS,
+      trial_duration: 1000
+    }
+
+    var test_procedure = {
+      timeline: [gap,fixation,test],
+      timeline_variables: test_stimuli,
       randomize_order: true
     }
 
-    var block2 = {
-      timeline: [fixation,test],
-      timeline_variables: stimuli_b2,
-      randomize_order: true
-    }
 
-    var block3 = {
-      timeline: [fixation,test],
-      timeline_variables: stimuli_b3,
-      randomize_order: true
-    }
-    var block4 = {
-      timeline: [fixation,test],
-      timeline_variables: stimuli_b4,
-      randomize_order: true
+
+
+    var save_data = {
+        type: "html-keyboard-response",
+        stimulus: "<p> Saving data, please stay at this page.</p> ",
+        post_trial_gap: 2000,
+        choices: null,
+        trial_duration: 2000,
+        on_finish: function(){
+            //firebase!
+            var tmp = new Uint32Array(1);
+            tmp = window.crypto.getRandomValues(tmp);
+            var dbpath = firebase.auth().currentUser.uid+'/'+tmp;
+            firebase.database().ref(dbpath).set({
+                data: jsPsych.data.get().values(),
+                study: 'hysteresis-ambiguity',
+                date: Date()
+            });
+           // jsPsych.data.displayData();
+        }
     }
 
     var debriefing = {
         type: "html-keyboard-response",
         stimulus: "<p> This is the end of the experiment </p> " +
             "<p>Thank you for your participation!</p>" +
-            "<p>Now please press any key to end the experiment. "+
-            "After pressing a key, you will find the webpage is blank, and thant's when you can leave and close the window.</p>",
-        post_trial_gap: 2000,
+            "<p>Now please press any key to end the experiment. ",
+        post_trial_gap: 500,
         choices: null
     }
 
-    //timeline manipulation
     timeline.push(practice);
-//    timeline.push(response);
-    timeline.push(start);
-    timeline.push(block1);
-    timeline.push(gap1);
-    timeline.push(block2);
-    timeline.push(gap2);
-    timeline.push(block3);
-    timeline.push(gap3);
-    timeline.push(block4);
+    timeline.push(test_procedure);
+    timeline.push(save_data);
     timeline.push(debriefing);
 
 
     /* start the experiment */
     jsPsych.init({
       timeline: timeline,
-      preload_images: paths,
-      on_finish: function() {
-          //firebase!
-          var tmp = new Uint32Array(1);
-          tmp = window.crypto.getRandomValues(tmp);
-          var dbpath = firebase.auth().currentUser.uid+'/'+tmp;
-          firebase.database().ref(dbpath).set({
-              data: jsPsych.data.get().values(),
-              study: 'hysteresis-ambiguity',
-              date: Date()
-          });
-         // jsPsych.data.displayData();
-      }
+      preload_images: paths
     });
   </script>
   </html>
