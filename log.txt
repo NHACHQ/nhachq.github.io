@@ -25,3 +25,10 @@ root_keydown_listener	@	jspsych.js:1983
 ----------------------------
 info: this error also happens with the original plugin "animaion", when pressing
 buttons for nultiple times very quickly at the start of the animation trial
+
+
+
+version after 2021-02-10 -------------------------------------------------------
+1. experiment design:
+    # added the prograss BAR
+    #
