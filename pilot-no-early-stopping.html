@@ -142,13 +142,7 @@
         frame_isi: 300,
         prompt: '<p>Press the space bar to respond if you think the category of the image has been changed</p>',
         choices: ['space'],
-        response_ends_trial: false,
-        on_finish: function() {
-            // at the end of each trial, update the progress bar
-            // based on the current value and the proportion to update for each trial
-            var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
-            jsPsych.setProgressBar(curr_progress_bar_value + (1/num_trials));
-        }
+        response_ends_trial: false
     }
 
     var start = {
