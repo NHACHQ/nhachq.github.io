@@ -6,7 +6,7 @@
     <script src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-animation.js"></script>
-    <script src="jspsych-6.1.0/plugins/jspsych-animation-response.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-animation-feedback.js"></script>
     <script src="utils.js"></script>
     <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
     <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-app.js"></script>
@@ -44,7 +44,7 @@
       type: "html-keyboard-response",
       stimulus: "<p>Welcome to the experiment.</p>"+
       " <p>The experiment itself takes about 20 minutes, and the overall"+
-      " time may vary due to how mucn break you decide to take in the middle of the experiment."+
+      " time may vary due to how much break you decide to take in the middle of the experiment."+
       " Please allocate about 30 mimutes for this experiment. You will know your progress through the progress bar on the top of the screen. </p>"+
       "<p>Press any key to see the detailed instructions.</p>",
       on_start: function() {
@@ -57,17 +57,16 @@
     /* define instructions trial */
     var instructions = {
       type: "html-keyboard-response",
-      stimulus: "<p>In each trial, a sequence of in-door-scenes images will appear on the center " +
-          "of the screen. You will find three categories of the in-door-scenes: bedroom, living room and dining room.</p>" +
-          "<p>You will be presented with a staring scene of one of the three categories, which will gradually change to another category."+
-          " For example, you first see an image of bedroom on the screen, which may gradually change to an image of  living room or dining room."+
-          " When you notice the category of the images has changed, press the SPACE BAR to respond.</p>" +
-          "<p>Your first response of each image sequence will be recorded. </p>"+
-         // "<p>If your response is successful, the word RESPONDED will appear on the screen</p>"+
-          "<p>You will now start with a practice trial, and then 4 blocks of test trials.</p>" +
-          "<p>If you are ready, press the 'Y' to begin.</p>",
+      stimulus: "<p>In each trial, a sequence of images of indoor scenes will appear at the center of the screen. " +
+          " Scenes come from three categories: bedrooms, living rooms, and dining rooms. </p>" +
+          "<p>You will be presented with a scene, which will gradually change from one category to another."+
+          " For example, you may first see a bedroom scene, which may gradually change to a living room."+
+          " Please press the SPACE BAR as soon as you detect the change in category.</p>" +
+          "<p> Only our first response for each image sequence will be recorded. </p>"+
+          "<p>You will first see a practice trial, followed by 4 64 test trials.</p>" +
+          "<p>Please press the SPACE BAR when you are ready to begin.</p>",
       post_trial_gap: 1000,
-      choices: ['y']
+      choices: ['space']
     };
     timeline.push(instructions);
 
@@ -134,66 +133,65 @@
 
     var practice = {
         //type: 'animation',
-        type: 'animation-response',
+        type: 'animation-feedback',
         stimuli: practice_stimuli,
         frame_time: 200,
         frame_isi: 300,
-        prompt: '<p>Press the space bar to respond if you think the category of the image has been changed</p>',
-        choices: ['space'],
-        response_ends_trial: true
+        prompt: '<p style="color:white"> empty </p>',
+        choices: ['space']
     }
 
     var start = {
         type: "html-keyboard-response",
         stimulus: "<p> Now we will start the test trials.  </p>",
         post_trial_gap: 1000,
-        choices: ['y'],
+        choices: ['space'],
         trial_duration: 3000
     }
 
     var test = {
         //type: 'animation',
-        type: 'animation-response',
+        type: 'animation-feedback',
         stimuli: jsPsych.timelineVariable('stimulus'),
         frame_time: 300,
         frame_isi: 300,
         choices:['space'],
         data: jsPsych.timelineVariable('data'),
-        response_ends_trial: true,
-        post_trial_gap: 300
+        post_trial_gap: 300,
+        prompt: '<p style="color:white"> empty </p>',
     }
 
     var gap = {
       type: "html-keyboard-response",
-      stimulus: "<p> If you are ready, please press 'Y' to start the next trial.</p>"+
-      "<p> Remember, for the next trials, press the SPACE BAR to indicate your responses </p>"+
-      "<p> Feel free to take a break to relax your eyes. </p>",
+      stimulus: "<p> Feel free to take a break to relax your eyes.</p>"+
+      "<p> Please press the SPACE BAR when you are ready to begin the next trial. </p>",
       post_trial_gap: 1000,
-      choices: ['y']
+      choices: ['space']
     }
 
     var fixation = {
       type: 'html-keyboard-response',
-      stimulus: '<div style="font-size:60px;">+</div>',
+      stimulus: '<div style="font-size:60px;">+</div>'+
+                '<p style="color:white"> empty </p>',
       choices: jsPsych.NO_KEYS,
       trial_duration: 1000
     }
 
-    var feedback = {
-        type: 'html-keyboard-response',
-        stimulus: '<p style="font-size:20px; color:green;">Responded!</p>',
-        choices: jsPsych.NO_KEYS,
-        trial_duration: 500,
-        on_finish: function() {
-            // at the end of each trial, update the progress bar
-            // based on the current value and the proportion to update for each trial
-            var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
-            jsPsych.setProgressBar(curr_progress_bar_value + (1/num_trials));
-        }
-    }
+    // var feedback = {
+    //     type: 'html-keyboard-response',
+    //     stimulus: '<p style="font-size:20px; color:green;">Responded!</p>',
+    //     choices: jsPsych.NO_KEYS,
+    //     trial_duration: 500,
+    //     on_finish: function() {
+    //         // at the end of each trial, update the progress bar
+    //         // based on the current value and the proportion to update for each trial
+    //         var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
+    //         jsPsych.setProgressBar(curr_progress_bar_value + (1/num_trials));
+    //     }
+    // }
 
     var test_procedure = {
-      timeline: [gap,fixation,test,feedback],
+      timeline: [gap,fixation,test],
       timeline_variables: test_stimuli.slice(),
       randomize_order: true
     }
@@ -236,7 +234,7 @@
 
     timeline.push(fixation);
     timeline.push(practice);
-    timeline.push(feedback);
+    //timeline.push(feedback);
     timeline.push(start);
     timeline.push(test_procedure);
     timeline.push(save_data);
