@@ -138,7 +138,13 @@
         frame_time: 200,
         frame_isi: 300,
         prompt: '<p style="color:white"> empty </p>',
-        choices: ['space']
+        choices: ['space'],
+        on_finish: function() {
+            // at the end of each trial, update the progress bar
+            // based on the current value and the proportion to update for each trial
+            var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
+            jsPsych.setProgressBar(curr_progress_bar_value + (1/num_trials));
+        }
     }
 
     var start = {
@@ -159,6 +165,12 @@
         data: jsPsych.timelineVariable('data'),
         post_trial_gap: 300,
         prompt: '<p style="color:white"> empty </p>',
+        on_finish: function() {
+            // at the end of each trial, update the progress bar
+            // based on the current value and the proportion to update for each trial
+            var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
+            jsPsych.setProgressBar(curr_progress_bar_value + (1/num_trials));
+        }
     }
 
     var gap = {
