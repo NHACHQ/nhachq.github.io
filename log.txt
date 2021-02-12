@@ -3,7 +3,7 @@
 1. add full screen mode
 2. save data directly to github
 3. buffering on keyboard (flush)
-
+4. add browser information (in email)
 
 
 

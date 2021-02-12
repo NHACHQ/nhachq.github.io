@@ -7,6 +7,10 @@
     <script src="jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-animation.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-animation-feedback.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-html-button-response.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-external-html.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-animation.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-fullscreen.js"></script>
     <script src="utils.js"></script>
     <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
     <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-app.js"></script>
@@ -56,6 +60,41 @@
       }
     };
     timeline.push(welcome);
+
+    /*concent*/
+    var consent_inst = {
+        type: 'html-button-response',
+        stimulus: html='<p style="color: black; font-size: 20px;">'
+            +'We would like to get your consent before starting the experiment.</p>'+
+            '<p> You will enter the full screen mode once the experiment starts.</p>',
+        choices: ['Consent page'],
+        data: {disp_type: 'consent-instruction'}
+    }
+    var check_consent = function(elem) {
+        if (document.getElementById('radio_agree').checked) {
+            return true;
+        } else {
+            alert("If you wish to participate, you must check the box next to the statement 'I agree.'");
+            return false;
+        }
+        return false;
+    };
+    var consent_page = {
+        type: 'external-html',
+        url: "LetterOfInformationParticipantConsent_2020\\content.html",
+        cont_btn: "start",
+        check_fn: check_consent,
+        data: {disp_type: 'online_consent_form'}
+    }
+
+    timeline.push(consent_inst);
+    timeline.push(consent_page);
+
+    timeline.push({
+        type: 'fullscreen',
+        fullscreen_mode: true,
+        data: {disp_type: 'fullscreen_enter'}
+    });
 
     /* define instructions trial */
     var instructions = {
