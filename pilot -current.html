@@ -65,8 +65,7 @@
     var consent_inst = {
         type: 'html-button-response',
         stimulus: html='<p style="color: black; font-size: 20px;">'
-            +'We would like to get your consent before starting the experiment.</p>'+
-            '<p> You will enter the full screen mode once the experiment starts.</p>',
+            +'We would like to get your consent before starting the experiment.</p>',
         choices: ['Consent page'],
         data: {disp_type: 'consent-instruction'}
     }
@@ -92,21 +91,21 @@
 
     timeline.push({
         type: 'fullscreen',
-        fullscreen_mode: true,
-        data: {disp_type: 'fullscreen_enter'}
+        fullscreen_mode: true
     });
 
     /* define instructions trial */
     var instructions = {
       type: "html-keyboard-response",
-      stimulus: "<p>In each trial, a sequence of images of indoor scenes will appear at the center of the screen. " +
+      stimulus: "<h1> Instuctions </h1>"+
+      "<p>In each trial, a sequence of images of indoor scenes will appear at the center of the screen. " +
           " Scenes come from three categories: bedrooms, living rooms, and dining rooms. </p>" +
           "<p>You will be presented with a scene, which will gradually change from one category to another."+
           " For example, you may first see a bedroom scene, which may gradually change to a living room."+
-          " Please press the SPACE BAR as soon as you detect the change in category.</p>" +
+          " Please press the SPACE BAR as  soon as you detect the change in category.</p>" +
           "<p> Only our first response for each image sequence will be recorded. </p>"+
           "<p>You will first see a practice trial, followed by 4 64 test trials.</p>" +
-          "<p>Please press the SPACE BAR when you are ready to begin.</p>",
+          "<p>Please press the SPACE BAR when you are ready to begin the test trial`.</p>",
       post_trial_gap: 1000,
       choices: ['space']
     };
