@@ -12,31 +12,35 @@
     <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-database.js"></script>
-​
+​    <script src="https://cdn.savejs.com/savejs/1.0.1/save.min.js"></script>
 ​
   </head>
 ​
-    <?php
-    $post_data = json_decode(file_get_contents('php://input'), true);
-    // the directory "data" must be writable by the server
-    $name = "data/".$post_data['filename'].".csv";
-    $data = $post_data['filedata'];
-    // write the file to disk
-    file_put_contents($name, $data);
-    ?>
-​
+
+​  <body>
+    <button id="saveBtn" data-save-target="saveTextarea" class="btn">Save</button>
+  </body>
   <script>
 
-  var firebaseConfig = {
-        apiKey: "AIzaSyBvy4J-k9RM7tPZq_Fzsveo0-qUBrkqpKA",
-        authDomain: "pilot-e3b0c.firebaseapp.com",
-        databaseURL: "https://pilot-e3b0c-default-rtdb.firebaseio.com",
-        projectId: "pilot-e3b0c",
-        storageBucket: "pilot-e3b0c.appspot.com",
-        messagingSenderId: "677239736982",
-        appId: "1:677239736982:web:e6fd97490987a9e0d110b7",
-        measurementId: "G-7GCBZREB6V"
-      };
+    var test = savejs.create({
+            buttonId: 'saveBtn',
+            mimeType: 'text/plain',
+            // requestFileName: true,
+            // requestFileNameMessage: 'Enter a file name',
+    });
+
+    test.init();
+
+    var firebaseConfig = {
+            apiKey: "AIzaSyBvy4J-k9RM7tPZq_Fzsveo0-qUBrkqpKA",
+            authDomain: "pilot-e3b0c.firebaseapp.com",
+            databaseURL: "https://pilot-e3b0c-default-rtdb.firebaseio.com",
+            projectId: "pilot-e3b0c",
+            storageBucket: "pilot-e3b0c.appspot.com",
+            messagingSenderId: "677239736982",
+            appId: "1:677239736982:web:e6fd97490987a9e0d110b7",
+            measurementId: "G-7GCBZREB6V"
+    };
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     // login anonymous user
@@ -214,14 +218,6 @@
 
 
 
-    function saveData(name, data){
-      var xhr = new XMLHttpRequest();
-      xhr.open('POST', 'write_data.php'); // 'write_data.php' is the path to the php file described above.
-      xhr.setRequestHeader('Content-Type', 'application/json');
-      xhr.send(JSON.stringify({filename: name, filedata: data}));
-    }
-
-
     var save_data = {
         type: "html-keyboard-response",
         stimulus: "<p> Saving data, please stay at this page.</p> ",
@@ -239,11 +235,6 @@
                 date: Date()
             });
            // jsPsych.data.displayData();
-
-           //dave it to github
-           //var filename = "/data"+firebase.auth().currentUser.uid+'/'+tmp;
-           var filename = "https://github.com/NHACHQ/nhachq.github.io/data"+firebase.auth().currentUser.uid+'/'+tmp;
-           saveData("experiment_data", jsPsych.data.get().csv());
         }
     }
 

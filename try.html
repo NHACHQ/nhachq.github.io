@@ -5,6 +5,8 @@
     <script src="jspsych-6.1.0/jspsych.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-html-button-response.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-external-html.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-animation.js"></script>
     <script src="utils.js"></script>
     <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
@@ -15,7 +17,7 @@
 ​
   </head>
 ​
-
+  <body style="background-color:#a6a6a6;"></body>
 ​
   <script>
 
@@ -39,6 +41,9 @@
     /* create timeline */
     var timeline = [];
 
+
+
+
     /* define welcome message trial */
     var welcome = {
       type: "html-keyboard-response",
@@ -50,6 +55,32 @@
     };
     timeline.push(welcome);
 
+    var consent_inst = {
+        type: 'html-button-response',
+        stimulus: html='<p style="color: black; font-size: 20px;">'
+            +'We would like to get your consent before starting the experiment.</p>',
+        choices: ['Consent page'],
+        data: {disp_type: 'consent-instruction'}
+    }
+    var check_consent = function(elem) {
+        if (document.getElementById('radio_agree').checked) {
+            return true;
+        } else {
+            alert("If you wish to participate, you must check the box next to the statement 'I agree.'");
+            return false;
+        }
+        return false;
+    };
+    var consent_page = {
+        type: 'external-html',
+        url: "LetterOfInformationParticipantConsent_2020\content.html",
+        cont_btn: "start",
+        check_fn: check_consent,
+        data: {disp_type: 'online_consent_form'}
+    }
+
+    timeline.push(consent_inst);
+    timeline.push(consent_page);
     /* define instructions trial */
     var instructions = {
       type: "html-keyboard-response",
@@ -183,9 +214,9 @@
     var practice = {
         type: 'animation',
         stimuli: test_stimuli[0]['stimulus'],
-        frame_time: 200,
-        frame_isi: 300,
-        prompt: 'Press the space bar to respond if you think the category of the image has been changed',
+        frame_time: 500,
+        //frame_isi: 300,
+        prompt: '<p>This is some text to show how text will look like in grey backgroun</p>',
         choices: ['space'],
         on_trial_start: function(practice){
             var current_node_id = jsPsych.currentTimelineNodeID();
@@ -276,6 +307,7 @@
         }
     }
     //timeline manipulation
+
     timeline.push(practice);
 //    timeline.push(response);
     timeline.push(start);
@@ -287,6 +319,7 @@
     jsPsych.init({
       timeline: timeline,
       preload_images: paths,
+      show_progress_bar: true
       // jsPsych.data.displayData();
 
     });

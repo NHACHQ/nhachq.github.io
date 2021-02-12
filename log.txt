@@ -1,4 +1,11 @@
 
+**To-Do**
+1. add full screen mode
+2. save data directly to github
+3. buffering on keyboard (flush)
+
+
+
 
 version after 2021-02-10 12:42--------------------------------------------------------------
 1. experiment design:
@@ -31,4 +38,8 @@ buttons for nultiple times very quickly at the start of the animation trial
 version after 2021-02-10 -------------------------------------------------------
 1. experiment design:
     # added the prograss BAR
-    #
+
+
+version after 2021-02-12 --------------------------------------------------
+1. added consent form and debriefing
+2. background color changed to #808080

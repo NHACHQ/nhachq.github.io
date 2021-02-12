@@ -125,7 +125,7 @@ jsPsych.plugins["animation-feedback"] = (function() {
       // which can be used to provide visual feedback that a response was recorded
       display_element.querySelector('#jspsych-animation-image').className += ' responded';
 
-      trial.prompt='<p style="font-size:20px; color:green;">RESPONSE RECORDED</p>';
+      trial.prompt='<p style="font-size:20px;color:white;">RESPONSE RECORDED</p>';
     }
 
     // hold the jspsych response listener object in memory
