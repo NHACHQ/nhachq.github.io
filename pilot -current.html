@@ -179,7 +179,7 @@
         stimuli: practice_stimuli,
         frame_time: 200,
         frame_isi: 300,
-        prompt: '<p style="color:white"> empty </p>',
+        prompt: '<p style="color:#a6a6a6;"> empty </p>',
         choices: ['space'],
         on_finish: function() {
             // at the end of each trial, update the progress bar
@@ -206,7 +206,7 @@
         choices:['space'],
         data: jsPsych.timelineVariable('data'),
         post_trial_gap: 300,
-        prompt: '<p style="color:white"> empty </p>',
+        prompt: '<p style="color:#a6a6a6;"> empty </p>',
         on_finish: function() {
             // at the end of each trial, update the progress bar
             // based on the current value and the proportion to update for each trial
@@ -226,7 +226,7 @@
     var fixation = {
       type: 'html-keyboard-response',
       stimulus: '<div style="font-size:60px;">+</div>'+
-                '<p style="color:white"> empty </p>',
+                '<p style="color:#a6a6a6"> empty </p>',
       choices: jsPsych.NO_KEYS,
       trial_duration: 1000
     }
