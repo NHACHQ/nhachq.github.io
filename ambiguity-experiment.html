@@ -181,7 +181,7 @@
 
     var c=0;
     var deviation;
-    for(var i = 13; i<15; i++){
+    for(var i = 14; i<15; i++){
         c = 3*i;
         //caliberation
         if (i%3==0){
@@ -220,7 +220,7 @@
     var abrupt_stimuli = [];
     var temp;
     var end;
-    for (var i = 6; i<10; i++){
+    for (var i = 9; i<10; i++){
         end=2*i+1;
         temp = abrupt_img('stimuli/abrupt/'+2*i+'.jpg','stimuli/abrupt/'+end+'.jpg', 10+i, 30 );
         paths.push('stimuli/abrupt/'+2*i+'.jpg','stimuli/abrupt/'+end+'.jpg');
@@ -388,7 +388,7 @@
     var debriefing = {
       type:'external-html',
       url: "debriefing.html",
-      cont_key: null
+      cont_key: ['space']
     };
 
 
