@@ -385,10 +385,14 @@
     }
 
 
+    var check_consent = function(elem) {return true;    };
+
+
     var debriefing = {
       type:'external-html',
       url: "debriefing.html",
-      cont_key: ['space']
+      cont_key: ['space'],
+    check_fn: check_consent
     };
 
     var end = {
