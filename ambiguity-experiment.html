@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Pilot experiment - hysteresis in category boundaries</title>
+    <title>Ambiguity in category boundaries</title>
     <script src="jspsych-6.1.0/jspsych.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js"></script>
@@ -95,9 +95,15 @@
       questions: [
         {prompt: "<p>We would like to collect your basic biogprahic data.</p>"+
         " <p>What is your age?</p>", name: 'age'},
-        {prompt: "How do you identify your gender?", name: 'gender'}
+        {prompt: "Are you left-handed or right-handed? Reply R or L", name: 'handedness'},
+        {prompt: "How do you identify your gender?", name: 'gender'},
+        {prompt: "Do you wear glasses (G) or contacts(C) or both (Y) or none of them (N)?", name: 'vision'},
+        {prompt: "<p>The follwing information is collected only to record your earned course credit.</p>"+
+        " <p>What is your name?</p>", name: 'name'},
+        {prompt: "Student number: ", name: 'studentID'}
       ],
     };
+
 
     /* define instructions trial */
     var instructions_b = {
