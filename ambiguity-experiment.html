@@ -93,14 +93,14 @@
     };
     var consent_page = {
         type: 'external-html',
-        url: "LetterOfInformationParticipantConsent_2020/content.html",
+        url: "LetterOfInformationParticipantConsent_2020\\content.html",
         cont_btn: "start",
         check_fn: check_consent,
         data: {disp_type: 'online_consent_form'}
     }
 
-    timeline.push(consent_inst);
-    timeline.push(consent_page);
+    //timeline.push(consent_inst);
+    //timeline.push(consent_page);
 
     timeline.push({
         type: 'fullscreen',
@@ -111,7 +111,8 @@
     var survey = {
       type: 'survey-text',
       questions: [
-        {prompt: "What is your age?", name: 'age'},
+        {prompt: "<p>We would like to collect your basic biogprahic data.</p>"+
+        " <p>What is your age?</p>", name: 'age'},
         {prompt: "How do you identify your gender?", name: 'gender'}
       ],
     };
@@ -171,12 +172,16 @@
                          [85.0, 169.0, 331.0],
                          [87.0, 177.0, 318.0],
                          [88.0, 175.0, 320.0],
-                         [82.0, 169.0, 324.0]];
+                         [82.0, 169.0, 324.0],
+                         [90.0, 172.0, 318.0],
+                        [93.0, 172.0, 324.0],
+                        [92.0, 170.0, 328.0],
+                        [87.0, 180.0, 321.0]];
 
 
     var c=0;
     var deviation;
-    for(var i = 0; i<4; i++){
+    for(var i = 13; i<15; i++){
         c = 3*i;
         //caliberation
         if (i%3==0){
@@ -214,8 +219,11 @@
     //abrupt trials
     var abrupt_stimuli = [];
     var temp;
-    for (var i = 0; i<5; i++){
-        temp = abrupt_img('stimuli/'+i+'/webp/000020.webp','stimuli/'+i+'/webp/000100.webp', 10+i, 30 );
+    var end;
+    for (var i = 6; i<10; i++){
+        end=2*i+1;
+        temp = abrupt_img('stimuli/abrupt/'+2*i+'.jpg','stimuli/abrupt/'+end+'.jpg', 10+i, 30 );
+        paths.push('stimuli/abrupt/'+2*i+'.jpg','stimuli/abrupt/'+end+'.jpg');
         abrupt_stimuli.push({ stimulus: temp, data: {trial_tag: 'a'+i} });
     }
 
