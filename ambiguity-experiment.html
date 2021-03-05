@@ -391,25 +391,36 @@
       cont_key: ['space']
     };
 
-
+    var end = {
+        type: "html-keyboard-response",
+        stimulus: "<p> Goodbye! </p> ",
+        post_trial_gap: 500,
+        choices: null,
+        on_finish: function() {
+            // at the end of each trial, update the progress bar
+            // based on the current value and the proportion to update for each trial
+            var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
+            jsPsych.setProgressBar(curr_progress_bar_value + (1/num_trials));
+        }
+    }
 
     /* timeline arrangement*/
     /* biographic*/
     timeline.push(survey);
 
     /*part A*/
-    timeline.push(instructions_a);
-    timeline.push(fixation);
-    timeline.push(practice);
-    timeline.push(start);
-    timeline.push(test_procedure);
+    // timeline.push(instructions_a);
+    // timeline.push(fixation);
+    // timeline.push(practice);
+    // timeline.push(start);
+    // timeline.push(test_procedure);
 
     /*part B*/
-    timeline.push(instructions_b);
-    timeline.push(fixation);
-    timeline.push(practice_abrupt);
-    timeline.push(start);
-    timeline.push(abrupt_procedure);
+    // timeline.push(instructions_b);
+    // timeline.push(fixation);
+    // timeline.push(practice_abrupt);
+    // timeline.push(start);
+    // timeline.push(abrupt_procedure);
 
     /*save data*/
     timeline.push(save_data);
@@ -419,7 +430,7 @@
         type: 'fullscreen',
         fullscreen_mode: false
     });
-
+    timeline.push(end);
     /* start the experiment */
     jsPsych.init({
       timeline: timeline,
