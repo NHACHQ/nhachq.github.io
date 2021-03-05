@@ -86,11 +86,11 @@
     //timeline.push(consent_inst);
     //timeline.push(consent_page);
 
-    timeline.push({
-        type: 'fullscreen',
-        fullscreen_mode: true,
-        data: {disp_type: 'fullscreen_enter'}
-    });
+    // timeline.push({
+    //     type: 'fullscreen',
+    //     fullscreen_mode: true,
+    //     data: {disp_type: 'fullscreen_enter'}
+    // });
 
     /* define instructions */
     var instructions = {
@@ -107,7 +107,7 @@
       post_trial_gap: 1000,
       choices: ['y']
     };
-    timeline.push(instructions);
+    //timeline.push(instructions);
 
 
     //generate arrays of images
@@ -179,7 +179,7 @@
         type: 'animation',
         stimuli: jsPsych.timelineVariable('stimulus'),
         frame_time: 200,
-        frame_isi: 300,
+        //frame_isi: 300,
         choices:['space'],
         data: jsPsych.timelineVariable('data'),
         // on_start: function(test){
@@ -192,10 +192,10 @@
 
     var gap1 = {
       type: "html-keyboard-response",
-      stimulus: "<p> Good job! You hava completed the block 1 of four blocks. Now take a break. If you are ready, please press 'Y' to start the next trial block.</p>"+
+      stimulus: "<p> Good job! You hava completed the block 1 of four blocks. Now take a break. If you are ready, please press 'space' to start the next trial block.</p>"+
                 "<p> Remember, for the next trials, press the SPACE BAR to indicate your responses </p>",
-      post_trial_gap: 1000,
-      choices: ['y']
+      //post_trial_gap: 1000,
+      choices: ['space']
     }
     var gap2 = {
       type: "html-keyboard-response",
@@ -225,23 +225,58 @@
     var practice = {
         type: 'animation',
         stimuli: test_stimuli[0]['stimulus'],
-        frame_time: 500,
+        frame_time: 200,
         //frame_isi: 300,
-        prompt: '<p>This is some text to show how text will look like in grey backgroun</p>',
+        prompt: '<p>This is a practice trial </p>',
         choices: ['space'],
-        on_trial_start: function(practice){
-            var current_node_id = jsPsych.currentTimelineNodeID();
-            console.log("Current node ID is：" +current_node_id);
-            var data = jsPsych.data.getDataByTimelineNode(current_node_id);
-            if(data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode('space')){
-                jsPsych.finishTrial(null);
-            } else{
-                console.log("nothing changed");
-            }
-
-        }
+        // on_trial_start: function(practice){
+        //     var current_node_id = jsPsych.currentTimelineNodeID();
+        //     console.log("Current node ID is：" +current_node_id);
+        //     var data = jsPsych.data.getDataByTimelineNode(current_node_id);
+        //     if(data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode('space')){
+        //         jsPsych.finishTrial(null);
+        //     } else{
+        //         console.log("nothing changed");
+        //     }
+        //
+        // }
     }
 
+
+    var abrupt_stimuli = [];
+    var temp;
+
+
+    for (var i = 0; i<10; i++){
+        temp = abrupt_img('stimuli/'+i+'/webp/000000.webp','stimuli/'+i+'/webp/000120.webp', 10+i, 30 );
+        abrupt_stimuli.push({ stimulus: temp, data: {trial_tag: 'a'+i} });
+    }
+
+
+
+    var abrupt1 = {
+        type: 'animation',
+        stimuli: ['stimuli/1/000020.jpg', 'stimuli/1/000100.jpg'],
+        frame_time: 3000,
+        //frame_isi: 300,
+        prompt: '<p>This is an abrupt trial</p>',
+        choices: ['space'],
+    }
+
+    var abrupt_test = {
+        type: 'animation',
+        stimuli: jsPsych.timelineVariable('stimulus'),
+        frame_time: 200,
+        //frame_isi: 300,
+        choices:['space'],
+        data: jsPsych.timelineVariable('data')
+    }
+
+    var abrupt = {
+      timeline: [fixation,abrupt_test],
+      timeline_variables: abrupt_stimuli,
+      randomize_order: true
+    }
 
 
     // var response = {
@@ -289,6 +324,7 @@
       randomize_order: true
     }
 
+
     var debriefing = {
         type: "html-keyboard-response",
         stimulus: "<p> This is the end of the experiment </p> " +
@@ -319,21 +355,26 @@
     }
     //timeline manipulation
 
-    timeline.push(practice);
+    //timeline.push(practice);
+    timeline.push(gap1);
+    //timeline.push(practice);
+    //timeline.push(gap1);
+    timeline.push(abrupt);
 //    timeline.push(response);
 
     timeline.push(start);
-    timeline.push(save_data);
-    timeline.push(debriefing);
+    //timeline.push(save_data);
+    //timeline.push(debriefing);
 
 
     /* start the experiment */
     jsPsych.init({
       timeline: timeline,
       preload_images: paths,
-      show_progress_bar: true
-      // jsPsych.data.displayData();
-
+      show_progress_bar: true,
+     on_finish: function(){
+         jsPsych.data.displayData();
+     }
     });
   </script>
   </html>

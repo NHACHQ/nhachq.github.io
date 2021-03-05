@@ -11,13 +11,12 @@
     <script src="jspsych-6.1.0/plugins/jspsych-external-html.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-animation.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-fullscreen.js"></script>
-    <script src="jspsych-6.3.0/plugins/jspsych-survey-text.js"></script>
     <script src="utils.js"></script>
     <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
     <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-database.js"></script>
-
+​
 ​
   </head>
 ​
@@ -27,28 +26,16 @@
 
   <script>
 
-  // var firebaseConfig = {
-  //       apiKey: "AIzaSyBvy4J-k9RM7tPZq_Fzsveo0-qUBrkqpKA",
-  //       authDomain: "pilot-e3b0c.firebaseapp.com",
-  //       databaseURL: "https://pilot-e3b0c-default-rtdb.firebaseio.com",
-  //       projectId: "pilot-e3b0c",
-  //       storageBucket: "pilot-e3b0c.appspot.com",
-  //       messagingSenderId: "677239736982",
-  //       appId: "1:677239736982:web:e6fd97490987a9e0d110b7",
-  //       measurementId: "G-7GCBZREB6V"
-  //     };
-
-    var firebaseConfig = {
-        apiKey: "AIzaSyCkGlSd4675ekVUPIt7jO9tgHzuN78fGJw",
-        authDomain: "bwlab-ambiguity-psy280data.firebaseapp.com",
-        databaseURL: "https://bwlab-ambiguity-psy280data-default-rtdb.firebaseio.com/",
-        projectId: "bwlab-ambiguity-psy280data",
-        storageBucket: "bwlab-ambiguity-psy280data.appspot.com",
-        messagingSenderId: "320165000340",
-        appId: "1:320165000340:web:68338b8f0eaf843dcb7081",
-        measurementId: "G-XGKC7Q9VFP"
-    };
-
+  var firebaseConfig = {
+        apiKey: "AIzaSyBvy4J-k9RM7tPZq_Fzsveo0-qUBrkqpKA",
+        authDomain: "pilot-e3b0c.firebaseapp.com",
+        databaseURL: "https://pilot-e3b0c-default-rtdb.firebaseio.com",
+        projectId: "pilot-e3b0c",
+        storageBucket: "pilot-e3b0c.appspot.com",
+        messagingSenderId: "677239736982",
+        appId: "1:677239736982:web:e6fd97490987a9e0d110b7",
+        measurementId: "G-7GCBZREB6V"
+      };
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     // login anonymous user
@@ -63,9 +50,9 @@
     var welcome = {
       type: "html-keyboard-response",
       stimulus: "<p>Welcome to the experiment.</p>"+
-      " <p>The experiment itself takes about 35 minutes, and the overall"+
+      " <p>The experiment itself takes about 20 minutes, and the overall"+
       " time may vary due to how much break you decide to take in the middle of the experiment."+
-      " Therefore, please allocate about 50 mimutes for this experiment. You will know your progress through the progress bar on the top of the screen. </p>"+
+      " Please allocate about 30 mimutes for this experiment. You will know your progress through the progress bar on the top of the screen. </p>"+
       "<p>Press any key to see the detailed instructions.</p>",
       on_start: function() {
             // set progress bar to 0 at the start of experiment
@@ -93,7 +80,7 @@
     };
     var consent_page = {
         type: 'external-html',
-        url: "LetterOfInformationParticipantConsent_2020/content.html",
+        url: "LetterOfInformationParticipantConsent_2020\\content.html",
         cont_btn: "start",
         check_fn: check_consent,
         data: {disp_type: 'online_consent_form'}
@@ -107,52 +94,23 @@
         fullscreen_mode: true
     });
 
-/* collect biogprahic data*/
-    var survey = {
-      type: 'survey-text',
-      questions: [
-        {prompt: "What is your age?", name: 'age'},
-        {prompt: "How do you identify your gender?", name: 'gender'}
-      ],
-    };
-
     /* define instructions trial */
-    var instructions_b = {
+    var instructions = {
       type: "html-keyboard-response",
-      stimulus: "<h1> Instuctions of Part B </h1>"+
-      "<p> There are 10 trials in Part B of the experiment.<p/>"+
+      stimulus: "<h1> Instuctions </h1>"+
       "<p>In each trial, a sequence of images of indoor scenes will appear at the center of the screen. " +
           " Scenes come from three categories: bedrooms, living rooms, and dining rooms. </p>" +
-          "<p>You will be presented with a scene, which will SUDDENLY change from one category to another."+
-          " For example, you may first see a bedroom scene, which may suddenly change to a living room."+
+          "<p>You will be presented with a scene, which will gradually change from one category to another."+
+          " For example, you may first see a bedroom scene, which may gradually change to a living room."+
           " Please press the SPACE BAR as  soon as you detect the change in category.</p>" +
-          "<p> Only your first response for each image sequence will be recorded. </p>"+
-          "<p>You will first see a practice trial, followed by 10 test trials.</p>" +
-          "<p>Now please press the SPACE BAR when you are ready to begin the practice trial`.</p>",
+          "<p> Only our first response for each image sequence will be recorded. </p>"+
+          "<p>You will first see a practice trial, followed by 4 64 test trials.</p>" +
+          "<p>Please press the SPACE BAR when you are ready to begin the test trial`.</p>",
       post_trial_gap: 1000,
       choices: ['space']
     };
+    timeline.push(instructions);
 
-    var instructions_a = {
-      type: "html-keyboard-response",
-      stimulus: "<h1> Instuctions of Part A </h1>"+
-      "<p> There are 96 trials in Part A of the experiment.<p/>"+
-      "<p>In each trial, a sequence of images of indoor scenes will appear at the center of the screen. " +
-          " Scenes come from three categories: bedrooms, living rooms, and dining rooms. </p>" +
-          "<p>You will be presented with a scene, which will GRADUALLY change from one category to another."+
-          " For example, you may first see a bedroom scene, which may gradually change to a living room, different from what you did in Pat A."+
-          " Please press the SPACE BAR as  soon as you detect the change in category.</p>" +
-          "<p> Only your first response for each image sequence will be recorded. </p>"+
-          "<p>You will first see a practice trial, followed by 96 test trials. Since there are lots of trials, please take breaks to relax yourself.</p>" +
-          "<p>Now please press the SPACE BAR when you are ready to begin the practice trial.</p>",
-      post_trial_gap: 1000,
-      choices: ['space']
-    };
-
-
-
-
-    /*   stimuli  */
 
     //generate arrays of images
     var paths = [];
@@ -176,7 +134,7 @@
 
     var c=0;
     var deviation;
-    for(var i = 0; i<4; i++){
+    for(var i = 0; i<11; i++){
         c = 3*i;
         //caliberation
         if (i%3==0){
@@ -197,12 +155,12 @@
         var l2d = imgSelect(deviation[0]+boundaries[i][1], deviation[1]+boundaries[i][1], 3, "stimuli/"+i+'/webp');
         test_stimuli.push({ stimulus: l2d[0], data: {trial_tag: c} });
         test_stimuli.push({ stimulus: l2d[1], data: {trial_tag: c+'r'} });
-        // c++;
-        // var d2b = imgSelect(deviation[0]+boundaries[i][2], deviation[1]+boundaries[i][2], 3, "stimuli/"+i+'/webp');
-        // test_stimuli.push({ stimulus: d2b[0], data: {trial_tag: c} });
-        // test_stimuli.push({ stimulus: d2b[1], data: {trial_tag: c+'r'} });
-        // paths.push(b2l,l2d,d2b);
-        paths.push(b2l,l2d);
+        c++;
+        var d2b = imgSelect(deviation[0]+boundaries[i][2], deviation[1]+boundaries[i][2], 3, "stimuli/"+i+'/webp');
+        test_stimuli.push({ stimulus: d2b[0], data: {trial_tag: c} });
+        test_stimuli.push({ stimulus: d2b[1], data: {trial_tag: c+'r'} });
+        paths.push(b2l,l2d,d2b);
+        //paths.push(b2l);
     }
 
 
@@ -211,37 +169,13 @@
     test_stimuli.shift();
     test_stimuli.shift();
 
-    //abrupt trials
-    var abrupt_stimuli = [];
-    var temp;
-    for (var i = 0; i<5; i++){
-        temp = abrupt_img('stimuli/'+i+'/webp/000020.webp','stimuli/'+i+'/webp/000100.webp', 10+i, 30 );
-        abrupt_stimuli.push({ stimulus: temp, data: {trial_tag: 'a'+i} });
-    }
-
     // update number of trials
-    num_trials = num_trials + test_stimuli.length + abrupt_stimuli.length;
+    num_trials = num_trials + test_stimuli.length;
 
     var practice = {
         //type: 'animation',
         type: 'animation-feedback',
         stimuli: practice_stimuli,
-        frame_time: 200,
-        frame_isi: 300,
-        prompt: '<p style="color:#a6a6a6;"> empty </p>',
-        choices: ['space'],
-        on_finish: function() {
-            // at the end of each trial, update the progress bar
-            // based on the current value and the proportion to update for each trial
-            var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
-            jsPsych.setProgressBar(curr_progress_bar_value + (1/num_trials));
-        }
-    }
-
-    var practice_abrupt = {
-        //type: 'animation',
-        type: 'animation-feedback',
-        stimuli: abrupt_img('stimuli/10/webp/000030.webp','stimuli/10/webp/000100.webp', 15, 30),
         frame_time: 200,
         frame_isi: 300,
         prompt: '<p style="color:#a6a6a6;"> empty </p>',
@@ -262,29 +196,11 @@
         trial_duration: 3000
     }
 
-    // var abrupt_test = {
-    //     type: 'animation-feedback',
-    //     stimuli: jsPsych.timelineVariable('stimulus'),
-    //     frame_time: 200,
-    //     frame_isi: 300,
-    //     choices:['space'],
-    //     data: jsPsych.timelineVariable('data'),
-    //     post_trial_gap: 300,
-    //     prompt: '<p style="color:#a6a6a6;"> empty </p>',
-    //     on_finish: function() {
-    //         // at the end of each trial, update the progress bar
-    //         // based on the current value and the proportion to update for each trial
-    //         var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
-    //         jsPsych.setProgressBar(curr_progress_bar_value + (1/num_trials));
-    //     }
-    // }
-    // }
-
     var test = {
         //type: 'animation',
         type: 'animation-feedback',
         stimuli: jsPsych.timelineVariable('stimulus'),
-        frame_time: 200,
+        frame_time: 300,
         frame_isi: 300,
         choices:['space'],
         data: jsPsych.timelineVariable('data'),
@@ -297,7 +213,6 @@
             jsPsych.setProgressBar(curr_progress_bar_value + (1/num_trials));
         }
     }
-
 
     var gap = {
       type: "html-keyboard-response",
@@ -328,14 +243,9 @@
     //     }
     // }
 
-    var abrupt_procedure = {
-        timeline: [gap,fixation,test],
-        timeline_variables:abrupt_stimuli,
-        randomize_order: true
-    }
     var test_procedure = {
       timeline: [gap,fixation,test],
-      timeline_variables: test_stimuli,
+      timeline_variables: test_stimuli.slice(),
       randomize_order: true
     }
 
@@ -375,32 +285,13 @@
         }
     }
 
-
-    /* timeline arrangement*/
-    /* biographic*/
-    timeline.push(survey);
-
-    /*part A*/
-    timeline.push(instructions_a);
     timeline.push(fixation);
     timeline.push(practice);
+    //timeline.push(feedback);
     timeline.push(start);
     timeline.push(test_procedure);
-
-    /*part B*/
-    timeline.push(instructions_b);
-    timeline.push(fixation);
-    timeline.push(practice_abrupt);
-    timeline.push(start);
-    timeline.push(abrupt_procedure);
-
-    /*save data*/
     timeline.push(save_data);
     timeline.push(debriefing);
-    timeline.push({
-        type: 'fullscreen',
-        fullscreen_mode: false
-    });
 
     /* start the experiment */
     jsPsych.init({
