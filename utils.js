@@ -35,3 +35,30 @@ function shuffle(array) {
     }
     return array;
 }
+
+
+//for abrupt trials
+// parameters: paths of two iamges
+// change point : a decimal number between 0 and 1
+// num: overall number of frames
+// return a set of images with two directions
+function abrupt_img(start_path, end_path, change, num){
+    var s;
+    var images = [];
+    var path;
+    for (var i = 0 ;i<num; i++){
+
+        if (i < change)
+            path = start_path;
+        else
+            path = end_path;
+
+        // images.push(path+"/"+s+".jpg");
+        // images_r.unshift(path+"/"+s+".jpg");
+        images.push(path);
+        //testing
+        //document.write(path+"/"+s+".jpg<br>")
+
+    }
+    return images;
+}
