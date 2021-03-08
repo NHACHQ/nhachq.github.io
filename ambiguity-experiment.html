@@ -314,7 +314,7 @@
 
     var save_data = {
         type: "html-keyboard-response",
-        stimulus: "<p> Saving data, please stay at this page.</p> ",
+        stimulus: "<p> Saving data, please stay at this page and wait for further instructions.</p> ",
         post_trial_gap: 2000,
         choices: null,
         trial_duration: 2000,
@@ -328,16 +328,15 @@
                 study: 'hysteresis-ambiguity',
                 date: Date()
             });
-           // jsPsych.data.displayData();
+
+           //jsPsych.data.displayData();
        }
     }
 
 
     var finish = {
         type: "html-keyboard-response",
-        stimulus: "<p> This is the end of the experiment </p> " +
-            "<p>Thank you for your participation!</p>" +
-            "<p>Now please press any key to the debriefing page. ",
+        stimulus:  "<p>Now please press any key to the debriefing page. ",
         post_trial_gap: 500,
         choices: null,
         on_finish: function() {
@@ -368,7 +367,11 @@
         <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:normal;font-size:15px;font-family:"Times New Roman",serif;margin:0cm;'><span style='font-family:"Calibri",sans-serif;color:black;'>-------------------------------------------------------------------------------------------------------------------------------</span></p>
         <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:normal;font-size:15px;font-family:"Times New Roman",serif;margin:0cm;'><span style='font-family:"Calibri",sans-serif;color:black;'>If you have any questions, please contact Dr. Bernhardt-Walther by email at bernhardt-walther@psych.utoronto.ca</span>.</p>
  `;
-      }
+    },
+    on_finish: function(){
+        alert("There may be data storing issues for those who are accessing this webpage from mainland China. If you are accessing this webpage from mainland china, please proceed to the last page where data is displayed. Then right click on the page with data, and save it as an html file. Please send this html file to the lab email. Thank you very much!");
+    }
+
     };
 
     var end_experiment = {
@@ -416,13 +419,16 @@
         type: 'fullscreen',
         fullscreen_mode: false
     });
-    timeline.push(end_experiment);
+    //timeline.push(end_experiment);
     /* start the experiment */
     jsPsych.init({
       timeline: timeline,
       preload_images: paths,
       show_progress_bar: true,
-      auto_update_progress_bar: false
+      auto_update_progress_bar: false,
+      on_finish: function() {
+          jsPsych.data.displayData();
+      }
     });
   </script>
   </html>
