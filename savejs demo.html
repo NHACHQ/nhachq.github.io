@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>savejs-textarea</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <!-- 1. Define some markup -->
+    <p id="saveTextarea">Hello world, here is an example message for save.js!</p>
+	<br />
+    <button id="saveBtn" data-save-target="saveTextarea" class="btn">Save</button>
+
+    <!-- 2. Include library -->
+    <script src="https://cdn.savejs.com/savejs/1.0.1/save.min.js"></script>
+
+    <!-- 3. Instantiate alertTest by passing a string selector -->
+    <script>
+        var test = savejs.create({
+            buttonId: 'saveBtn',
+            mimeType: 'text/plain',
+            // requestFileName: true,
+            // requestFileNameMessage: 'Enter a file name',
+        });
+
+        test.init();
+
+    </script>
+</body>
+</html>

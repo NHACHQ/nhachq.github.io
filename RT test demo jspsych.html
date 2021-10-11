@@ -5,6 +5,8 @@
     <script src="jspsych-6.3.0/jspsych.js"></script>
     <script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
     <script src="jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js"></script>
+    <script src="jspsych-6.3.0/plugins/jspsych-html-button-response.js"></script>
+
     <script src="jspsych-6.3.0/plugins/jspsych-preload.js"></script>
     <link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
   </head>
@@ -86,7 +88,16 @@
       repetitions: 5,
       randomize_order: true
     }
-    timeline.push(test_procedure);
+    //timeline.push(test_procedure);
+
+
+    var trial = {
+    type: 'html-button-response',
+    stimulus: '<p>Running</p>',
+    choices: ['Healthy', 'Unhealthy'],
+    prompt: "<p>Is this activity healthy or unhealthy?</p>"
+};
+    timeline.push(trial);
 
     /* define debrief */
 
