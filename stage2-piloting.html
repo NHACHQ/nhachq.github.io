@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Ambiguity in category boundaries</title>
+    <script src="jspsych-6.1.0/jspsych.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-animation.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-animation-feedback.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-html-button-response.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-external-html.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-animation.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-fullscreen.js"></script>
+    <script src="jspsych-6.3.0/plugins/jspsych-survey-text.js"></script>
+    <script src="utils.js"></script>
+    <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-database.js"></script>
+
+​
+  </head>
+​
+
+​  <body style="background-color:#a6a6a6;"></body>
+
+
+  <script>
+
+    var firebaseConfig = {
+        apiKey: "AIzaSyCkARijjc9rhsbwRg6Cqbw4VQZU9Ne4hXA",
+        authDomain: "bwlab-hysteresis-stage2.firebaseapp.com",
+        databaseURL: "https://bwlab-hysteresis-stage2-default-rtdb.firebaseio.com",
+        projectId: "bwlab-hysteresis-stage2",
+        storageBucket: "bwlab-hysteresis-stage2.appspot.com",
+        messagingSenderId: "743577254079",
+        appId: "1:743577254079:web:40ca2c784de4ff1650ae0a",
+        measurementId: "G-N031LNGNVV"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    // login anonymous user
+    firebase.auth().signInAnonymously().catch(function(error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+    });
+    /* create timeline */
+    var timeline = [];
+
+    /* define welcome message trial */
+    var welcome = {
+      type: "html-keyboard-response",
+      stimulus: "<p>Welcome to the experiment.</p>"+
+      " <p>The experiment itself takes about 40-50 minutes, depending on"+
+      " how much break you decide to take in the middle of the experiment."+
+      " Therefore, please allocate about 50 mimutes for this experiment. You will know your progress through the progress bar on the top of the screen. </p>"+
+      "<p>Press any key to see the detailed instructions.</p>",
+      on_start: function() {
+            // set progress bar to 0 at the start of experiment
+            jsPsych.setProgressBar(0);
+      }
+    };
+    timeline.push(welcome);
+
+    /*concent*/
+    var consent_inst = {
+        type: 'html-button-response',
+        stimulus: html='<p style="color: black; font-size: 20px;">'
+            +'We would like to get your consent before starting the experiment.</p>',
+        choices: ['Consent page'],
+        data: {disp_type: 'consent-instruction'}
+    }
+    var check_consent = function(elem) {
+        if (document.getElementById('radio_agree').checked) {
+            return true;
+        } else {
+            alert("If you wish to participate, you must check the box next to the statement 'I agree.'");
+            return false;
+        }
+        return false;
+    };
+    var consent_page = {
+        type: 'external-html',
+        url: "LetterOfInformationParticipantConsent_2020\\content.html",
+        cont_btn: "start",
+        check_fn: check_consent,
+        data: {disp_type: 'online_consent_form'}
+    };
+
+
+/* collect biogprahic data*/
+    var survey = {
+      type: 'survey-text',
+      questions: [
+        {prompt: "<p>We would like to collect your basic biogprahic data.</p>"+
+        " <p>What is your age?</p>", name: 'age'},
+        {prompt: "Are you left-handed or right-handed? Reply R or L", name: 'handedness'},
+        {prompt: "How do you identify your gender?", name: 'gender'},
+        {prompt: "Do you wear glasses (G) or contacts(C) or both (Y) or none of them (N)?", name: 'vision'},
+        {prompt: "<p>The follwing information is collected only to record your earned course credit.</p>"+
+        " <p>What is your name?</p>", name: 'name'},
+        {prompt: "Student number: ", name: 'studentID'}
+      ],
+    };
+
+
+    /* define instructions trial */
+    var instructions_b = {
+      type: "html-keyboard-response",
+      stimulus: "<h1> Instuctions of Part B </h1>"+
+      "<p> There are 10 trials in Part B of the experiment.<p/>"+
+      "<p>In each trial, a sequence of images of indoor scenes will appear at the center of the screen. " +
+          " Scenes come from three categories: bedrooms, living rooms, and dining rooms. </p>" +
+          "<p>You will be presented with a scene, which will SUDDENLY change from one category to another."+
+          " For example, you may first see a bedroom scene, which may suddenly change to a living room."+
+          " Please press the SPACE BAR as soon as you detect the change in category. You will see a notice RESPONSE RECORDED below the image after a succesful response.</p>" +
+          "<p> Only your first response for each image sequence will be recorded.</p>"+
+          "<p>You will first see a practice trial, followed by 10 test trials.</p>" +
+          "<p>Now please press the SPACE BAR when you are ready to begin the practice trial`.</p>",
+      post_trial_gap: 1000,
+      choices: ['space']
+    };
+
+    var instructions_a = {
+      type: "html-keyboard-response",
+      stimulus: "<h1> Instuctions of Part A </h1>"+
+      "<p> There are 96 trials in Part A of the experiment.<p/>"+
+      "<p>In each trial, a sequence of images of indoor scenes will appear at the center of the screen. " +
+          " Scenes come from three categories: bedrooms, living rooms, and dining rooms. </p>" +
+          "<p>You will be presented with a scene, which will GRADUALLY change from one category to another."+
+          " For example, you may first see a bedroom scene, which may gradually change to a living room, different from what you did in Pat A."+
+          " Please press the SPACE BAR as  soon as you detect the change in category. You will see a notice RESPONSE RECORDED below the image after a succesful response.</p>" +
+          "<p> Only your first response for each image sequence will be recorded. </p>"+
+          "<p>You will first see a practice trial, followed by 96 test trials. Since there are lots of trials, please take breaks to relax yourself.</p>" +
+          "<p>Now please press the SPACE BAR when you are ready to begin the practice trial.</p>",
+      post_trial_gap: 1000,
+      choices: ['space']
+    };
+
+
+
+
+    /*   stimuli  */
+
+    //generate arrays of images
+    var paths = [];
+    // number of trials = practive + trials + debriefing
+    // initially 2
+    var num_trials = 2;
+    var test_stimuli = []; //0-32, 0r-32r
+    var practice_stimuli;
+    var boundaries = [[85.0, 178.0, 315.0],
+                        [81.0, 170.0, 333.0],
+                        [87.0, 174.0, 330.0],
+                         [90.0, 170.0, 321.0],
+                         [83.0, 171.0, 325.0],
+                        [84.0, 171.0, 326.0],
+                        [77.0, 169.0, 325.0],
+                         [85.0, 169.0, 331.0],
+                         [87.0, 177.0, 318.0],
+                         [88.0, 175.0, 320.0],
+                         [82.0, 169.0, 324.0],
+                         [90.0, 172.0, 318.0],
+                        [93.0, 172.0, 324.0],
+                        [92.0, 170.0, 328.0],
+                        [87.0, 180.0, 321.0],
+                        [98.0, 169.0, 334.0]];
+
+
+    var c=0;
+    var deviation;
+    for(var i = 0; i<16; i++){
+        c = 3*i;
+        //caliberation
+        if (i%3==0){
+            deviation = [-60,30];
+        }
+        else if (i%3==1){
+            deviation = [-45,45];
+        }
+        else {
+            deviation = [-30,60];
+        }
+
+        var a = boundaries[0][0];
+        var b2l = imgSelect(deviation[0]+boundaries[i][0], deviation[1]+boundaries[i][0], 3, "stimuli/"+i+'/webp');
+        test_stimuli.push({ stimulus: b2l[0], data: {trial_tag: c} });
+        test_stimuli.push({ stimulus: b2l[1], data: {trial_tag: c+'r'} });
+        c++;
+        var l2d = imgSelect(deviation[0]+boundaries[i][1], deviation[1]+boundaries[i][1], 3, "stimuli/"+i+'/webp');
+        test_stimuli.push({ stimulus: l2d[0], data: {trial_tag: c} });
+        test_stimuli.push({ stimulus: l2d[1], data: {trial_tag: c+'r'} });
+        c++;
+        var d2b = imgSelect(deviation[0]+boundaries[i][2], deviation[1]+boundaries[i][2], 3, "stimuli/"+i+'/webp');
+        test_stimuli.push({ stimulus: d2b[0], data: {trial_tag: c} });
+        test_stimuli.push({ stimulus: d2b[1], data: {trial_tag: c+'r'} });
+        paths.push(b2l,l2d,d2b);
+        //paths.push(b2l,l2d);
+    }
+
+
+    practice_stimuli= imgSelect(130, 220, 3, "stimuli/practice")[0];
+    paths.push(practice_stimuli);
+    //remove 0 and 0r
+    // test_stimuli.shift();
+    // test_stimuli.shift();
+
+    //abrupt trials
+    var abrupt_stimuli = [];
+    var temp;
+    var end;
+    for (var i = 0; i<5; i++){
+        end=2*i+1;
+        temp = abrupt_img('stimuli/abrupt/'+2*i+'.jpg','stimuli/abrupt/'+end+'.jpg', 10+2*i, 30 );
+        paths.push('stimuli/abrupt/'+2*i+'.jpg','stimuli/abrupt/'+end+'.jpg');
+        abrupt_stimuli.push({ stimulus: temp, data: {trial_tag: 'a'+i} });
+
+        temp = abrupt_img('stimuli/abrupt/'+end+'.jpg','stimuli/abrupt/'+2*i+'.jpg', 10+2*i, 30 );
+        abrupt_stimuli.push({ stimulus: temp, data: {trial_tag: 'ar'+i} });
+    }
+
+    // update number of trials
+    num_trials = num_trials + test_stimuli.length + abrupt_stimuli.length;
+
+    var practice = {
+        //type: 'animation',
+        type: 'animation-feedback',
+        stimuli: practice_stimuli,
+        frame_time: 200,
+        frame_isi: 300,
+        prompt: '<p style="color:#a6a6a6;"> empty </p>',
+        choices: ['space'],
+        on_finish: function() {
+            // at the end of each trial, update the progress bar
+            // based on the current value and the proportion to update for each trial
+            var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
+            jsPsych.setProgressBar(curr_progress_bar_value + (1/num_trials));
+        }
+    }
+
+    var practice_abrupt = {
+        //type: 'animation',
+        type: 'animation-feedback',
+        stimuli: abrupt_img('stimuli/10/webp/000030.webp','stimuli/10/webp/000100.webp', 15, 30),
+        frame_time: 200,
+        frame_isi: 300,
+        prompt: '<p style="color:#a6a6a6;"> empty </p>',
+        choices: ['space'],
+        on_finish: function() {
+            // at the end of each trial, update the progress bar
+            // based on the current value and the proportion to update for each trial
+            var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
+            jsPsych.setProgressBar(curr_progress_bar_value + (1/num_trials));
+        }
+    }
+
+    var start = {
+        type: "html-keyboard-response",
+        stimulus: "<p> Now we will start the test trials.  </p>",
+        post_trial_gap: 1000,
+        choices: ['space'],
+        trial_duration: 3000
+    }
+
+
+    var test = {
+        //type: 'animation',
+        type: 'animation-feedback',
+        stimuli: jsPsych.timelineVariable('stimulus'),
+        frame_time: 200,
+        frame_isi: 300,
+        choices:['space'],
+        data: jsPsych.timelineVariable('data'),
+        post_trial_gap: 300,
+        prompt: '<p style="color:#a6a6a6;"> empty </p>',
+        on_finish: function() {
+            // at the end of each trial, update the progress bar
+            // based on the current value and the proportion to update for each trial
+            var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
+            jsPsych.setProgressBar(curr_progress_bar_value + (1/num_trials));
+        }
+    }
+
+
+    var gap = {
+      type: "html-keyboard-response",
+      stimulus: "<p> Feel free to take a break to relax your eyes.</p>"+
+      "<p> Please press the SPACE BAR when you are ready to begin the next trial. </p>",
+      post_trial_gap: 1000,
+      choices: ['space']
+    }
+
+    var fixation = {
+      type: 'html-keyboard-response',
+      stimulus: '<div style="font-size:60px;">+</div>'+
+                '<p style="color:#a6a6a6"> empty </p>',
+      choices: jsPsych.NO_KEYS,
+      trial_duration: 1000
+    }
+
+
+    var abrupt_procedure = {
+        timeline: [gap,fixation,test],
+        timeline_variables:abrupt_stimuli,
+        randomize_order: true
+    }
+    var test_procedure = {
+      timeline: [gap,fixation,test],
+      timeline_variables: test_stimuli,
+      randomize_order: true
+    }
+
+
+    var save_data = {
+        type: "html-keyboard-response",
+        stimulus: "<p> Saving data, please stay at this page and wait for further instructions.</p> ",
+        post_trial_gap: 2000,
+        choices: null,
+        trial_duration: 2000,
+        on_finish: function(){
+            //firebase!
+            var tmp = new Uint32Array(1);
+            tmp = window.crypto.getRandomValues(tmp);
+            var dbpath = firebase.auth().currentUser.uid+'/'+tmp;
+            firebase.database().ref(dbpath).set({
+                data: jsPsych.data.get().values(),
+                study: 'hysteresis-ambiguity',
+                date: Date()
+            });
+
+           //jsPsych.data.displayData();
+       }
+    }
+
+
+    var finish = {
+        type: "html-keyboard-response",
+        stimulus:  "<p>Now please press any key to the debriefing page. ",
+        post_trial_gap: 500,
+        choices: null,
+        on_finish: function() {
+            // at the end of each trial, update the progress bar
+            // based on the current value and the proportion to update for each trial
+            var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
+            jsPsych.setProgressBar(curr_progress_bar_value + (1/num_trials));
+        }
+    }
+
+
+    var debriefing = {
+      type: "html-keyboard-response",
+      stimulus: function() {
+        return `<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;text-align:center;'><strong><span style="font-size:21px;line-height:107%;">The perceptual ambiguity of in-door scenes</span></strong></p>
+        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><span style='font-family:"Calibri",sans-serif;color:black;'>(You can press any key to end the experiment)</span></p>
+        <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;'>&nbsp;</p>
+        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><span style='font-family:"Calibri",sans-serif;color:black;'>The experiment you just completed is about the general topic of perception and memory of scenes. The specific topic here is the perceptual ambiguity of discrete scene categories. How your perception of scene categories influenced by the stimuli presented when there is ambiguity? Hysteresis is an interesting effect found in perceptual ambiguities. It means the dependence of the previous state in a system. In psychophysics, hysteresis refers to the phenomenon that the perception of stimuli is influenced by prior stimuli. People tend to stick with the perception brought by previous stimuli until the later stimuli propose a large enough change in perception. Therefore, in categorical judgements, the threshold of perception on category change can depend on the direction of presenting the stimuli. Hysteresis effect has been found in many studies, such as geometric and emotional ambiguities, figure-ground transitions, linguistic ambiguities, and so on. Here we are interested to see if we can also find the hysteresis effect in judgements of scene categories, and how this gives inferences on scene perception.</span></p>
+        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><span style='font-family:"Calibri",sans-serif;color:black;'>In the experiment, you completed two parts of experiment. In part A of the experiment, you were presented with image sequences, and your task was to decide a change in terms of category. All transitions between categories were presented to you in both directions, and we will see your perceptions of changes in categories differ on the same image sequence, but presented in opposite directions. We hypothesize that your judgement of change in categories will be different in two directions, as, in each direction, you tend to stick longer to the previous category you saw. In part B of the experiment, we asked you to respond to immediate changes, to collect your response time. This response time will be extracted from the data we collected from part A, so the effect of response time can be eliminated.</span></p>
+        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><span style='font-family:"Calibri",sans-serif;color:black;'>This experiment will inform us on how scene perception is similar or different from other perceptions. It can also give implications on the experiment paradigms including presenting stimuli in a specific order, and how the order of presenting may influence the results.</span></p>
+        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><span style='font-family:"Calibri",sans-serif;color:black;'>Thank you for participating! You can now press any key to end the experiment!</span></p>
+        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><br></p>
+         <!--button type="button" id="end">End Experiment</button-->
+        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><br></p>
+        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:36.0pt;line-height:107%;font-size:15px;font-family:"Times New Roman",serif;text-indent:-36.0pt;'><span style='font-family:"Calibri",sans-serif;color:black;'>Liaci, E., Fischer, A., Atmanspacher, H., Heinrichs, M., Tebartz van Elst, L., &amp; Kornmeier, J. (2018). Positive and negative hysteresis effects for the perception of geometric and emotional ambiguities.&nbsp;</span>PLoS One,&nbsp;13(9), e0202398.</p>
+        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:36.0pt;line-height:107%;font-size:15px;font-family:"Times New Roman",serif;text-indent:-36.0pt;'><span style='font-family:"Calibri",sans-serif;color:black;'>Poltoratski, S., &amp; Tong, F. (2014). Hysteresis in the dynamic perception of scenes and objects.&nbsp;</span>Journal of Experimental Psychology: General,&nbsp;143(5), 1875.</p>
+        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:36.0pt;line-height:107%;font-size:15px;font-family:"Times New Roman",serif;text-indent:-36.0pt;'><span style='font-family:"Calibri",sans-serif;color:black;'>&nbsp;</span></p>
+        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:normal;font-size:15px;font-family:"Times New Roman",serif;margin:0cm;'><span style='font-family:"Calibri",sans-serif;color:black;'>-------------------------------------------------------------------------------------------------------------------------------</span></p>
+        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:normal;font-size:15px;font-family:"Times New Roman",serif;margin:0cm;'><span style='font-family:"Calibri",sans-serif;color:black;'>If you have any questions, please contact Dr. Bernhardt-Walther by email at bernhardt-walther@psych.utoronto.ca</span>.</p>
+ `;
+    },
+    on_finish: function(){
+        alert("There may be data storing issues in a unstable VPN environment. If you are accessing this webpage using VPN, please proceed to the last page where data is displayed. Then right click on the page with data, and save it as an html file. Please send this html file to the lab email. Thank you very much!");
+    }
+
+    };
+
+    var end_experiment = {
+        type: "html-keyboard-response",
+        stimulus: "<p> Goodbye! </p> ",
+        post_trial_gap: 500,
+        choices: null,
+        trial_duration: 1000
+    }
+
+    /* timeline arrangement*/
+
+
+    /* consent*/
+    timeline.push(consent_inst);
+    timeline.push(consent_page);
+
+    timeline.push({
+        type: 'fullscreen',
+        fullscreen_mode: true
+    });
+
+    /* biographic*/
+    timeline.push(survey);
+
+    // /*part A*/
+    // timeline.push(instructions_a);
+    // timeline.push(fixation);
+    // timeline.push(practice);
+    // timeline.push(start);
+    // timeline.push(test_procedure);
+
+    // /*part B*/
+    // timeline.push(instructions_b);
+    // timeline.push(fixation);
+    // timeline.push(practice_abrupt);
+    // timeline.push(start);
+    // timeline.push(abrupt_procedure);
+
+    // /*save data*/
+    // timeline.push(save_data);
+    // timeline.push(finish);
+    // timeline.push(debriefing);
+    // timeline.push({
+    //     type: 'fullscreen',
+    //     fullscreen_mode: false
+    // });
+    //timeline.push(end_experiment);
+    /* start the experiment */
+    jsPsych.init({
+      timeline: timeline,
+      preload_images: paths,
+      show_progress_bar: true,
+      auto_update_progress_bar: false,
+      on_finish: function() {
+          jsPsych.data.displayData();
+      }
+    });
+  </script>
+  </html>
