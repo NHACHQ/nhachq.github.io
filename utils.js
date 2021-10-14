@@ -16,10 +16,10 @@ function imgSelect(start, end, interval, path){
         if (i%interval == 0){
             s = "000000" + c;
             s = s.substr(s.length-size);
-            // images.push(path+"/"+s+".jpg");
-            // images_r.unshift(path+"/"+s+".jpg");
-            images.push(path+"/"+s+".webp");
-            images_r.unshift(path+"/"+s+".webp");
+            images.push(path+"/"+s+".jpg");
+            images_r.unshift(path+"/"+s+".jpg");
+            // images.push(path+"/"+s+".webp");
+            // images_r.unshift(path+"/"+s+".webp");
             //testing
             //document.write(path+"/"+s+".jpg<br>")
         }

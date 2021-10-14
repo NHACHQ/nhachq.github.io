@@ -55,6 +55,7 @@
       " <p>The experiment itself takes about 50-60 minutes, depending on"+
       " how much break you decide to take in the middle of the experiment."+
       " Therefore, please allocate about 60 mimutes for this experiment. You will know your progress through the progress bar on the top of the screen. </p>"+
+      "Please DO NOT close this page before the end of the experiment, otherwise the data will be lost."+
       "<p>Press any key to see the detailed instructions.</p>",
       on_start: function() {
             // set progress bar to 0 at the start of experiment
@@ -106,10 +107,50 @@
 
 
     /* define instructions trial */
+    var instructions_a = {
+      type: "html-keyboard-response",
+      stimulus: "<h1> Instuctions of Part A </h1>"+
+      "<p> There are 9 trials in Part A of the experiment.<p/>"+
+      "<p>In each trial, a sequence of images of indoor scenes will appear at the center of the screen. " +
+          " Scenes come from three categories: bedrooms, living rooms, and dining rooms. </p>" +
+          "<p>You will be presented with a scene, which will GRADUALLY change from one category to another."+
+          " For example, you may first see a bedroom scene, which may gradually change to a living room, different from what you did in Pat A."+
+          " Please press the SPACE BAR as  soon as you detect the change in category. You will see a notice RESPONSE RECORDED below the image after a succesful response.</p>" +
+          "<p> Only your first response for each image sequence will be recorded. </p>"+
+          "<p>You will first see a practice trial, followed by 9 test trials. Since there are lots of trials, please take breaks to relax yourself.</p>" +
+          "<p>Now please press the SPACE BAR when you are ready to begin the practice trial.</p>",
+      post_trial_gap: 1000,
+      choices: ['space']
+    };
+
     var instructions_b = {
       type: "html-keyboard-response",
-      stimulus: "<h1> Instuctions of Part B </h1>"+
-      "<p> There are 10 trials in Part B of the experiment.<p/>"+
+      stimulus: "<h1> Instuctions of Part E </h1>",
+
+      post_trial_gap: 1000,
+      choices: ['space']
+    };
+
+    var instructions_c = {
+      type: "html-keyboard-response",
+      stimulus: "<h1> Instuctions of Part E </h1>",
+
+      post_trial_gap: 1000,
+      choices: ['space']
+    };
+
+    var instructions_d = {
+      type: "html-keyboard-response",
+      stimulus: "<h1> Instuctions of Part E </h1>",
+
+      post_trial_gap: 1000,
+      choices: ['space']
+    };
+
+    var instructions_e = {
+      type: "html-keyboard-response",
+      stimulus: "<h1> Instuctions of Part E </h1>"+
+      "<p> There are 10 trials in Part E of the experiment. This is the last part of this experiment. <p/>"+
       "<p>In each trial, a sequence of images of indoor scenes will appear at the center of the screen. " +
           " Scenes come from three categories: bedrooms, living rooms, and dining rooms. </p>" +
           "<p>You will be presented with a scene, which will SUDDENLY change from one category to another."+
@@ -121,24 +162,6 @@
       post_trial_gap: 1000,
       choices: ['space']
     };
-
-    var instructions_a = {
-      type: "html-keyboard-response",
-      stimulus: "<h1> Instuctions of Part A </h1>"+
-      "<p> There are 96 trials in Part A of the experiment.<p/>"+
-      "<p>In each trial, a sequence of images of indoor scenes will appear at the center of the screen. " +
-          " Scenes come from three categories: bedrooms, living rooms, and dining rooms. </p>" +
-          "<p>You will be presented with a scene, which will GRADUALLY change from one category to another."+
-          " For example, you may first see a bedroom scene, which may gradually change to a living room, different from what you did in Pat A."+
-          " Please press the SPACE BAR as  soon as you detect the change in category. You will see a notice RESPONSE RECORDED below the image after a succesful response.</p>" +
-          "<p> Only your first response for each image sequence will be recorded. </p>"+
-          "<p>You will first see a practice trial, followed by 96 test trials. Since there are lots of trials, please take breaks to relax yourself.</p>" +
-          "<p>Now please press the SPACE BAR when you are ready to begin the practice trial.</p>",
-      post_trial_gap: 1000,
-      choices: ['space']
-    };
-
-
 
 
     /*   stimuli  */
@@ -165,12 +188,14 @@
                         [93.0, 172.0, 324.0],
                         [92.0, 170.0, 328.0],
                         [87.0, 180.0, 321.0],
-                        [98.0, 169.0, 334.0]];
+                        [98.0, 169.0, 334.0],
+                        [87.0, 170.0, 327.0],
+                        [88.0, 170.0, 339.0]];
 
 
     var c=0;
     var deviation;
-    for(var i = 0; i<16; i++){
+    for(var i = 0; i<18; i++){
         c = 3*i;
         //caliberation
         if (i%3==0){
@@ -183,20 +208,20 @@
             deviation = [-30,60];
         }
 
-        var a = boundaries[0][0];
-        var b2l = imgSelect(deviation[0]+boundaries[i][0], deviation[1]+boundaries[i][0], 3, "stimuli/"+i+'/webp');
+        
+        var b2l = imgSelect(deviation[0]+boundaries[i][0], deviation[1]+boundaries[i][0], 3, "stimuli/"+i);
         test_stimuli.push({ stimulus: b2l[0], data: {trial_tag: c} });
         test_stimuli.push({ stimulus: b2l[1], data: {trial_tag: c+'r'} });
         c++;
-        var l2d = imgSelect(deviation[0]+boundaries[i][1], deviation[1]+boundaries[i][1], 3, "stimuli/"+i+'/webp');
+        var l2d = imgSelect(deviation[0]+boundaries[i][1], deviation[1]+boundaries[i][1], 3, "stimuli/"+i);
         test_stimuli.push({ stimulus: l2d[0], data: {trial_tag: c} });
         test_stimuli.push({ stimulus: l2d[1], data: {trial_tag: c+'r'} });
         c++;
-        var d2b = imgSelect(deviation[0]+boundaries[i][2], deviation[1]+boundaries[i][2], 3, "stimuli/"+i+'/webp');
+        var d2b = imgSelect(deviation[0]+boundaries[i][2], deviation[1]+boundaries[i][2], 3, "stimuli/"+i);
         test_stimuli.push({ stimulus: d2b[0], data: {trial_tag: c} });
         test_stimuli.push({ stimulus: d2b[1], data: {trial_tag: c+'r'} });
         paths.push(b2l,l2d,d2b);
-        //paths.push(b2l,l2d);
+
     }
 
 
@@ -305,9 +330,12 @@
         timeline_variables:abrupt_stimuli,
         randomize_order: true
     }
+
+    //var part_of_stimuli = test_stimuli[0.2];
+
     var test_procedure = {
       timeline: [gap,fixation,test],
-      timeline_variables: test_stimuli,
+      timeline_variables: test_stimuli.slice(0,2),
       randomize_order: true
     }
 
@@ -395,14 +423,14 @@
     });
 
     /* biographic*/
-    timeline.push(survey);
+    //timeline.push(survey);
 
     // /*part A*/
     // timeline.push(instructions_a);
     // timeline.push(fixation);
     // timeline.push(practice);
     // timeline.push(start);
-    // timeline.push(test_procedure);
+    timeline.push(test_procedure);
 
     // /*part B*/
     // timeline.push(instructions_b);
