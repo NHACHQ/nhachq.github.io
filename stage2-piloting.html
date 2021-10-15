@@ -12,6 +12,8 @@
     <script src="jspsych-6.1.0/plugins/jspsych-animation.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-fullscreen.js"></script>
     <script src="jspsych-6.3.0/plugins/jspsych-survey-text.js"></script>
+    <script src="jspsych-6.3.0/plugins/jspsych-categorize-image.js"></script>
+
     <script src="utils.js"></script>
     <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
     <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-app.js"></script>
@@ -110,14 +112,14 @@
     var instructions_a = {
       type: "html-keyboard-response",
       stimulus: "<h1> Instuctions of Part A </h1>"+
-      "<p> There are 9 trials in Part A of the experiment.<p/>"+
+      "<p> There are 18 trials in Part A of the experiment.<p/>"+
       "<p>In each trial, a sequence of images of indoor scenes will appear at the center of the screen. " +
           " Scenes come from three categories: bedrooms, living rooms, and dining rooms. </p>" +
           "<p>You will be presented with a scene, which will GRADUALLY change from one category to another."+
           " For example, you may first see a bedroom scene, which may gradually change to a living room, different from what you did in Pat A."+
           " Please press the SPACE BAR as  soon as you detect the change in category. You will see a notice RESPONSE RECORDED below the image after a succesful response.</p>" +
           "<p> Only your first response for each image sequence will be recorded. </p>"+
-          "<p>You will first see a practice trial, followed by 9 test trials. Since there are lots of trials, please take breaks to relax yourself.</p>" +
+          "<p>You will first see a practice trial, followed by 18 test trials. Since there are lots of trials, please take breaks to relax yourself.</p>" +
           "<p>Now please press the SPACE BAR when you are ready to begin the practice trial.</p>",
       post_trial_gap: 1000,
       choices: ['space']
@@ -167,6 +169,7 @@
     /*   stimuli  */
 
     //generate arrays of images
+    //note that paths will be a 3D array according to the following manipulation
     var paths = [];
     // number of trials = practive + trials + debriefing
     // initially 2
@@ -227,9 +230,7 @@
 
     //practice_stimuli= imgSelect(130, 220, 3, "stimuli/practice")[0];
     //paths.push(practice_stimuli);
-    //remove 0 and 0r
-    // test_stimuli.shift();
-    // test_stimuli.shift();
+
 
     //abrupt trials
     var abrupt_stimuli = [];
@@ -247,6 +248,12 @@
 
     // update number of trials
     num_trials = num_trials + test_stimuli.length + abrupt_stimuli.length;
+
+    //random trials
+    var random_stimuli= random_select(paths, 3);
+
+
+    /* types of tasks */
 
     var practice = {
         //type: 'animation',
@@ -312,7 +319,7 @@
       type: "html-keyboard-response",
       stimulus: "<p> Feel free to take a break to relax your eyes.</p>"+
       "<p> Please press the SPACE BAR when you are ready to begin the next trial. </p>",
-      post_trial_gap: 1000,
+      post_trial_gap: 500,
       choices: ['space']
     }
 
@@ -321,9 +328,45 @@
       stimulus: '<div style="font-size:60px;">+</div>'+
                 '<p style="color:#a6a6a6"> empty </p>',
       choices: jsPsych.NO_KEYS,
-      trial_duration: 1000
+      trial_duration: 700
     }
 
+    var random_test = {
+        type: 'categorize-image',
+        stimuli:jsPsych.timelineVariable('stimulus'),
+        stimulus_duration: 200,
+        trial_duration: 1800,
+        key_answer: 'a',
+        //text_answer: 'Blue',
+        choices: ['a', 'l'],
+        correct_text: "<p class='prompt'>You chose A.</p>",
+        incorrect_text: "<p class='prompt'>You chose L.</p>",
+        prompt: "<p>A or L?</p>"
+    }
+
+    // setting up procedures for part a-e
+
+    var normal_procedure = {
+      timeline: [gap,fixation,test],
+      timeline_variables: test_stimuli.slice(0,18),
+      randomize_order: true
+    }
+
+    var random_procedure = {
+        timeline: [gap, fixation, random_test],
+        timeline_variables: random_stimuli[0],
+        randomiza_order: true
+
+    }
+
+    var preexposure_procedure = {
+
+    }
+
+    var variation_procedure = {
+
+
+    }
 
     var abrupt_procedure = {
         timeline: [gap,fixation,test],
@@ -331,13 +374,8 @@
         randomize_order: true
     }
 
-    //var part_of_stimuli = test_stimuli[0.2];
 
-    var test_procedure = {
-      timeline: [gap,fixation,test],
-      timeline_variables: test_stimuli.slice(0,2),
-      randomize_order: true
-    }
+
 
 
     var save_data = {
@@ -414,8 +452,8 @@
 
 
     /* consent*/
-    timeline.push(consent_inst);
-    timeline.push(consent_page);
+    //timeline.push(consent_inst);
+    //timeline.push(consent_page);
 
     timeline.push({
         type: 'fullscreen',
@@ -430,9 +468,11 @@
     // timeline.push(fixation);
     // timeline.push(practice);
     // timeline.push(start);
-    timeline.push(test_procedure);
+    //timeline.push(normal_procedure);
 
-    // /*part B*/
+    timeline.push(random_procedure);
+
+    // /*part E*/
     // timeline.push(instructions_b);
     // timeline.push(fixation);
     // timeline.push(practice_abrupt);
