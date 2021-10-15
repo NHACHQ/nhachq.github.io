@@ -70,7 +70,12 @@ function abrupt_img(start_path, end_path, change, num){
 
 
 function random_select(paths, trials){
-    var randoms = [];
+    const dimension = [paths.length, paths[0].length, paths[0][0].length];
+    console.log(dimension);
+    console.log(paths[paths.length-1]);
+    //console.log(path)
+    var randoms = [[],[],[]];
+
     var len = paths[0][0].length;
     //this is a timeline variable 2d array
     var final = [];
@@ -80,22 +85,17 @@ function random_select(paths, trials){
     for (var i = 0; i<trials; i++){
         temp = paths[i][0];
         var temp_1 = [];
-        for (var j = 0; j<temp.length; j++){
-            temp_1.push({stimulus: temp[i][j], data: {trial_tag: 'random-'+i+'-'+j} });
+        for (var j = 0; j<len; j++){
+            randoms[i%3].push({stimulus: temp[j], data: {trial_tag: 'random-'+i+'-'+j} });
             //randoms[i%3].push({stimulus: temp[i][j], data: {trial_tag: 'random-'+i+'-'+j} });
         }
-        randoms[i%3]=temp_1;
+        //randoms[i%3].push(temp_1);
     }
 
     // randomize all images
     for (var j = 0; j < randoms.length; j++){
 
-        for (let i = randoms[j].length -1; i > 0; i--) {
-            let p = Math.floor(Math.random() * i);
-            let k = randoms[j][i];
-            randoms[j][i] = randoms[j][p];
-            randoms[j][p] = k;
-          }
+       randoms[j] = shuffle(randoms[j])
 
     }
 
@@ -105,6 +105,8 @@ function random_select(paths, trials){
     //     temp = randoms.slice(i*len, (i+1)*len);
     //     final.push(temp);
     // }
-
+    const dimension_ran = [randoms.length, randoms[0].length];
+    console.log(dimension_ran);
+    console.log(randoms[2]);
     return randoms;
 }

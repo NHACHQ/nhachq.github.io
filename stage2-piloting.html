@@ -29,24 +29,27 @@
 
   <script>
 
-    var firebaseConfig = {
-        apiKey: "AIzaSyCkARijjc9rhsbwRg6Cqbw4VQZU9Ne4hXA",
-        authDomain: "bwlab-hysteresis-stage2.firebaseapp.com",
-        databaseURL: "https://bwlab-hysteresis-stage2-default-rtdb.firebaseio.com",
-        projectId: "bwlab-hysteresis-stage2",
-        storageBucket: "bwlab-hysteresis-stage2.appspot.com",
-        messagingSenderId: "743577254079",
-        appId: "1:743577254079:web:40ca2c784de4ff1650ae0a",
-        measurementId: "G-N031LNGNVV"
-    };
+    // var firebaseConfig = {
+    //     apiKey: "AIzaSyCkARijjc9rhsbwRg6Cqbw4VQZU9Ne4hXA",
+    //     authDomain: "bwlab-hysteresis-stage2.firebaseapp.com",
+    //     databaseURL: "https://bwlab-hysteresis-stage2-default-rtdb.firebaseio.com",
+    //     projectId: "bwlab-hysteresis-stage2",
+    //     storageBucket: "bwlab-hysteresis-stage2.appspot.com",
+    //     messagingSenderId: "743577254079",
+    //     appId: "1:743577254079:web:40ca2c784de4ff1650ae0a",
+    //     measurementId: "G-N031LNGNVV"
+    // };
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    // login anonymous user
-    firebase.auth().signInAnonymously().catch(function(error) {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-    });
+    // // Initialize Firebase
+    // firebase.initializeApp(firebaseConfig);
+    // // login anonymous user
+    // firebase.auth().signInAnonymously().catch(function(error) {
+    //     var errorCode = error.code;
+    //     var errorMessage = error.message;
+    // });
+
+
+
     /* create timeline */
     var timeline = [];
 
@@ -211,7 +214,6 @@
             deviation = [-30,60];
         }
 
-        
         var b2l = imgSelect(deviation[0]+boundaries[i][0], deviation[1]+boundaries[i][0], 3, "stimuli/"+i);
         test_stimuli.push({ stimulus: b2l[0], data: {trial_tag: c} });
         test_stimuli.push({ stimulus: b2l[1], data: {trial_tag: c+'r'} });
@@ -250,8 +252,8 @@
     num_trials = num_trials + test_stimuli.length + abrupt_stimuli.length;
 
     //random trials
-    var random_stimuli= random_select(paths, 3);
-
+    var random_stimuli= random_select(paths, 6)[0];
+    //var random_stimuli = [{ stimulus: 'stimuli/0/000000.jpg', data: {trial_tag: 'random'} }];
 
     /* types of tasks */
 
@@ -314,6 +316,19 @@
         }
     }
 
+    var random_test = {
+        type: 'categorize-image',
+        stimulus:jsPsych.timelineVariable('stimulus'),
+        stimulus_duration: 200,
+        trial_duration: 2800,
+        key_answer: 'a',
+        //text_answer: 'Blue',
+        show_stim_with_feedback: false,
+        choices: ['a', 'l'],
+        correct_text: "<p class='prompt'>You chose A.</p>",
+        incorrect_text: "<p class='prompt'>You chose L.</p>",
+        prompt: "<p>A or L?</p>"
+    }
 
     var gap = {
       type: "html-keyboard-response",
@@ -331,18 +346,6 @@
       trial_duration: 700
     }
 
-    var random_test = {
-        type: 'categorize-image',
-        stimuli:jsPsych.timelineVariable('stimulus'),
-        stimulus_duration: 200,
-        trial_duration: 1800,
-        key_answer: 'a',
-        //text_answer: 'Blue',
-        choices: ['a', 'l'],
-        correct_text: "<p class='prompt'>You chose A.</p>",
-        incorrect_text: "<p class='prompt'>You chose L.</p>",
-        prompt: "<p>A or L?</p>"
-    }
 
     // setting up procedures for part a-e
 
@@ -354,7 +357,7 @@
 
     var random_procedure = {
         timeline: [gap, fixation, random_test],
-        timeline_variables: random_stimuli[0],
+        timeline_variables: random_stimuli,
         randomiza_order: true
 
     }
@@ -455,10 +458,10 @@
     //timeline.push(consent_inst);
     //timeline.push(consent_page);
 
-    timeline.push({
-        type: 'fullscreen',
-        fullscreen_mode: true
-    });
+    // timeline.push({
+    //     type: 'fullscreen',
+    //     fullscreen_mode: true
+    // });
 
     /* biographic*/
     //timeline.push(survey);
@@ -480,7 +483,7 @@
     // timeline.push(abrupt_procedure);
 
     // /*save data*/
-    timeline.push(save_data);
+    //timeline.push(save_data);
     // timeline.push(finish);
     // timeline.push(debriefing);
     // timeline.push({
@@ -491,7 +494,7 @@
     /* start the experiment */
     jsPsych.init({
       timeline: timeline,
-      preload_images: paths,
+      //preload_images: paths,
       show_progress_bar: true,
       auto_update_progress_bar: false,
       on_finish: function() {
