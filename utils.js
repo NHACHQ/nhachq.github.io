@@ -70,15 +70,14 @@ function abrupt_img(start_path, end_path, change, num){
 
 
 function random_select(paths, trials){
-    const dimension = [paths.length, paths[0].length, paths[0][0].length];
-    console.log(dimension);
-    console.log(paths[paths.length-1]);
+    // const dimension = [paths.length, paths[0].length, paths[0][0].length];
+    // console.log(dimension);
+    // console.log(paths[paths.length-1]);
     //console.log(path)
     var randoms = [[],[],[]];
 
     var len = paths[0][0].length;
     //this is a timeline variable 2d array
-    var final = [];
     var temp;
     
     //get a 1D array
@@ -105,8 +104,8 @@ function random_select(paths, trials){
     //     temp = randoms.slice(i*len, (i+1)*len);
     //     final.push(temp);
     // }
-    const dimension_ran = [randoms.length, randoms[0].length];
-    console.log(dimension_ran);
-    console.log(randoms[2]);
+    // const dimension_ran = [randoms.length, randoms[0].length];
+    // console.log(dimension_ran);
+    // console.log(randoms[2]);
     return randoms;
 }

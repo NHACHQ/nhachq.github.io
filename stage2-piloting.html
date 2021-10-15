@@ -60,6 +60,7 @@
       " <p>The experiment itself takes about 50-60 minutes, depending on"+
       " how much break you decide to take in the middle of the experiment."+
       " Therefore, please allocate about 60 mimutes for this experiment. You will know your progress through the progress bar on the top of the screen. </p>"+
+      " <p>This experiment has many parts, each part has a different instruation. Please read the instructions carefully before proceeding to the next steps.</p>"+
       "Please DO NOT close this page before the end of the experiment, otherwise the data will be lost."+
       "<p>Press any key to see the detailed instructions.</p>",
       on_start: function() {
@@ -115,7 +116,7 @@
     var instructions_a = {
       type: "html-keyboard-response",
       stimulus: "<h1> Instuctions of Part A </h1>"+
-      "<p> There are 18 trials in Part A of the experiment.<p/>"+
+      "<p> There are 18 trials in Part A of the experiment.</p>"+
       "<p>In each trial, a sequence of images of indoor scenes will appear at the center of the screen. " +
           " Scenes come from three categories: bedrooms, living rooms, and dining rooms. </p>" +
           "<p>You will be presented with a scene, which will GRADUALLY change from one category to another."+
@@ -130,7 +131,39 @@
 
     var instructions_b = {
       type: "html-keyboard-response",
-      stimulus: "<h1> Instuctions of Part E </h1>",
+      stimulus: "<h1> Instuctions of Part B </h1>",
+
+      post_trial_gap: 1000,
+      choices: ['space']
+    };
+
+    var instructions_b_b2l = {
+      type: "html-keyboard-response",
+      stimulus: "<h1> Instuction </h1>"+
+                "<p> You will categorize each image into Bedroom Or Living room. </p>"+
+                "<p> On your keybord, press B for bedroom and L for living room.</p>"+
+                "<p> If you are ready, press the spacebar to start the next trial.</p>",
+      post_trial_gap: 1000,
+      choices: ['space']
+    };
+
+    var instructions_b_l2d = {
+      type: "html-keyboard-response",
+      stimulus: "<h1> Instuctions </h1>"+
+                "<p> You will categorize each image into Dining room Or Living room. </p>"+
+                "<p> On your keybord, press D for Dining and L for living room.</p>"+
+                "<p> If you are ready, press the spacebar to start the next trial.</p>",
+
+      post_trial_gap: 1000,
+      choices: ['space']
+    };
+
+    var instructions_b_d2b = {
+      type: "html-keyboard-response",
+      stimulus: "<h1> Instuctions</h1>"+
+                "<p> You will categorize each image into Bedroom Or Dining room. </p>"+
+                "<p> On your keybord, press B for Bedroom and D for Dining room.</p>"+
+                "<p> If you are ready, press the spacebar to start the next trial.</p>",
 
       post_trial_gap: 1000,
       choices: ['space']
@@ -138,7 +171,7 @@
 
     var instructions_c = {
       type: "html-keyboard-response",
-      stimulus: "<h1> Instuctions of Part E </h1>",
+      stimulus: "<h1> Instuctions of Part C </h1>",
 
       post_trial_gap: 1000,
       choices: ['space']
@@ -146,7 +179,7 @@
 
     var instructions_d = {
       type: "html-keyboard-response",
-      stimulus: "<h1> Instuctions of Part E </h1>",
+      stimulus: "<h1> Instuctions of Part D </h1>",
 
       post_trial_gap: 1000,
       choices: ['space']
@@ -252,7 +285,7 @@
     num_trials = num_trials + test_stimuli.length + abrupt_stimuli.length;
 
     //random trials
-    var random_stimuli= random_select(paths, 6)[0];
+    var random_stimuli= random_select(paths, 3);
     //var random_stimuli = [{ stimulus: 'stimuli/0/000000.jpg', data: {trial_tag: 'random'} }];
 
     /* types of tasks */
@@ -316,18 +349,46 @@
         }
     }
 
-    var random_test = {
+    var random_b2l = {
         type: 'categorize-image',
         stimulus:jsPsych.timelineVariable('stimulus'),
         stimulus_duration: 200,
         trial_duration: 2800,
-        key_answer: 'a',
+        key_answer: 'b',
         //text_answer: 'Blue',
         show_stim_with_feedback: false,
-        choices: ['a', 'l'],
-        correct_text: "<p class='prompt'>You chose A.</p>",
-        incorrect_text: "<p class='prompt'>You chose L.</p>",
-        prompt: "<p>A or L?</p>"
+        choices: ['b', 'l'],
+        correct_text: "<p class='prompt'>You chose Bedroom.</p>",
+        incorrect_text: "<p class='prompt'>You chose Living room.</p>",
+        prompt: "<p>B or L?</p>"
+    }
+
+    var random_l2d = {
+        type: 'categorize-image',
+        stimulus:jsPsych.timelineVariable('stimulus'),
+        stimulus_duration: 200,
+        trial_duration: 2800,
+        key_answer: 'l',
+        //text_answer: 'Blue',
+        show_stim_with_feedback: false,
+        choices: ['l', 'd'],
+        correct_text: "<p class='prompt'>You chose Living room.</p>",
+        incorrect_text: "<p class='prompt'>You chose Dining room.</p>",
+        prompt: "<p>L or D?</p>"
+    }
+
+    var random_d2b = {
+        type: 'categorize-image',
+        stimulus:jsPsych.timelineVariable('stimulus'),
+        stimulus_duration: 200,
+        trial_duration: 2800,
+        key_answer: 'b',
+        //text_answer: 'Blue',
+        show_stim_with_feedback: false,
+        choices: ['b', 'd'],
+        correct_text: "<p class='prompt'>You chose Bedroom.</p>",
+        incorrect_text: "<p class='prompt'>You chose Dining room.</p>",
+        prompt: "<p> B or D?</p>"
     }
 
     var gap = {
@@ -355,9 +416,41 @@
       randomize_order: true
     }
 
-    var random_procedure = {
-        timeline: [gap, fixation, random_test],
-        timeline_variables: random_stimuli,
+    var random_procedure_b2l_1 = {
+        timeline: [fixation, random_b2l],
+        timeline_variables: random_stimuli[0].slice(0,random_stimuli[0].length/2),
+        randomiza_order: true
+
+    }
+    var random_procedure_b2l_2 = {
+        timeline: [fixation, random_b2l],
+        timeline_variables: random_stimuli[0].slice(random_stimuli[0].length/2),
+        randomiza_order: true
+
+    }
+
+    var random_procedure_l2d_1 = {
+        timeline: [fixation, random_l2d],
+        timeline_variables: random_stimuli[1].slice(0,random_stimuli[0].length/2),
+        randomiza_order: true
+
+    }
+    var random_procedure_l2d_2 = {
+        timeline: [fixation, random_l2d],
+        timeline_variables: random_stimuli[1].slice(random_stimuli[0].length/2),
+        randomiza_order: true
+
+    }
+
+    var random_procedure_d2b_1 = {
+        timeline: [fixation, random_d2b],
+        timeline_variables: random_stimuli[2].slice(0,random_stimuli[0].length/2),
+        randomiza_order: true
+
+    }
+    var random_procedure_d2b_2 = {
+        timeline: [fixation, random_d2b],
+        timeline_variables: random_stimuli[2].slice(random_stimuli[0].length/2),
         randomiza_order: true
 
     }
@@ -473,7 +566,21 @@
     // timeline.push(start);
     //timeline.push(normal_procedure);
 
-    timeline.push(random_procedure);
+    /*part B*/
+    timeline.push(instructions_b);
+    // timeline.push(fixation);
+    // timeline.push(practice);
+    // timeline.push(start);
+    timeline.push(instructions_b_b2l,random_procedure_b2l_1,gap,random_procedure_b2l_2);
+    timeline.push(instructions_b_l2d,random_procedure_l2d_1,gap,random_procedure_l2d_2);
+    timeline.push(instructions_b_d2b,random_procedure_d2b_1,gap,random_procedure_d2b_2);
+
+    // timeline.push(random_procedure_b2l_1);
+    // timeline.push(random_procedure_b2l_2);
+    // timeline.push(random_procedure_l2d_1);
+    // timeline.push(random_procedure_l2d_2);
+    // timeline.push(random_procedure_d2b_1);
+    // timeline.push(random_procedure_d2b_2);
 
     // /*part E*/
     // timeline.push(instructions_b);
