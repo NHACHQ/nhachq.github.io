@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Adaptive Side by Side IMG with Caption</title>
+<style>
+div {
+  display: inline-block;
+  width: 49%;
+}
+img {
+  width: 50%;
+}
+div::after {
+  content: '~'; /* in absence of caption the block will be sustained */
+  display: block;
+  color: #fff;
+  background: #1f4056;
+  text-align: center;
+  margin: 2px auto;
+  line-height: 1.8em;    /* puts some darkspace under the g */
+}
+div:first-child::after {
+  content: "Codecademy trademark";
+}
+div:last-child::after {
+  content: "Codecademy logo";
+}
+</style>
+</head>
+<body>
+<div><img src="stimuli/0/000000.jpg"></div>
+<div><img src="stimuli/1/000000.jpg"></div>
+</body>
+</html>

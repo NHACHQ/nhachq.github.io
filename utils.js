@@ -7,7 +7,7 @@ function imgSelect(start, end, interval, path){
     var images = [];
     var images_r = [];
     var c;
-    for (var i = start ;i<=end; i++){
+    for (var i = start ;i< end; i++){
         if (i>359){
             c = i%360;
         }else {
@@ -16,8 +16,8 @@ function imgSelect(start, end, interval, path){
         if (i%interval == 0){
             s = "000000" + c;
             s = s.substr(s.length-size);
-            images.push(path+"/"+s+".jpg");
-            images_r.unshift(path+"/"+s+".jpg");
+            images.push(path+'/'+s+'.jpg');
+            images_r.unshift(path+'/'+s+'.jpg');
             // images.push(path+"/"+s+".webp");
             // images_r.unshift(path+"/"+s+".webp");
             //testing
@@ -63,17 +63,20 @@ function abrupt_img(start_path, end_path, change, num){
     return images;
 }
 
+
+
+
+
 // this function is for setting up stimuli for random trials
-// each time the targe stumuli got 
-
-
-
+// each time the targe stumuli got shuffled and return three groups of random timeline variables with images 
+// paths: the 3D array that stored all the preloaded images
+// trials: number of trials where you got the random stlmuli from. By default start from set0
 
 function random_select(paths, trials){
-    // const dimension = [paths.length, paths[0].length, paths[0][0].length];
-    // console.log(dimension);
-    // console.log(paths[paths.length-1]);
-    //console.log(path)
+    const dimension = [paths.length, paths[0].length, paths[0][0].length];
+    console.log(dimension);
+    console.log(paths[paths.length-1]);
+    
     var randoms = [[],[],[]];
 
     var len = paths[0][0].length;
@@ -106,6 +109,113 @@ function random_select(paths, trials){
     // }
     // const dimension_ran = [randoms.length, randoms[0].length];
     // console.log(dimension_ran);
-    // console.log(randoms[2]);
+    console.log(randoms[2]);
     return randoms;
 }
+
+
+
+// timeline vaiable enerator for normal trials
+function normal_timeVarGenerator(paths, boundaries, start, end){
+
+    var c=0;
+    var deviation;
+    var test_stimuli = [];
+    for(var i = start; i<end; i++){
+        c = 3*i;
+        //caliberation
+        if (i%3==0){
+            deviation = [-60,30];
+        }
+        else if (i%3==1){
+            deviation = [-45,45];
+        }
+        else {
+            deviation = [-30,60];
+        }
+
+        var b2l = imgSelect(deviation[0]+boundaries[i][0], deviation[1]+boundaries[i][0], 3, "stimuli/"+i);
+        test_stimuli.push({ stimulus: b2l[0], data: {trial_tag: c} });
+        test_stimuli.push({ stimulus: b2l[1], data: {trial_tag: c+'r'} });
+        c++;
+        var l2d = imgSelect(deviation[0]+boundaries[i][1], deviation[1]+boundaries[i][1], 3, "stimuli/"+i);
+        test_stimuli.push({ stimulus: l2d[0], data: {trial_tag: c} });
+        test_stimuli.push({ stimulus: l2d[1], data: {trial_tag: c+'r'} });
+        c++;
+        var d2b = imgSelect(deviation[0]+boundaries[i][2], deviation[1]+boundaries[i][2], 3, "stimuli/"+i);
+        test_stimuli.push({ stimulus: d2b[0], data: {trial_tag: c} });
+        test_stimuli.push({ stimulus: d2b[1], data: {trial_tag: c+'r'} });
+        paths.push(b2l,l2d,d2b);
+
+    }
+
+
+    return test_stimuli;
+}
+
+function abrupt_timeVarGenerator(paths, ab_path, trials, type){
+    var abrupt_stimuli = [];
+    var temp;
+    var end;
+    for (var i = 0; i<trials; i++){
+        end=2*i+1;
+        temp = abrupt_img(ab_path+2*i+'.jpg',ab_path+end+'.jpg', 10+2*i, 30 );
+        paths.push(ab_path+2*i+'.jpg',ab_path+end+'.jpg');
+        abrupt_stimuli.push({ stimulus: temp, data: {trial_tag: 'a'+i} });
+
+        temp = abrupt_img(ab_path+end+'.jpg',ab_path+2*i+'.jpg', 10+2*i, 30 );
+        abrupt_stimuli.push({ stimulus: temp, data: {trial_tag: 'ar'+i} });
+    }
+
+
+    return abrupt_stimuli;
+}
+
+// timeline vaiable enerator for normal trials
+function exposure_timeVarGenerator(paths, boundaries, start, end){
+
+    var c=0;
+    var deviation;
+    var test_stimuli = [];
+    for(var i = start; i<end; i++){
+        c = 3*i;
+        //caliberation
+        if (i%3==0){
+            deviation = [-60,30];
+        }
+        else if (i%3==1){
+            deviation = [-45,45];
+        }
+        else {
+            deviation = [-30,60];
+        }
+
+        var b2l = imgSelect(deviation[0]+boundaries[i][0], deviation[1]+boundaries[i][0], 3, "stimuli/"+i);
+        test_stimuli.push({ stimulus: b2l[0], data: {trial_tag: c},
+            exposure: "<figure><img src= "+ b2l[0][0] +"><figcaption style='color:#ffffff'>Start</figcaption></figure>  <figure><img src="+b2l[0][b2l[0].length-1] +"><figcaption style='color:#ffffff'>End</figcaption></figure>"});
+        test_stimuli.push({ stimulus: b2l[1], data: {trial_tag: c+'r'},           
+            exposure: "<figure><img src= "+ b2l[1][0] +"><figcaption style='color:#ffffff'>Start</figcaption></figure>  <figure><img src="+b2l[1][b2l[1].length-1] +"><figcaption style='color:#ffffff'>End</figcaption></figure>"});
+        c++;
+        var l2d = imgSelect(deviation[0]+boundaries[i][1], deviation[1]+boundaries[i][1], 3, "stimuli/"+i);
+        test_stimuli.push({ stimulus: l2d[0], data: {trial_tag: c} ,
+            exposure: "<figure><img src= "+ l2d[0][0] +"><figcaption style='color:#ffffff'>Start</figcaption></figure>  <figure><img src="+l2d[0][l2d[0].length-1] +"><figcaption style='color:#ffffff'>End</figcaption></figure>"});
+        test_stimuli.push({ stimulus: l2d[1], data: {trial_tag: c+'r'},
+            exposure: "<figure><img src= "+ l2d[1][0] +"><figcaption style='color:#ffffff'>Start</figcaption></figure>  <figure><img src="+l2d[1][b2l[1].length-1] +"><figcaption style='color:#ffffff'>End</figcaption></figure>"});
+       
+        c++;
+        var d2b = imgSelect(deviation[0]+boundaries[i][2], deviation[1]+boundaries[i][2], 3, "stimuli/"+i);
+        test_stimuli.push({ stimulus: d2b[0], data: {trial_tag: c},
+            exposure: "<figure><img src= "+ d2b[0][0] +"><figcaption style='color:#ffffff'>Start</figcaption></figure>  <figure><img src="+d2b[0][l2d[0].length-1] +"><figcaption style='color:#ffffff'>End</figcaption></figure>"});
+        test_stimuli.push({ stimulus: d2b[1], data: {trial_tag: c+'r'},
+            exposure: "<figure><img src= "+ d2b[1][0] +"><figcaption style='color:#ffffff'>Start</figcaption></figure>  <figure><img src="+d2b[1][b2l[1].length-1] +"><figcaption style='color:#ffffff'>End</figcaption></figure>"});
+       
+    
+        paths.push(b2l,l2d,d2b);
+        //paths.push(b2l);
+
+    }
+
+
+    return test_stimuli;
+}
+
