@@ -52,3 +52,16 @@ sets:
 13---set42
 14---set47
 15---set43
+
+
+version after 2021-03-05 ------------------------------------------------
+sets:
+16---set1
+17---set4
+
+changes for the recent commits:
+1. finished functions for variation trials
+2. added an input variable to timeline variable generator: interval
+3. changed the image selector from "" to '' for saving image paths, this is used later for displaying preexposure image
+4. in images selector, from now, all trials will select images from the first 0 in the queue, and omit the last one.
+5. bug fixed： all normal trials will be 30. (some used to be 31)

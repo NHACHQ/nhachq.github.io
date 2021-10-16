@@ -231,12 +231,13 @@
                         [88.0, 170.0, 339.0]];
 
 
-    var normal_stimuli = normal_timeVarGenerator(paths, boundaries, 0, 3);
+    var normal_stimuli = normal_timeVarGenerator(paths, boundaries, 0, 3, 3);
     //random trials
     var random_stimuli = random_select(paths, 3);
 
-    var exposure_stmuli = exposure_timeVarGenerator(paths, boundaries, 3, 6);
+    var exposure_stimuli = exposure_timeVarGenerator(paths, boundaries, 3, 6, 3);
 
+    var variation_stimuli = variation_timeVarGenerator([2,4,5,6], paths, boundaries, 6,18 )
     var practice_stimuli;
     //practice_stimuli= imgSelect(130, 220, 3, "stimuli/practice")[0];
     //paths.push(practice_stimuli);
@@ -361,6 +362,8 @@
         choices: ['space']
     }
 
+
+
     var gap = {
       type: "html-keyboard-response",
       stimulus: "<p> Feel free to take a break to relax your eyes.</p>"+
@@ -427,12 +430,14 @@
 
     var preexposure_procedure = {
       timeline: [gap,fixation,exposure,test],
-      timeline_variables:exposure_stmuli,
+      timeline_variables:exposure_stimuli,
       randomize_order: true
     }
 
     var variation_procedure = {
-
+      timeline: [gap,fixation, test],
+      timeline_variables:variation_stimuli,
+      randomize_order: true
 
     }
 
@@ -548,8 +553,10 @@
     // timeline.push(instructions_b_d2b,random_procedure_d2b_1,gap,random_procedure_d2b_2);
 
     /*part C*/
-    timeline.push(preexposure_procedure);
+    //timeline.push(preexposure_procedure);
 
+    /*part D*/
+      timeline.push(variation_procedure);
     // /*part E*/
     // timeline.push(instructions_b);
     // timeline.push(fixation);
