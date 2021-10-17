@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+  <!---here are the plugins--->
   <head>
     <title>Ambiguity in category boundaries</title>
     <script src="jspsych-6.1.0/jspsych.js"></script>
@@ -57,10 +58,10 @@
     var welcome = {
       type: "html-keyboard-response",
       stimulus: "<p>Welcome to the experiment.</p>"+
-      " <p>The experiment itself takes about 50-60 minutes, depending on"+
+      " <p>The experiment itself takes about 45-60 minutes, depending on"+
       " how much break you decide to take in the middle of the experiment."+
       " Therefore, please allocate about 60 mimutes for this experiment. You will know your progress through the progress bar on the top of the screen. </p>"+
-      " <p>This experiment has many parts, each part has a different instruation. Please read the instructions carefully before proceeding to the next steps.</p>"+
+      " <p>This experiment has many parts, each part has a different instruction. Please read the instructions carefully before proceeding to the next steps.</p>"+
       "Please DO NOT close this page before the end of the experiment, otherwise the data will be lost."+
       "<p>Press any key to see the detailed instructions.</p>",
       on_start: function() {
@@ -231,12 +232,13 @@
                         [88.0, 170.0, 339.0]];
 
 
-    var normal_stimuli = normal_timeVarGenerator(paths, boundaries, 0, 3);
+    var normal_stimuli = normal_timeVarGenerator(paths, boundaries, 0, 3, 3);
     //random trials
     var random_stimuli = random_select(paths, 3);
 
-    var exposure_stmuli = exposure_timeVarGenerator(paths, boundaries, 3, 6);
+    var exposure_stimuli = exposure_timeVarGenerator(paths, boundaries, 3, 6, 3);
 
+    var variation_stimuli = variation_timeVarGenerator([2,4,5,6], paths, boundaries, 6,18 )
     var practice_stimuli;
     //practice_stimuli= imgSelect(130, 220, 3, "stimuli/practice")[0];
     //paths.push(practice_stimuli);
@@ -361,6 +363,8 @@
         choices: ['space']
     }
 
+
+
     var gap = {
       type: "html-keyboard-response",
       stimulus: "<p> Feel free to take a break to relax your eyes.</p>"+
@@ -427,12 +431,14 @@
 
     var preexposure_procedure = {
       timeline: [gap,fixation,exposure,test],
-      timeline_variables:exposure_stmuli,
+      timeline_variables:exposure_stimuli,
       randomize_order: true
     }
 
     var variation_procedure = {
-
+      timeline: [gap,fixation, test],
+      timeline_variables:variation_stimuli,
+      randomize_order: true
 
     }
 
@@ -520,8 +526,8 @@
 
 
     /* consent*/
-    //timeline.push(consent_inst);
-    //timeline.push(consent_page);
+    // timeline.push(consent_inst);
+    // timeline.push(consent_page);
 
     // timeline.push({
     //     type: 'fullscreen',
@@ -548,8 +554,10 @@
     // timeline.push(instructions_b_d2b,random_procedure_d2b_1,gap,random_procedure_d2b_2);
 
     /*part C*/
-    timeline.push(preexposure_procedure);
+    //timeline.push(preexposure_procedure);
 
+    /*part D*/
+      timeline.push(variation_procedure);
     // /*part E*/
     // timeline.push(instructions_b);
     // timeline.push(fixation);
