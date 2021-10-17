@@ -54,7 +54,7 @@ sets:
 15---set43
 
 
-version after 2021-03-05 ------------------------------------------------
+version after 2021-10-16 ------------------------------------------------
 sets:
 16---set1
 17---set4
@@ -65,3 +65,10 @@ changes for the recent commits:
 3. changed the image selector from "" to '' for saving image paths, this is used later for displaying preexposure image
 4. in images selector, from now, all trials will select images from the first 0 in the queue, and omit the last one.
 5. bug fixed： all normal trials will be 30. (some used to be 31)
+
+
+2021-10-17
+
+practice set9/10 info：[94.0, 175.0, 310.0]， can use any
+set14/15 use the last transition: 
+set 44/45 only the first transiton, recommended to be left screwed

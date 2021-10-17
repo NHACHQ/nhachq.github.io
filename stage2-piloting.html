@@ -97,15 +97,15 @@
     };
 
 
-/* collect biogprahic data*/
+/* collect demographic data*/
     var survey = {
       type: 'survey-text',
       questions: [
-        {prompt: "<p>We would like to collect your basic biogprahic data.</p>"+
+        {prompt: "<p>We would like to collect your basic information.</p>"+
         " <p>What is your age?</p>", name: 'age'},
         {prompt: "Are you left-handed or right-handed? Reply R or L", name: 'handedness'},
         {prompt: "How do you identify your gender?", name: 'gender'},
-        {prompt: "Do you wear glasses (G) or contacts(C) or both (Y) or none of them (N)?", name: 'vision'},
+        {prompt: "Are you wearing glasses (G) or contacts(C) or both (Y) or none of them (N)?", name: 'vision'},
         {prompt: "<p>The follwing information is collected only to record your earned course credit.</p>"+
         " <p>What is your name?</p>", name: 'name'},
         {prompt: "Student number: ", name: 'studentID'}
@@ -121,10 +121,10 @@
       "<p>In each trial, a sequence of images of indoor scenes will appear at the center of the screen. " +
           " Scenes come from three categories: bedrooms, living rooms, and dining rooms. </p>" +
           "<p>You will be presented with a scene, which will GRADUALLY change from one category to another."+
-          " For example, you may first see a bedroom scene, which may gradually change to a living room, different from what you did in Pat A."+
-          " Please press the SPACE BAR as  soon as you detect the change in category. You will see a notice RESPONSE RECORDED below the image after a succesful response.</p>" +
+          " For example, you may first see a bedroom scene, which may gradually change to a living room."+
+          " Please press the SPACE BAR as soon as you detect the change in category. You will see a notice RESPONSE RECORDED below the image after a succesful response.</p>" +
           "<p> Only your first response for each image sequence will be recorded. </p>"+
-          "<p>You will first see a practice trial, followed by 18 test trials. Since there are lots of trials, please take breaks to relax yourself.</p>" +
+          "<p>You will first see three practice trials, followed by 18 test trials. Since there are lots of trials, please take breaks to relax yourself.</p>" +
           "<p>Now please press the SPACE BAR when you are ready to begin the practice trial.</p>",
       post_trial_gap: 1000,
       choices: ['space']
@@ -238,7 +238,8 @@
 
     var exposure_stimuli = exposure_timeVarGenerator(paths, boundaries, 3, 6, 3);
 
-    var variation_stimuli = variation_timeVarGenerator([2,4,5,6], paths, boundaries, 6,18 )
+    var variation_stimuli = variation_timeVarGenerator([2,4,5,6], paths, boundaries, 6,18 );
+    
     var practice_stimuli;
     //practice_stimuli= imgSelect(130, 220, 3, "stimuli/practice")[0];
     //paths.push(practice_stimuli);
@@ -526,8 +527,8 @@
 
 
     /* consent*/
-    // timeline.push(consent_inst);
-    // timeline.push(consent_page);
+    timeline.push(consent_inst);
+    timeline.push(consent_page);
 
     // timeline.push({
     //     type: 'fullscreen',
