@@ -122,7 +122,7 @@
           " Scenes come from three categories: bedrooms, living rooms, and dining rooms. </p>" +
           "<p>You will be presented with a scene, which will GRADUALLY change from one category to another."+
           " For example, you may first see a bedroom scene, which may gradually change to a living room."+
-          " Please press the SPACE BAR as soon as you detect the change in category. You will see a notice RESPONSE RECORDED below the image after a succesful response.</p>" +
+          " Please press the SPACE BAR as soon as you detect the change in terms of category. You will see a notice RESPONSE RECORDED below the image after a succesful response.</p>" +
           "<p> Only your first response for each image sequence will be recorded. </p>"+
           "<p>You will first do three practice trials, followed by 18 test trials. There will be breaks between trials, and feel free to take breaks when you need.</p>" +
           "<p>Now please press the SPACE BAR when you are ready to begin the practice trial.</p>",
@@ -194,7 +194,7 @@
                 "<p>In each trial, a sequence of images of indoor scenes will appear at the center of the screen. " +
           " Scenes come from three categories: bedrooms, living rooms, and dining rooms. </p>" +
           "<p>You will be presented with a scene, which will GRADUALLY change from one category to another."+
-          " Please press the SPACE BAR as soon as you detect the change in category. You will see a notice RESPONSE RECORDED below the image after a succesful response.</p>" +
+          " Please press the SPACE BAR as soon as you detect the change in terms of category. You will see a notice RESPONSE RECORDED below the image after a succesful response.</p>" +
           "<p>Different from part A, in this part you will be prersented the images of the two categories (starting category and ending category) in the next trial. "+
             "The starting category shows on top of the screen, and the ending category shows on the bottom of the screen, both with category labels."+
             " You will have 2.5 seconds to look at the two images. </p>"+
@@ -206,7 +206,14 @@
 
     var instructions_d = {
       type: "html-keyboard-response",
-      stimulus: "<h1> Instuctions of Part D </h1>",
+      stimulus: "<h1> Instuctions of Part D </h1>"+     
+                 "<p>In this part, you will do the same tasks as what you did in part A, except that the length of each trial varies. </p>"+
+                "<p>In each trial, a sequence of images of indoor scenes will appear at the center of the screen. " +
+          " Scenes come from three categories: bedrooms, living rooms, and dining rooms. </p>" +
+          "<p>You will be presented with a scene, which will GRADUALLY change from one category to another."+
+          " Please press the SPACE BAR as soon as you detect the change in temrs of category. You will see a notice RESPONSE RECORDED below the image after a succesful response.</p>" +
+          "<p>There is no practice trial. You will do 36 test trials in this part. There will be breaks between trials, and feel free to take breaks when you need.</p>" +
+          "<p>Now please press the SPACE BAR when you are ready to begin the test trials.</p>",
 
       post_trial_gap: 1000,
       choices: ['space']
@@ -296,21 +303,21 @@
 
     /* types of tasks */
 
-    var practice = {
-        //type: 'animation',
-        type: 'animation-feedback',
-        stimuli: jsPsych.timelineVariable('stimulus'),
-        frame_time: 200,
-        frame_isi: 300,
-        prompt: '<p style="color:#a6a6a6;"> empty </p>',
-        choices: ['space'],
-        on_finish: function() {
-            // at the end of each trial, update the progress bar
-            // based on the current value and the proportion to update for each trial
-            var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
-            jsPsych.setProgressBar(curr_progress_bar_value + (1/num_trials));
-        }
-    }
+    // var practice = {
+    //     //type: 'animation',
+    //     type: 'animation-feedback',
+    //     stimuli: jsPsych.timelineVariable('stimulus'),
+    //     frame_time: 200,
+    //     frame_isi: 300,
+    //     prompt: '<p style="color:#a6a6a6;"> empty </p>',
+    //     choices: ['space'],
+    //     on_finish: function() {
+    //         // at the end of each trial, update the progress bar
+    //         // based on the current value and the proportion to update for each trial
+    //         var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
+    //         jsPsych.setProgressBar(curr_progress_bar_value + (1/num_trials));
+    //     }
+    // }
 
     var practice_abrupt = {
         //type: 'animation',
@@ -550,7 +557,7 @@
         <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><span style='font-family:"Calibri",sans-serif;color:black;'>(You can press any key to end the experiment)</span></p>
         <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;'>&nbsp;</p>
         <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><span style='font-family:"Calibri",sans-serif;color:black;'>The experiment you just completed is about the general topic of perception and memory of scenes. The specific topic here is the perceptual ambiguity of discrete scene categories. How your perception of scene categories influenced by the stimuli presented when there is ambiguity? Hysteresis is an interesting effect found in perceptual ambiguities. It means the dependence of the previous state in a system. In psychophysics, hysteresis refers to the phenomenon that the perception of stimuli is influenced by prior stimuli. People tend to stick with the perception brought by previous stimuli until the later stimuli propose a large enough change in perception. Therefore, in categorical judgements, the threshold of perception on category change can depend on the direction of presenting the stimuli. Hysteresis effect has been found in many studies, such as geometric and emotional ambiguities, figure-ground transitions, linguistic ambiguities, and so on. Here we are interested to see if we can also find the hysteresis effect in judgements of scene categories, and how this gives inferences on scene perception.</span></p>
-        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><span style='font-family:"Calibri",sans-serif;color:black;'>In the experiment, you completed two parts of experiment. In part A of the experiment, you were presented with image sequences, and your task was to decide a change in terms of category. All transitions between categories were presented to you in both directions, and we will see your perceptions of changes in categories differ on the same image sequence, but presented in opposite directions. We hypothesize that your judgement of change in categories will be different in two directions, as, in each direction, you tend to stick longer to the previous category you saw. In part B of the experiment, we asked you to respond to immediate changes, to collect your response time. This response time will be extracted from the data we collected from part A, so the effect of response time can be eliminated.</span></p>
+        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><span style='font-family:"Calibri",sans-serif;color:black;'>In the experiment, you completed many parts. In part A of the experiment, you were presented with image sequences, and your task was to decide a change in terms of category. All transitions between categories were presented to you in both directions, and we will see your perceptions of changes in categories differ on the same image sequence, but presented in opposite directions. We hypothesize that your judgement of change in categories will be different in two directions, as, in each direction, you tend to stick longer to the previous category you saw. In part B, we asked you to categoriza the images without seeing the transition, this gives us information on categorical judgement without hysteresis effect. Then in part C and D we explore what may influence hysteresis and how does the size of hysteresis effect change when conditions vary. In partIn part E of the experiment, we asked you to respond to immediate changes, to collect your response time. This response time will be extracted from the data we collected from part A, so the effect of response time can be eliminated.</span></p>
         <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><span style='font-family:"Calibri",sans-serif;color:black;'>This experiment will inform us on how scene perception is similar or different from other perceptions. It can also give implications on the experiment paradigms including presenting stimuli in a specific order, and how the order of presenting may influence the results.</span></p>
         <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><span style='font-family:"Calibri",sans-serif;color:black;'>Thank you for participating! You can now press any key to end the experiment!</span></p>
         <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><br></p>
@@ -607,24 +614,27 @@
     // timeline.push(instructions_b_d2b,random_procedure_d2b_1,gap,random_procedure_d2b_2);
 
     /*part C*/
-    timeline.push(instructions_c);
-    timeline.push(practice_exposure_procedure);
-    timeline.push(start, preexposure_procedure);
+    // timeline.push(instructions_c);
+    // timeline.push(practice_exposure_procedure);
+    // timeline.push(start, preexposure_procedure);
 
 
     /*part D*/
-    timeline.push(variation_procedure);
-    // /*part E*/
-    // timeline.push(instructions_b);
-    // timeline.push(fixation);
-    // timeline.push(practice_abrupt);
-    // timeline.push(start);
-    // timeline.push(abrupt_procedure);
+    // timeline.push(instructions_d);
+    // timeline.push(variation_procedure);
+
+
+    /*part E*/
+    timeline.push(instructions_e);
+    timeline.push(fixation);
+    timeline.push(practice_abrupt);
+    timeline.push(start);
+    timeline.push(abrupt_procedure);
 
     // /*save data*/
     //timeline.push(save_data);
     // timeline.push(finish);
-    // timeline.push(debriefing);
+    //timeline.push(debriefing);
     // timeline.push({
     //     type: 'fullscreen',
     //     fullscreen_mode: false
