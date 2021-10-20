@@ -58,7 +58,7 @@
     var welcome = {
       type: "html-keyboard-response",
       stimulus: "<p>Welcome to the experiment.</p>"+
-      " <p>The experiment itself takes about 45-60 minutes, depending on"+
+      " <p>The experiment itself takes about 50-60 minutes, depending on"+
       " how much break you decide to take in the middle of the experiment."+
       " Therefore, please allocate about 60 mimutes for this experiment. You will know your general progress through the progress bar on the top of the screen. </p>"+
       " <p>This experiment has many parts, each part has a different instruction. Please read the instructions carefully before proceeding to the next steps.</p>"+
@@ -144,7 +144,7 @@
     var instruction_b_practice = {
       type: "html-keyboard-response",
       stimulus: "<h1> This is a practice trial.</h1>"+
-                "<p> You will categorize each image into Bedroom Or Living room. </p>"+
+                "<p> You will categorize each image into Bedroom or Living room. </p>"+
                 "<p> On your keybord, press B for bedroom and L for living room.</p>"+
                 "<p> If you are ready, press the spacebar to start the next trial.</p>",
       post_trial_gap: 1000,
@@ -154,7 +154,7 @@
     var instructions_b_b2l = {
       type: "html-keyboard-response",
       stimulus: "<h1> Instuction </h1>"+
-                "<p> You will categorize each image into Bedroom Or Living room. </p>"+
+                "<p> You will categorize each image into Bedroom or Living room. </p>"+
                 "<p> On your keybord, press B for bedroom and L for living room.</p>"+
                 "<p> If you are ready, press the spacebar to start the next trial.</p>",
       post_trial_gap: 1000,
@@ -164,7 +164,7 @@
     var instructions_b_l2d = {
       type: "html-keyboard-response",
       stimulus: "<h1> Instuctions </h1>"+
-                "<p> You will categorize each image into Dining room Or Living room. </p>"+
+                "<p> You will categorize each image into Dining room or Living room. </p>"+
                 "<p> On your keybord, press D for Dining and L for living room.</p>"+
                 "<p> If you are ready, press the spacebar to start the next trial.</p>",
 
@@ -175,7 +175,7 @@
     var instructions_b_d2b = {
       type: "html-keyboard-response",
       stimulus: "<h1> Instuctions</h1>"+
-                "<p> You will categorize each image into Bedroom Or Dining room. </p>"+
+                "<p> You will categorize each image into Bedroom or Dining room. </p>"+
                 "<p> On your keybord, press B for Bedroom and D for Dining room.</p>"+
                 "<p> If you are ready, press the spacebar to start the next trial.</p>",
 
@@ -456,7 +456,7 @@
     }
 
     var preexposure_procedure = {
-      timeline: [gap,fixation,exposure,test],
+      timeline: [gap,exposure,fixation,test],
       timeline_variables:exposure_stimuli,
       randomize_order: true
     }
@@ -486,7 +486,7 @@
     }
 
     var practice_exposure_procedure = {
-        timeline: [fixation, exposure, test],
+        timeline: [exposure,fixation, test],
         timeline_variables: practice_stimuli[2],
         randomize_order: true
     }
@@ -580,7 +580,7 @@
     timeline.push(instructions_b);
     timeline.push(instruction_b_practice, practice_random_procedure);
     timeline.push(start);
-    timeline.push(instructions_b_b2l,random_procedure_b2l_1)//,gap,random_procedure_b2l_2);
+    timeline.push(instructions_b_b2l,random_procedure_b2l_1,gap,random_procedure_b2l_2);
     timeline.push(instructions_b_l2d,random_procedure_l2d_1,gap,random_procedure_l2d_2);
     timeline.push(instructions_b_d2b,random_procedure_d2b_1,gap,random_procedure_d2b_2);
 
