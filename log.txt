@@ -72,3 +72,23 @@ changes for the recent commits:
 practice set9/10 info：[94.0, 175.0, 310.0]， can use any
 set14/15 use the last transition: 
 set 44/45 only the first transiton, recommended to be left screwed
+
+
+about converting to webp format: I tried to convert to webp format, but the lossless compression made the file even bigger.
+the lossy compression with 75% looks good, but it losses subtle details. I don't want to lose those details in a smooth
+transition, and the current jpg format worked well so far as long as paths are preloaded. Therefore I chose to keep the current jpg format.
+
+
+2021-10-20
+notes on coding:
+there is a weird example:
+        "correct" : false,
+        "internal_node_id" : "0.0-3.0-1.0",
+        "stimulus" : "stimuli/practice/0/000121.jpg",
+        "time_elapsed" : 9099,
+        "trial_index" : 4,
+        "trial_tag" : "practice-random-0-29",
+        "trial_type" : "categorize-image"
+there is no "response" data, where if no key press there should be at least "response" :null
+but there is nothing, which casued the code in data collection not working
+so check if this field exists in the code

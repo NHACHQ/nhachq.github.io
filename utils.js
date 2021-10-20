@@ -49,12 +49,7 @@ function abrupt_img(start_path, end_path, change, num){
         else
             path = end_path;
 
-        // images.push(path+"/"+s+".jpg");
-        // images_r.unshift(path+"/"+s+".jpg");
         images.push(path);
-        //testing
-        //document.write(path+"/"+s+".jpg<br>")
-
     }
     return images;
 }
@@ -82,29 +77,17 @@ function random_select(tag, paths, trials){
     //get a 1D array
     for (var i = 0; i<trials; i++){
         temp = paths[i][0];
-        var temp_1 = [];
         for (var j = 0; j<len; j++){
             randoms[i%3].push({stimulus: temp[j], data: {trial_tag: tag+'random-'+i+'-'+j} });
             //randoms[i%3].push({stimulus: temp[i][j], data: {trial_tag: 'random-'+i+'-'+j} });
         }
-        //randoms[i%3].push(temp_1);
     }
 
     // randomize all images
     for (var j = 0; j < randoms.length; j++){
-
        randoms[j] = shuffle(randoms[j])
-
     }
 
-
-    // // divide into number of trials
-    // for (var i = 0; i<trials; i++){
-    //     temp = randoms.slice(i*len, (i+1)*len);
-    //     final.push(temp);
-    // }
-    // const dimension_ran = [randoms.length, randoms[0].length];
-    // console.log(dimension_ran);
     console.log(randoms[2]);
     return randoms;
 }
@@ -222,9 +205,8 @@ function variation_timeVarGenerator(img_path, tag, intervals, paths, boundaries,
     }
 
     for (var i = 0; i < intervals.length; i++){
-        
-        test_stimuli = test_stimuli.concat(normal_timeVarGenerator(img_path, tag, paths, boundaries, start, end, intervals[i]));
+        test_stimuli = test_stimuli.concat(normal_timeVarGenerator(img_path, tag, paths, boundaries, i*3+start, i*3+start+3, intervals[i]));
     }
-    console.log(test_stimuli[0])
+    //console.log(test_stimuli[0])
     return test_stimuli;
 }

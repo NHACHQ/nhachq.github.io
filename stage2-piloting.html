@@ -2,7 +2,7 @@
 <html>
   <!---here are the plugins--->
   <head>
-    <title>Ambiguity in category boundaries</title>
+    <title>Categories of in-door Scenes</title>
     <script src="jspsych-6.1.0/jspsych.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js"></script>
@@ -30,24 +30,24 @@
 
   <script>
 
-    // var firebaseConfig = {
-    //     apiKey: "AIzaSyCkARijjc9rhsbwRg6Cqbw4VQZU9Ne4hXA",
-    //     authDomain: "bwlab-hysteresis-stage2.firebaseapp.com",
-    //     databaseURL: "https://bwlab-hysteresis-stage2-default-rtdb.firebaseio.com",
-    //     projectId: "bwlab-hysteresis-stage2",
-    //     storageBucket: "bwlab-hysteresis-stage2.appspot.com",
-    //     messagingSenderId: "743577254079",
-    //     appId: "1:743577254079:web:40ca2c784de4ff1650ae0a",
-    //     measurementId: "G-N031LNGNVV"
-    // };
+    var firebaseConfig = {
+        apiKey: "AIzaSyCkARijjc9rhsbwRg6Cqbw4VQZU9Ne4hXA",
+        authDomain: "bwlab-hysteresis-stage2.firebaseapp.com",
+        databaseURL: "https://bwlab-hysteresis-stage2-default-rtdb.firebaseio.com",
+        projectId: "bwlab-hysteresis-stage2",
+        storageBucket: "bwlab-hysteresis-stage2.appspot.com",
+        messagingSenderId: "743577254079",
+        appId: "1:743577254079:web:40ca2c784de4ff1650ae0a",
+        measurementId: "G-N031LNGNVV"
+    };
 
-    // // Initialize Firebase
-    // firebase.initializeApp(firebaseConfig);
-    // // login anonymous user
-    // firebase.auth().signInAnonymously().catch(function(error) {
-    //     var errorCode = error.code;
-    //     var errorMessage = error.message;
-    // });
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    // login anonymous user
+    firebase.auth().signInAnonymously().catch(function(error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+    });
 
 
 
@@ -60,14 +60,10 @@
       stimulus: "<p>Welcome to the experiment.</p>"+
       " <p>The experiment itself takes about 45-60 minutes, depending on"+
       " how much break you decide to take in the middle of the experiment."+
-      " Therefore, please allocate about 60 mimutes for this experiment. You will know your progress through the progress bar on the top of the screen. </p>"+
+      " Therefore, please allocate about 60 mimutes for this experiment. You will know your general progress through the progress bar on the top of the screen. </p>"+
       " <p>This experiment has many parts, each part has a different instruction. Please read the instructions carefully before proceeding to the next steps.</p>"+
       "Please DO NOT close this page before the end of the experiment, otherwise the data will be lost."+
-      "<p>Press any key to see the detailed instructions.</p>",
-      on_start: function() {
-            // set progress bar to 0 at the start of experiment
-            jsPsych.setProgressBar(0);
-      }
+      "<p>Press any key to see the detailed instructions.</p>"
     };
     timeline.push(welcome);
 
@@ -241,9 +237,6 @@
     //generate arrays of images
     //note that paths will be a 3D array according to the following manipulation
     var paths = [];
-    // number of trials = practive + trials + debriefing
-    // initially 2
-    var num_trials = 2;
 
     var boundaries = [[85.0, 178.0, 315.0],
                         [81.0, 170.0, 333.0],
@@ -265,79 +258,66 @@
                         [88.0, 170.0, 339.0]];
 
 
+    // //test settings 
+    // var normal_stimuli = normal_timeVarGenerator('stimuli/', '', paths, boundaries, 0, 2, 3);
+
+    // var random_stimuli = random_select('',paths, 3);
+
+    // var exposure_stimuli = exposure_timeVarGenerator('stimuli/','', paths, boundaries, 3, 4, 3);
+
+    // var variation_stimuli = variation_timeVarGenerator('stimuli/','', [2,6], paths, boundaries, 6,12);
+
+    // var abrupt_stimuli = abrupt_timeVarGenerator(paths, 'stimuli/abrupt/', 5, '.jpg');
+
+    //standard settings for stimuli
     var normal_stimuli = normal_timeVarGenerator('stimuli/', '', paths, boundaries, 0, 3, 3);
-    //random trials
-    var random_stimuli = random_select('',paths, 3);
+  
+    var random_stimuli = random_select('',paths, 9);
 
-    var exposure_stimuli = exposure_timeVarGenerator('stimuli/','', paths, boundaries, 3, 4, 3);
+    var exposure_stimuli = exposure_timeVarGenerator('stimuli/','', paths, boundaries, 3, 6, 3);
 
-    var variation_stimuli = variation_timeVarGenerator('stimuli/','', [2,4,5,6], paths, boundaries, 6,18 );
-
-
-
-    //abrupt trials
+    var variation_stimuli = variation_timeVarGenerator('stimuli/','', [2,4,5,6], paths, boundaries, 6, 18 );
+   
     var abrupt_stimuli = abrupt_timeVarGenerator(paths, 'stimuli/abrupt/', 5, '.jpg');
 
     var practice_stimuli =[];
     practice_stimuli[0]= [];
     var prac_boundaries = [[94.0, 175.0, 310.0],[88.0, 168.0, 328.0], [95.0, 188.0, 182.0]];
-    var temp_s = normal_timeVarGenerator('stimuli/practice/','practice-normal', paths, prac_boundaries, 0, 3, 3);
+    var temp_s = normal_timeVarGenerator('stimuli/practice/','practice-normal-', paths, prac_boundaries, 0, 3, 3);
     practice_stimuli[0].push(temp_s[2]);
     practice_stimuli[0].push(temp_s[11]);
     practice_stimuli[0].push(temp_s[12]);
     //.concat(temp[11],temp[12]);
     //console.log(practice_stimuli[0][0]);
-    console.log(practice_stimuli[0]);
-    // it does not matter two much how many trials to choose at this stage. Just not two few.
+    //console.log(practice_stimuli[0]);
+    // it does not matter two much how many trials to choose at this stage. Just not too few.
     practice_stimuli[1] = random_select('practice-', paths.slice(paths.length-9), 9)[0];
     practice_stimuli[2] = [exposure_timeVarGenerator('stimuli/practice/','practice-exposure-', paths, prac_boundaries, 0, 1, 3)[0]];
-    console.log(practice_stimuli[2]);
+    //console.log(practice_stimuli[2]);
     //practice_stimuli= imgSelect(130, 220, 3, "stimuli/practice")[0];
     //paths.push(practice_stimuli);
     // update number of trials
-    console.log(practice_stimuli);
-    num_trials = num_trials +normal_stimuli.length + abrupt_stimuli.length;
+    //console.log(practice_stimuli);
 
 
 
 
     /* types of tasks */
 
-    // var practice = {
-    //     //type: 'animation',
-    //     type: 'animation-feedback',
-    //     stimuli: jsPsych.timelineVariable('stimulus'),
-    //     frame_time: 200,
-    //     frame_isi: 300,
-    //     prompt: '<p style="color:#a6a6a6;"> empty </p>',
-    //     choices: ['space'],
-    //     on_finish: function() {
-    //         // at the end of each trial, update the progress bar
-    //         // based on the current value and the proportion to update for each trial
-    //         var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
-    //         jsPsych.setProgressBar(curr_progress_bar_value + (1/num_trials));
-    //     }
-    // }
-
     var practice_abrupt = {
         //type: 'animation',
         type: 'animation-feedback',
-        stimuli: abrupt_img('stimuli/10/webp/000030.webp','stimuli/10/webp/000100.webp', 15, 30),
+        stimuli: abrupt_img('stimuli/10/000030.jpg','stimuli/10/000100.jpg', 15, 30),
         frame_time: 200,
         frame_isi: 300,
         prompt: '<p style="color:#a6a6a6;"> empty </p>',
-        choices: ['space'],
-        on_finish: function() {
-            // at the end of each trial, update the progress bar
-            // based on the current value and the proportion to update for each trial
-            var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
-            jsPsych.setProgressBar(curr_progress_bar_value + (1/num_trials));
-        }
+        choices: ['space']
     }
 
     var start = {
         type: "html-keyboard-response",
-        stimulus: "<p> Now we will start the test trials. Please press the space bar when you are ready. </p>",
+        stimulus: "<h1> Now we will start the test trials.</h1>"+
+        "<p>Please press the space bar when you are ready. </p>",
         post_trial_gap: 1000,
         choices: ['space']
         ///trial_duration: 3000
@@ -353,13 +333,7 @@
         choices:['space'],
         data: jsPsych.timelineVariable('data'),
         post_trial_gap: 300,
-        prompt: '<p style="color:#a6a6a6;"> empty </p>',
-        on_finish: function() {
-            // at the end of each trial, update the progress bar
-            // based on the current value and the proportion to update for each trial
-            var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
-            jsPsych.setProgressBar(curr_progress_bar_value + (1/num_trials));
-        }
+        prompt: '<p style="color:#a6a6a6;"> empty </p>'
     }
 
     var random_b2l = {
@@ -373,7 +347,8 @@
         choices: ['b', 'l'],
         correct_text: "<p class='prompt'>You chose Bedroom.</p>",
         incorrect_text: "<p class='prompt'>You chose Living room.</p>",
-        prompt: "<p>B or L?</p>"
+        prompt: "<p>B or L?</p>",
+        data: jsPsych.timelineVariable('data')
     }
 
     var random_l2d = {
@@ -387,7 +362,8 @@
         choices: ['l', 'd'],
         correct_text: "<p class='prompt'>You chose Living room.</p>",
         incorrect_text: "<p class='prompt'>You chose Dining room.</p>",
-        prompt: "<p>L or D?</p>"
+        prompt: "<p>L or D?</p>",
+        data: jsPsych.timelineVariable('data')
     }
 
     var random_d2b = {
@@ -401,7 +377,8 @@
         choices: ['b', 'd'],
         correct_text: "<p class='prompt'>You chose Bedroom.</p>",
         incorrect_text: "<p class='prompt'>You chose Dining room.</p>",
-        prompt: "<p> B or D?</p>"
+        prompt: "<p> B or D?</p>",
+        data: jsPsych.timelineVariable('data')
     }
 
 
@@ -504,7 +481,7 @@
 
     var practice_random_procedure = {
         timeline: [fixation,random_b2l],
-        timeline_variables: practice_stimuli[1].slice(0,practice_stimuli[1].length/2),
+        timeline_variables: practice_stimuli[1].slice(0,15),
         randomize_order: true
     }
 
@@ -527,7 +504,7 @@
             var dbpath = firebase.auth().currentUser.uid+'/'+tmp;
             firebase.database().ref(dbpath).set({
                 data: jsPsych.data.get().values(),
-                study: 'hysteresis-ambiguity',
+                study: 'hysteresis-ambiguity-stage2',
                 date: Date()
             });
 
@@ -540,13 +517,7 @@
         type: "html-keyboard-response",
         stimulus:  "<p>Now please press any key to the debriefing page. ",
         post_trial_gap: 500,
-        choices: null,
-        on_finish: function() {
-            // at the end of each trial, update the progress bar
-            // based on the current value and the proportion to update for each trial
-            var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
-            jsPsych.setProgressBar(curr_progress_bar_value + (1/num_trials));
-        }
+        choices: null
     }
 
 
@@ -588,40 +559,40 @@
 
 
     /* consent*/
-    // timeline.push(consent_inst);
-    // timeline.push(consent_page);
+    timeline.push(consent_inst);
+    timeline.push(consent_page);
 
-    // timeline.push({
-    //     type: 'fullscreen',
-    //     fullscreen_mode: true
-    // });
+    timeline.push({
+        type: 'fullscreen',
+        fullscreen_mode: true
+    });
 
     /* biographic*/
-    //timeline.push(survey);
+    timeline.push(survey);
 
-    // /*part A*/
-    // timeline.push(instructions_a);
-    // timeline.push(practice_normal_procedure);
-    // timeline.push(start);
-    // timeline.push(normal_procedure);
+    /*part A*/
+    timeline.push(instructions_a);
+    timeline.push(practice_normal_procedure);
+    timeline.push(start);
+    timeline.push(normal_procedure);
 
     /*part B*/
-    // timeline.push(instructions_b);
-    // timeline.push(instruction_b_practice, practice_random_procedure);
-    // timeline.push(start);
-    // timeline.push(instructions_b_b2l,random_procedure_b2l_1,gap,random_procedure_b2l_2);
-    // timeline.push(instructions_b_l2d,random_procedure_l2d_1,gap,random_procedure_l2d_2);
-    // timeline.push(instructions_b_d2b,random_procedure_d2b_1,gap,random_procedure_d2b_2);
+    timeline.push(instructions_b);
+    timeline.push(instruction_b_practice, practice_random_procedure);
+    timeline.push(start);
+    timeline.push(instructions_b_b2l,random_procedure_b2l_1)//,gap,random_procedure_b2l_2);
+    timeline.push(instructions_b_l2d,random_procedure_l2d_1,gap,random_procedure_l2d_2);
+    timeline.push(instructions_b_d2b,random_procedure_d2b_1,gap,random_procedure_d2b_2);
 
     /*part C*/
-    // timeline.push(instructions_c);
-    // timeline.push(practice_exposure_procedure);
-    // timeline.push(start, preexposure_procedure);
+    timeline.push(instructions_c);
+    timeline.push(practice_exposure_procedure);
+    timeline.push(start, preexposure_procedure);
 
 
     /*part D*/
-    // timeline.push(instructions_d);
-    // timeline.push(variation_procedure);
+    timeline.push(instructions_d);
+    timeline.push(variation_procedure);
 
 
     /*part E*/
@@ -631,21 +602,21 @@
     timeline.push(start);
     timeline.push(abrupt_procedure);
 
-    // /*save data*/
-    //timeline.push(save_data);
-    // timeline.push(finish);
-    //timeline.push(debriefing);
-    // timeline.push({
-    //     type: 'fullscreen',
-    //     fullscreen_mode: false
-    // });
-    //timeline.push(end_experiment);
+    /*save data*/
+    timeline.push(save_data);
+    timeline.push(finish);
+    timeline.push(debriefing);
+    timeline.push({
+        type: 'fullscreen',
+        fullscreen_mode: false
+    });
+    timeline.push(end_experiment);
     /* start the experiment */
     jsPsych.init({
       timeline: timeline,
       preload_images: paths,
       show_progress_bar: true,
-      auto_update_progress_bar: false,
+      //auto_update_progress_bar: false,
       on_finish: function() {
           jsPsych.data.displayData();
       }
