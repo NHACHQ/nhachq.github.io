@@ -138,11 +138,11 @@ function abrupt_timeVarGenerator(paths, ab_path, trials, type){
     var end;
     for (var i = 0; i<trials; i++){
         end=2*i+1;
-        temp = abrupt_img(ab_path+2*i+'.jpg',ab_path+end+'.jpg', 10+2*i, 30 );
-        paths.push(ab_path+2*i+'.jpg',ab_path+end+'.jpg');
+        temp = abrupt_img(ab_path+2*i+type,ab_path+end+type, 10+2*i, 30 );
+        paths.push(ab_path+2*i+type,ab_path+end+type);
         abrupt_stimuli.push({ stimulus: temp, data: {trial_tag: 'a'+i} });
 
-        temp = abrupt_img(ab_path+end+'.jpg',ab_path+2*i+'.jpg', 10+2*i, 30 );
+        temp = abrupt_img(ab_path+end+type,ab_path+2*i+type, 10+2*i, 30 );
         abrupt_stimuli.push({ stimulus: temp, data: {trial_tag: 'ar'+i} });
     }
 
@@ -198,14 +198,14 @@ function exposure_timeVarGenerator(img_path, tag, paths, boundaries, start, end,
     return test_stimuli;
 }
 
-function variation_timeVarGenerator(img_path, tag, intervals, paths, boundaries, start, end){
+function variation_timeVarGenerator(img_path, tag, intervals, num_sets_each, paths, boundaries, start, end){
     var test_stimuli = [];
-    if (intervals.length*3 != end-start){
+    if (intervals.length*num_sets_each != end-start){
         throw "number of variation case and stimuli set does not match!";
     }
 
     for (var i = 0; i < intervals.length; i++){
-        test_stimuli = test_stimuli.concat(normal_timeVarGenerator(img_path, tag, paths, boundaries, i*3+start, i*3+start+3, intervals[i]));
+        test_stimuli = test_stimuli.concat(normal_timeVarGenerator(img_path, tag, paths, boundaries, i*num_sets_each+start, (i+1)*num_sets_each+start, intervals[i]));
     }
     //console.log(test_stimuli[0])
     return test_stimuli;
