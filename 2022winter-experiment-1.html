@@ -282,7 +282,7 @@
             var dbpath = firebase.auth().currentUser.uid+'/'+tmp;
             firebase.database().ref(dbpath).set({
                 data: jsPsych.data.get().values(),
-                study: 'hysteresis-ambiguity-stage2',
+                study: '2020winter-experiment1',
                 date: Date()
             });
 
