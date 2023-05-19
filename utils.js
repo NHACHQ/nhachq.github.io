@@ -150,7 +150,7 @@ function abrupt_timeVarGenerator(paths, ab_path, trials, type){
     return abrupt_stimuli;
 }
 
-// timeline vaiable enerator for normal trials
+// timeline vaiable generator for normal trials
 function exposure_timeVarGenerator(img_path, tag, paths, boundaries, start, end,interval){
 
     var c=0;

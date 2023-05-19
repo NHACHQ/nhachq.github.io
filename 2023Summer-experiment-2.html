@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+  <!---here are the plugins--->
+  <head>
+    <title>2023 summer experiment 1</title>
+    <script src="jspsych-6.1.0/jspsych.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-animation.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-animation-feedback.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-html-button-response.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-external-html.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-animation.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-fullscreen.js"></script>
+    <script src="jspsych-6.3.0/plugins/jspsych-survey-text.js"></script>
+    <script src="jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js"></script>
+    <script src="utils.js"></script>
+    <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-database.js"></script>
+
+​
+  </head>
+​
+
+​  <body style="background-color:#a6a6a6;"></body>
+
+
+  <script>
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    var firebaseConfig = {
+        apiKey: "AIzaSyCUpdjFpF5AA2WBHClF35S3Kwn2FJL4Hz4",
+        authDomain: "bwlab2022winter-variation.firebaseapp.com",
+        projectId: "bwlab2022winter-variation",
+        storageBucket: "bwlab2022winter-variation.appspot.com",
+        messagingSenderId: "212948908495",
+        appId: "1:212948908495:web:fb98aceb2ed32e9d143aba",
+        measurementId: "G-HP98TQ0DV7"
+    };
+
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    // login anonymous user
+    firebase.auth().signInAnonymously().catch(function(error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+    });
+
+
+
+    /* create timeline */
+    var timeline = [];
+
+    /* define welcome message trial */
+    var welcome = {
+      type: "html-keyboard-response",
+      stimulus: "<p>Welcome to the experiment.</p>"+
+      " <p>The experiment takes about 30 minutes. You will know your general progress through the progress bar on the top of the screen. </p>"+
+      " <p>This experiment has two parts, each part has a different instruction. Please read the instructions carefully before proceeding to the next steps.</p>"+
+      "Please DO NOT close this page before the end of the experiment, otherwise the data will be lost."+
+      "<p>Press any key to proceed.</p>",
+      on_start: function() {
+            // set progress bar to 0 at the start of experiment
+            jsPsych.setProgressBar(0);
+      }
+    };
+    timeline.push(welcome);
+
+    /*concent*/
+    var consent_inst = {
+        type: 'html-button-response',
+        stimulus: html='<p style="color: black; font-size: 20px;">'
+            +'We would like to get your consent before starting the experiment.</p>',
+        choices: ['Consent page'],
+        data: {disp_type: 'consent-instruction'}
+    }
+    var check_consent = function(elem) {
+        if (document.getElementById('radio_agree').checked) {
+            return true;
+        } else {
+            alert("If you wish to participate, you must check the box next to the statement 'I agree.'");
+            return false;
+        }
+        return false;
+    };
+    var consent_page = {
+        type: 'external-html',
+        url: "LetterOfInformationParticipantConsent_2022\\content.html",
+        cont_btn: "start",
+        check_fn: check_consent,
+        data: {disp_type: 'online_consent_form'}
+    };
+
+
+/* collect demographic data*/
+    var survey = {
+      type: 'survey-text',
+      questions: [
+        {prompt: "<p>We would like to collect your basic information.</p>"+
+        " <p>What is your age?</p>", name: 'age'},
+        {prompt: "Are you left-handed or right-handed? Reply R or L", name: 'handedness'},
+        {prompt: "How do you identify your gender?", name: 'gender'},
+        {prompt: "Are you wearing glasses (G) or contacts(C) or none of them (N)?", name: 'vision'},
+        {prompt: "<p>The follwing information is collected only to record your earned course credit.</p>"+
+        " <p>What is your name?</p>", name: 'name'},
+        {prompt: "Student number: ", name: 'studentID'}
+      ],
+    };
+
+
+    /* define instructions trial */
+    var instructions_a = {
+      type: "html-keyboard-response",
+      stimulus: "<h1> Instuctions of Part A </h1>"+
+      "<p>In each trial of part A, a sequence of images of indoor scenes will appear at the center of the screen. " +
+          " Scenes come from three categories: bedrooms, living rooms, and dining rooms. </p>" +
+          "<p>You will be presented with a scene, which will GRADUALLY change from one category to another."+
+          " For example, you may first see a bedroom scene, which may gradually change to a living room."+
+          " Please press the SPACE BAR as soon as you detect the change in terms of category. You will see a notice RESPONSE RECORDED below the image after a succesful response.</p>" +
+          "<p> Only your first response for each image sequence will be recorded. </p>"+
+          "<p>You will first do three practice trials, followed by the test trials. There will be breaks between trials, and feel free to take breaks when you need.</p>" +
+          "<p>Now please press the SPACE BAR when you are ready to begin the practice trials.</p>",
+      post_trial_gap: 1000,
+      choices: ['space']
+    };
+
+
+    var instructions_b = {
+      type: "html-keyboard-response",
+      stimulus: "<h1> Instuctions of Part B </h1>"+
+      "<p>In each trial of part B, a sequence of images of indoor scenes will appear at the center of the screen. " +
+          " Scenes come from three categories: bedrooms, living rooms, and dining rooms. </p>" +
+          "<p>You will be presented with a scene, which will SUDDENLY change from one category to another."+
+          " For example, you may first see a bedroom scene, which may suddenly change to a living room."+
+          " Please press the SPACE BAR as soon as you detect the change in category. You will see a notice RESPONSE RECORDED below the image after a succesful response.</p>" +
+          "<p> Only your first response for each image sequence will be recorded.</p>"+
+          "<p>You will first see a practice trial, followed by 10 test trials.</p>" +
+          "<p>Now please press the SPACE BAR when you are ready to begin the practice trials.</p>",
+      post_trial_gap: 1000,
+      choices: ['space']
+    };
+
+
+    /*   stimuli  */
+
+    //generate arrays of images
+    //note that paths will be a 3D array according to the following manipulation
+    var paths = [];
+    // 1x3 set of practice + 1 set of practice + 10 abrupt
+    var num_trials = 14;
+
+    var boundaries = [[85.0, 178.0, 315.0],
+                        [81.0, 170.0, 333.0],
+                        [87.0, 174.0, 330.0],
+                         [90.0, 170.0, 321.0],
+                         [83.0, 171.0, 325.0],
+                        [84.0, 171.0, 326.0],
+                        [77.0, 169.0, 325.0],
+                         [85.0, 169.0, 331.0],
+                         [87.0, 177.0, 318.0]];
+
+
+    // //test settings 
+    // var variation_stimuli = variation_timeVarGenerator('stimuli/','', [2,6], paths, boundaries, 6,12);
+    // var abrupt_stimuli = abrupt_timeVarGenerator(paths, 'stimuli/abrupt/', 5, '.jpg');
+
+    //standard settings for stimuli
+    var variation_stimuli = variation_timeVarGenerator('stimuli/','', [2,3,6],3, paths, boundaries, 0, 9 );
+    num_trials = num_trials + variation_stimuli.length;
+    console.log(num_trials)
+    var abrupt_stimuli = abrupt_timeVarGenerator(paths, 'stimuli/abrupt/', 5, '.jpg');
+
+    var practice_stimuli =[];
+    var prac_boundaries = [[94.0, 175.0, 310.0],[88.0, 168.0, 328.0], [95.0, 188.0, 182.0]];
+    //var temp_s = normal_timeVarGenerator('stimuli/practice/','practice-normal-', paths, prac_boundaries, 0, 3, 3);
+    var temp_s = variation_timeVarGenerator('stimuli/practice/', 'practice-',  [2,3,6], 1, paths, prac_boundaries, 0, 3);
+    practice_stimuli.push(temp_s[0]);
+    practice_stimuli.push(temp_s[8]);
+    practice_stimuli.push(temp_s[16]);
+
+
+
+
+    /* types of tasks */
+
+    var practice_abrupt = {
+        //type: 'animation',
+        type: 'animation-feedback',
+        stimuli: abrupt_img('stimuli/10/000030.jpg','stimuli/10/000100.jpg', 15, 30),
+        frame_time: 200,
+        frame_isi: 300,
+        prompt: '<p style="color:#a6a6a6;"> empty </p>',
+        choices: ['space'],
+        on_finish: function() {
+            // at the end of each trial, update the progress bar
+            // based on the current value and the proportion to update for each trial
+            var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
+            jsPsych.setProgressBar(curr_progress_bar_value + (1/num_trials));
+        }
+    }
+
+    var start = {
+        type: "html-keyboard-response",
+        stimulus: "<h1> Now we will start the test trials.</h1>"+
+        "<p>Please press the space bar when you are ready. </p>",
+        post_trial_gap: 1000,
+        choices: ['space']
+        ///trial_duration: 3000
+    }
+
+
+    var test = {
+        //type: 'animation',
+        type: 'animation-feedback',
+        stimuli: jsPsych.timelineVariable('stimulus'),
+        frame_time: 200,
+        frame_isi: 300,
+        choices:['space'],
+        data: jsPsych.timelineVariable('data'),
+        post_trial_gap: 300,
+        prompt: '<p style="color:#a6a6a6;"> empty </p>',
+        on_finish: function() {
+            // at the end of each trial, update the progress bar
+            // based on the current value and the proportion to update for each trial
+            var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
+            jsPsych.setProgressBar(curr_progress_bar_value + (1/num_trials));
+        }
+    }
+
+
+    var gap = {
+      type: "html-keyboard-response",
+      stimulus: "<p> Feel free to take a break to relax your eyes.</p>"+
+      "<p> Please press the SPACE BAR when you are ready to begin the next trial. </p>",
+      post_trial_gap: 500,
+      choices: ['space']
+    }
+
+    var fixation = {
+      type: 'html-keyboard-response',
+      stimulus: '<div style="font-size:60px;">+</div>'+
+                '<p style="color:#a6a6a6"> empty </p>',
+      choices: jsPsych.NO_KEYS,
+      trial_duration: 700
+    }
+
+
+    // setting up procedures for part a-e
+
+    var variation_procedure = {
+      timeline: [gap,fixation, test],
+      timeline_variables:variation_stimuli,
+      randomize_order: true
+    }
+
+    var abrupt_procedure = {
+        timeline: [gap,fixation,test],
+        timeline_variables:abrupt_stimuli,
+        randomize_order: true
+    }
+
+    var practice_procedure = {
+        timeline: [gap,fixation,test],
+        timeline_variables: practice_stimuli,
+        randomize_order: true
+    }
+
+
+    var save_data = {
+        type: "html-keyboard-response",
+        stimulus: "<p> Saving data, please stay at this page and wait for further instructions.</p> ",
+        post_trial_gap: 2000,
+        choices: null,
+        trial_duration: 2000,
+        on_finish: function(){
+            //firebase!
+            var tmp = new Uint32Array(1);
+            tmp = window.crypto.getRandomValues(tmp);
+            var dbpath = firebase.auth().currentUser.uid+'/'+tmp;
+            firebase.database().ref(dbpath).set({
+                data: jsPsych.data.get().values(),
+                study: '2020winter-experiment1',
+                date: Date()
+            });
+
+           //jsPsych.data.displayData();
+       }
+    }
+
+
+    var finish = {
+        type: "html-keyboard-response",
+        stimulus:  "<p>Now please press any key to the debriefing page. ",
+        post_trial_gap: 500,
+        choices: null
+    }
+
+
+    var debriefing = {
+      type: "html-keyboard-response",
+      stimulus: function() {
+        return `<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;text-align:center;'><strong><span style="font-size:21px;line-height:107%;">The perceptual ambiguity of in-door scenes</span></strong></p>
+        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><span style='font-family:"Calibri",sans-serif;color:black;'>(You can press any key to end the experiment)</span></p>
+        <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;'>&nbsp;</p>
+        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><span style='font-family:"Calibri",sans-serif;color:black;'>The experiment you just completed is about the general topic of perception of scenes. The specific topic here is the perceptual ambiguity of discrete scene categories. How your perception of scene categories influenced by the stimuli presented when there is ambiguity? Hysteresis is an interesting effect found in perceptual ambiguities. It means the dependence of the previous state in a system. In psychophysics, hysteresis refers to the phenomenon that the perception of stimuli is influenced by prior stimuli. People tend to stick with the perception brought by previous stimuli until the later stimuli propose a large enough change in perception. Therefore, in categorical judgements, the threshold of perception on category change can depend on the direction of presenting the stimuli. Hysteresis effect has been found in many studies, such as geometric and emotional ambiguities, figure-ground transitions, linguistic ambiguities, and so on. Here we are interested to see if we can also find the hysteresis effect in judgements of scene categories, and how this gives inferences on scene perception.</span></p>
+        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><span style='font-family:"Calibri",sans-serif;color:black;'>In the experiment, you completed many parts. In part A of the experiment, you were presented with image sequences, and your task was to decide a change in terms of category. All transitions between categories were presented to you in both directions, and we will see your perceptions of changes in categories differ on the same image sequence, but presented in opposite directions. We hypothesize that your judgement of change in categories will be different in two directions, as, in each direction, you tend to stick longer to the previous category you saw.  without seeing the transition, this gives us information on categorical judgement without hysteresis effect. We also explore how does the size of hysteresis effect change when conditions vary by changing the length of the trials. In part B of the experiment, we asked you to respond to immediate changes, to collect your response time. This response time will be extracted from the data we collected from part A, so the effect of response time can be eliminated.</span></p>
+        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><span style='font-family:"Calibri",sans-serif;color:black;'>This experiment will inform us on how scene perception is similar or different from other perceptions. It can also give implications on the experiment paradigms including presenting stimuli in a specific order, and how the order of presenting may influence the results.</span></p>
+        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><span style='font-family:"Calibri",sans-serif;color:black;'>Thank you for participating! You can now press any key to end the experiment!</span></p>
+        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><br></p>
+         <!--button type="button" id="end">End Experiment</button-->
+        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><br></p>
+        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:36.0pt;line-height:107%;font-size:15px;font-family:"Times New Roman",serif;text-indent:-36.0pt;'><span style='font-family:"Calibri",sans-serif;color:black;'>Liaci, E., Fischer, A., Atmanspacher, H., Heinrichs, M., Tebartz van Elst, L., &amp; Kornmeier, J. (2018). Positive and negative hysteresis effects for the perception of geometric and emotional ambiguities.&nbsp;</span>PLoS One,&nbsp;13(9), e0202398.</p>
+        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:36.0pt;line-height:107%;font-size:15px;font-family:"Times New Roman",serif;text-indent:-36.0pt;'><span style='font-family:"Calibri",sans-serif;color:black;'>Poltoratski, S., &amp; Tong, F. (2014). Hysteresis in the dynamic perception of scenes and objects.&nbsp;</span>Journal of Experimental Psychology: General,&nbsp;143(5), 1875.</p>
+        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:36.0pt;line-height:107%;font-size:15px;font-family:"Times New Roman",serif;text-indent:-36.0pt;'><span style='font-family:"Calibri",sans-serif;color:black;'>&nbsp;</span></p>
+        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:normal;font-size:15px;font-family:"Times New Roman",serif;margin:0cm;'><span style='font-family:"Calibri",sans-serif;color:black;'>-------------------------------------------------------------------------------------------------------------------------------</span></p>
+        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:normal;font-size:15px;font-family:"Times New Roman",serif;margin:0cm;'><span style='font-family:"Calibri",sans-serif;color:black;'>If you have any questions, please contact Dr. Bernhardt-Walther by email at bernhardt-walther@psych.utoronto.ca</span>.</p>
+ `;
+    },
+    on_finish: function(){
+        alert("There may be data storing issues in a unstable VPN environment. If you are accessing this webpage using VPN, please proceed to the last page where data is displayed. Then right click on the page with data, and save it as an html file. Please send this html file to the lab email. Thank you very much!");
+    }
+
+    };
+
+    var end_experiment = {
+        type: "html-keyboard-response",
+        stimulus: "<p> Goodbye! </p> ",
+        post_trial_gap: 500,
+        choices: null,
+        trial_duration: 1000
+    }
+
+
+
+    /* timeline arrangement*/
+
+
+    /* consent*/
+    timeline.push(consent_inst);
+    timeline.push(consent_page);
+
+    timeline.push({
+        type: 'fullscreen',
+        fullscreen_mode: true
+    });
+
+    /* biographic*/
+    timeline.push(survey);
+
+    /*part A*/
+    // timeline.push(instructions_a);
+    // timeline.push(practice_procedure);
+    // timeline.push(start);
+    // timeline.push(variation_procedure);
+
+
+    // // /*part B*/
+    // timeline.push(instructions_b);
+    // timeline.push(fixation);
+    // timeline.push(practice_abrupt);
+    // timeline.push(start);
+    // timeline.push(abrupt_procedure);
+
+    /*save data*/
+    timeline.push(save_data);
+    timeline.push(finish);
+    timeline.push(debriefing);
+    timeline.push({
+        type: 'fullscreen',
+        fullscreen_mode: false
+    });
+    timeline.push(end_experiment);
+    /* start the experiment */
+    jsPsych.init({
+      timeline: timeline,
+      preload_images: paths,
+      show_progress_bar: true,
+      auto_update_progress_bar: false,
+      on_finish: function() {
+          jsPsych.data.displayData();
+      }
+    });
+  </script>
+
+  </html>
+
