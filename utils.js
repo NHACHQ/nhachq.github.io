@@ -284,7 +284,7 @@ function exposure_word_only_timeVarGenerator(img_path, tag, paths, boundaries, s
         test_stimuli.push({ stimulus: b2l[0], data: {trial_tag: tag + c},
             exposure: "<p style='color:#ffffff'>Start: Bedroom <br> End: Living room</p>"});
         test_stimuli.push({ stimulus: b2l[1], data: {trial_tag: tag +c+'r'},           
-            exposure: "<p style='color:#ffffff'>Start: Living rooml <br> End: Bedroom</p>"});
+            exposure: "<p style='color:#ffffff'>Start: Living room <br> End: Bedroom</p>"});
         c++;
         var l2d = imgSelect(deviation[0]+boundaries[i][1], deviation[1]+boundaries[i][1], interval, img_path+i);
         test_stimuli.push({ stimulus: l2d[0], data: {trial_tag: tag +c} ,
