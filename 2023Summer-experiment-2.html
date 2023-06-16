@@ -177,14 +177,9 @@
     //standard settings for stimuli
 
     var stimuli = [];
-    
-    
     stimuli = stimuli.concat(null_exposure_timeVarGenerator('stimuli/', '', paths, boundaries, 0, 3, 3));
-
     stimuli = stimuli.concat(exposure_timeVarGenerator('stimuli/','', paths, boundaries, 3, 6, 3));
-
     stimuli = stimuli.concat(exposure_word_only_timeVarGenerator('stimuli/','', paths, boundaries, 6, 9, 3));
-
     stimuli = stimuli.concat(exposure_image_only_timeVarGenerator('stimuli/','', paths, boundaries, 9, 12, 3));
    
     var abrupt_stimuli = abrupt_timeVarGenerator(paths, 'stimuli/abrupt/', 5, '.jpg');
@@ -196,14 +191,10 @@
     practice_stimuli[1] = exposure_timeVarGenerator('stimuli/practice/','practice-exposure-', paths, prac_boundaries, 0, 1, 3)[2];
     practice_stimuli[2] = exposure_word_only_timeVarGenerator('stimuli/practice/','practice-exposure-', paths, prac_boundaries, 1, 2, 3)[0];
     practice_stimuli[3] = exposure_image_only_timeVarGenerator('stimuli/practice/','practice-exposure-', paths, prac_boundaries, 2, 3, 3)[0];
-    //console.log(practice_stimuli[2]);
-    //practice_stimuli= imgSelect(130, 220, 3, "stimuli/practice")[0];
-    //paths.push(practice_stimuli);
-    // update number of trials
-    //console.log(practice_stimuli);
-    var num_trials = stimuli.length+abrupt_stimuli.length;
-    console.log(num_trials);
+    paths.push(practice_stimuli);
 
+    // update number of trials
+    var num_trials = stimuli.length+abrupt_stimuli.length;
 
 
 
@@ -226,7 +217,6 @@
       trial_duration: 700
     }
 
-    
     var exposure = {
         type: 'html-keyboard-response',
         stimulus: jsPsych.timelineVariable('exposure'),
@@ -252,7 +242,6 @@
         }
     }
 
-
     var gap = {
       type: "html-keyboard-response",
       stimulus: "<p> Feel free to take a break to relax your eyes.</p>"+
@@ -260,8 +249,6 @@
       post_trial_gap: 500,
       choices: ['space']
     }
-
-
 
     var practice_abrupt = {
         //type: 'animation',
@@ -336,7 +323,7 @@
       type: "html-keyboard-response",
       stimulus: function() {
         return `<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;text-align:center;'><strong><span style="font-size:21px;line-height:107%;">The perceptual ambiguity of in-door scenes</span></strong></p>
-        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><span style='font-family:"Calibri",sans-serif;color:black;'>(You can press any key to end the experiment)</span></p>
+        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><span style='font-family:"Calibri",sans-serif;color:black;'>(You can now press any key to end the experiment! :)</span></p>
         <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;'>&nbsp;</p>
         <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><span style='font-family:"Calibri",sans-serif;color:black;'>The experiment you just completed is about the general topic of perception and memory of scenes. The specific topic here is the perceptual ambiguity of discrete scene categories. How your perception of scene categories influenced by the stimuli presented when there is ambiguity? Hysteresis is an interesting effect found in perceptual ambiguities. It means the dependence of the previous state in a system. In psychophysics, hysteresis refers to the phenomenon that the perception of stimuli is influenced by prior stimuli. People tend to stick with the perception brought by previous stimuli until the later stimuli propose a large enough change in perception. Therefore, in categorical judgements, the threshold of perception on category change can depend on the direction of presenting the stimuli. Hysteresis effect has been found in many studies, such as geometric and emotional ambiguities, figure-ground transitions, linguistic ambiguities, and so on. Here we are interested to see if we can also find the hysteresis effect in judgements of scene categories, and how this gives inferences on scene perception.</span></p>
         <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><span style='font-family:"Calibri",sans-serif;color:black;'>In the experiment, you completed many parts. In part A of the experiment, you were presented with image sequences, and your task was to decide a change in terms of category. All transitions between categories were presented to you in both directions, and we will see your perceptions of changes in categories differ on the same image sequence, but presented in opposite directions. We hypothesize that your judgement of change in categories will be different in two directions, as, in each direction, you tend to stick longer to the previous category you saw. In part B, we asked you to categoriza the images without seeing the transition, this gives us information on categorical judgement without hysteresis effect. Then in part C and D we explore what may influence hysteresis and how does the size of hysteresis effect change when conditions vary. In partIn part E of the experiment, we asked you to respond to immediate changes, to collect your response time. This response time will be extracted from the data we collected from part A, so the effect of response time can be eliminated.</span></p>
@@ -366,9 +353,10 @@
         trial_duration: 1000
     }
 
-    /* timeline arrangement*/
 
 
+
+    /****************** timeline arrangement****************/
     timeline.push(welcome);
     
     /* consent*/
@@ -386,15 +374,15 @@
     /*part A*/
     timeline.push(instructions_a);
     timeline.push(practice_exposure_procedure);
-    // timeline.push(start);
-    // timeline.push(exposure_procedure);
+    timeline.push(start);
+    timeline.push(exposure_procedure);
 
     /*part B*/
     timeline.push(instructions_b);
     timeline.push(fixation);
     timeline.push(practice_abrupt);
-    // timeline.push(start);
-    // timeline.push(abrupt_procedure);
+    timeline.push(start);
+    timeline.push(abrupt_procedure);
 
     /*save data*/
     timeline.push(save_data);
