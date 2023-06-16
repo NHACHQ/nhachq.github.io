@@ -2,7 +2,7 @@
 <html>
   <!---here are the plugins--->
   <head>
-    <title>2023 summer experiment 1</title>
+    <title>Categories of in-door Scenes</title>
     <script src="jspsych-6.1.0/jspsych.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js"></script>
@@ -13,6 +13,7 @@
     <script src="jspsych-6.1.0/plugins/jspsych-animation.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-fullscreen.js"></script>
     <script src="jspsych-6.3.0/plugins/jspsych-survey-text.js"></script>
+    <script src="jspsych-6.3.0/plugins/jspsych-categorize-image.js"></script>
     <script src="jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js"></script>
     <script src="utils.js"></script>
     <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
@@ -28,18 +29,18 @@
 
 
   <script>
-    // Your web app's Firebase configuration
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-    var firebaseConfig = {
-        apiKey: "AIzaSyCUpdjFpF5AA2WBHClF35S3Kwn2FJL4Hz4",
-        authDomain: "bwlab2022winter-variation.firebaseapp.com",
-        projectId: "bwlab2022winter-variation",
-        storageBucket: "bwlab2022winter-variation.appspot.com",
-        messagingSenderId: "212948908495",
-        appId: "1:212948908495:web:fb98aceb2ed32e9d143aba",
-        measurementId: "G-HP98TQ0DV7"
-    };
 
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    var firebaseConfig = {
+      apiKey: "AIzaSyC9jgLp3X7IWzMbeiBJ0v2ANeMi8vcsgkM",
+      authDomain: "bwlab-2023-summer-exposure.firebaseapp.com",
+      databaseURL: "https://bwlab-2023-summer-exposure-default-rtdb.firebaseio.com",
+      projectId: "bwlab-2023-summer-exposure",
+      storageBucket: "bwlab-2023-summer-exposure.appspot.com",
+      messagingSenderId: "808865677206",
+      appId: "1:808865677206:web:3dccee4953b9bce49c67b7",
+      measurementId: "G-ZGT5Q2LTRP"
+    };
 
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
@@ -60,14 +61,12 @@
       stimulus: "<p>Welcome to the experiment.</p>"+
       " <p>The experiment takes about 30 minutes. You will know your general progress through the progress bar on the top of the screen. </p>"+
       " <p>This experiment has two parts, each part has a different instruction. Please read the instructions carefully before proceeding to the next steps.</p>"+
-      "Please DO NOT close this page before the end of the experiment, otherwise the data will be lost."+
-      "<p>Press any key to proceed.</p>",
-      on_start: function() {
-            // set progress bar to 0 at the start of experiment
-            jsPsych.setProgressBar(0);
-      }
+      "<p>Please DO NOT close this page before the end of the experiment, otherwise the data will be lost.</P>"+
+      "<p> ( Note: There may be data storing issues in a unstable VPN environment. If you are accessing this webpage using VPN, "+
+      "please proceed to the last page where data is displayed after completing the experiment. Then right click on the page with data, and save it as an html file. "+
+      "Please send this html file to the lab email. Thank you very much! ) </p>"+
+      "<p>Press any key to see the detailed instructions.</p>"
     };
-    timeline.push(welcome);
 
     /*concent*/
     var consent_inst = {
@@ -103,7 +102,7 @@
         " <p>What is your age?</p>", name: 'age'},
         {prompt: "Are you left-handed or right-handed? Reply R or L", name: 'handedness'},
         {prompt: "How do you identify your gender?", name: 'gender'},
-        {prompt: "Are you wearing glasses (G) or contacts(C) or none of them (N)?", name: 'vision'},
+        {prompt: "Are you wearing glasses (G) or contacts(C) or both (Y) or none of them (N)?", name: 'vision'},
         {prompt: "<p>The follwing information is collected only to record your earned course credit.</p>"+
         " <p>What is your name?</p>", name: 'name'},
         {prompt: "Student number: ", name: 'studentID'}
@@ -115,30 +114,34 @@
     var instructions_a = {
       type: "html-keyboard-response",
       stimulus: "<h1> Instuctions of Part A </h1>"+
-      "<p>In each trial of part A, a sequence of images of indoor scenes will appear at the center of the screen. " +
+      "<p> There are 72s trials in Part A of the experiment.</p>"+
+      "<p>In each trial, a sequence of images of indoor scenes will appear at the center of the screen. " +
           " Scenes come from three categories: bedrooms, living rooms, and dining rooms. </p>" +
           "<p>You will be presented with a scene, which will GRADUALLY change from one category to another."+
           " For example, you may first see a bedroom scene, which may gradually change to a living room."+
           " Please press the SPACE BAR as soon as you detect the change in terms of category. You will see a notice RESPONSE RECORDED below the image after a succesful response.</p>" +
           "<p> Only your first response for each image sequence will be recorded. </p>"+
-          "<p>You will first do three practice trials, followed by the test trials. There will be breaks between trials, and feel free to take breaks when you need.</p>" +
-          "<p>Now please press the SPACE BAR when you are ready to begin the practice trials.</p>",
+          "<p> For some of the trials, you will know the starting and ending category of the transition in advance. You may see hints in the format of words, images, or both.</p>"+
+          "<p> You will first complete a few practice trials, followed by the test trials. There will be breaks between trials, and feel free to take breaks when you need.</p>" +
+          "<p> Now please press the SPACE BAR when you are ready to begin the practice trial.</p>",
       post_trial_gap: 1000,
       choices: ['space']
     };
 
 
+
     var instructions_b = {
       type: "html-keyboard-response",
       stimulus: "<h1> Instuctions of Part B </h1>"+
-      "<p>In each trial of part B, a sequence of images of indoor scenes will appear at the center of the screen. " +
+      "<p> There are 10 trials in Part B of the experiment. This is the last part of this experiment. <p/>"+
+      "<p>In each trial, a sequence of images of indoor scenes will appear at the center of the screen. " +
           " Scenes come from three categories: bedrooms, living rooms, and dining rooms. </p>" +
           "<p>You will be presented with a scene, which will SUDDENLY change from one category to another."+
           " For example, you may first see a bedroom scene, which may suddenly change to a living room."+
           " Please press the SPACE BAR as soon as you detect the change in category. You will see a notice RESPONSE RECORDED below the image after a succesful response.</p>" +
           "<p> Only your first response for each image sequence will be recorded.</p>"+
           "<p>You will first see a practice trial, followed by 10 test trials.</p>" +
-          "<p>Now please press the SPACE BAR when you are ready to begin the practice trials.</p>",
+          "<p>Now please press the SPACE BAR when you are ready to begin the practice trial`.</p>",
       post_trial_gap: 1000,
       choices: ['space']
     };
@@ -149,8 +152,6 @@
     //generate arrays of images
     //note that paths will be a 3D array according to the following manipulation
     var paths = [];
-    // 1x3 set of practice + 1 set of practice + 10 abrupt
-    var num_trials = 14;
 
     var boundaries = [[85.0, 178.0, 315.0],
                         [81.0, 170.0, 333.0],
@@ -160,47 +161,53 @@
                         [84.0, 171.0, 326.0],
                         [77.0, 169.0, 325.0],
                          [85.0, 169.0, 331.0],
-                         [87.0, 177.0, 318.0]];
+                         [87.0, 177.0, 318.0],
+                         [88.0, 175.0, 320.0],
+                         [82.0, 169.0, 324.0],
+                         [90.0, 172.0, 318.0],
+                        [93.0, 172.0, 324.0],
+                        [92.0, 170.0, 328.0],
+                        [87.0, 180.0, 321.0],
+                        [98.0, 169.0, 334.0],
+                        [87.0, 170.0, 327.0],
+                        [88.0, 170.0, 339.0]];
 
 
-    // //test settings 
-    // var variation_stimuli = variation_timeVarGenerator('stimuli/','', [2,6], paths, boundaries, 6,12);
-    // var abrupt_stimuli = abrupt_timeVarGenerator(paths, 'stimuli/abrupt/', 5, '.jpg');
 
     //standard settings for stimuli
-    var variation_stimuli = variation_timeVarGenerator('stimuli/','', [2,3,6],3, paths, boundaries, 0, 9 );
-    num_trials = num_trials + variation_stimuli.length;
-    console.log(num_trials)
+
+    var stimuli = [];
+    
+    
+    stimuli = stimuli.concat(null_exposure_timeVarGenerator('stimuli/', '', paths, boundaries, 0, 3, 3));
+
+    stimuli = stimuli.concat(exposure_timeVarGenerator('stimuli/','', paths, boundaries, 3, 6, 3));
+
+    stimuli = stimuli.concat(exposure_word_only_timeVarGenerator('stimuli/','', paths, boundaries, 6, 9, 3));
+
+    stimuli = stimuli.concat(exposure_image_only_timeVarGenerator('stimuli/','', paths, boundaries, 9, 12, 3));
+   
     var abrupt_stimuli = abrupt_timeVarGenerator(paths, 'stimuli/abrupt/', 5, '.jpg');
 
+    // set up practive stimuli for each exposure condition
     var practice_stimuli =[];
     var prac_boundaries = [[94.0, 175.0, 310.0],[88.0, 168.0, 328.0], [95.0, 188.0, 182.0]];
-    //var temp_s = normal_timeVarGenerator('stimuli/practice/','practice-normal-', paths, prac_boundaries, 0, 3, 3);
-    var temp_s = variation_timeVarGenerator('stimuli/practice/', 'practice-',  [2,3,6], 1, paths, prac_boundaries, 0, 3);
-    practice_stimuli.push(temp_s[0]);
-    practice_stimuli.push(temp_s[8]);
-    practice_stimuli.push(temp_s[16]);
+    practice_stimuli[0] = null_exposure_timeVarGenerator('stimuli/practice/','practice-exposure-', paths, prac_boundaries, 0, 1, 3)[0];
+    practice_stimuli[1] = exposure_timeVarGenerator('stimuli/practice/','practice-exposure-', paths, prac_boundaries, 0, 1, 3)[2];
+    practice_stimuli[2] = exposure_word_only_timeVarGenerator('stimuli/practice/','practice-exposure-', paths, prac_boundaries, 1, 2, 3)[0];
+    practice_stimuli[3] = exposure_image_only_timeVarGenerator('stimuli/practice/','practice-exposure-', paths, prac_boundaries, 2, 3, 3)[0];
+    //console.log(practice_stimuli[2]);
+    //practice_stimuli= imgSelect(130, 220, 3, "stimuli/practice")[0];
+    //paths.push(practice_stimuli);
+    // update number of trials
+    //console.log(practice_stimuli);
+    var num_trials = stimuli.length+abrupt_stimuli.length;
+    console.log(num_trials);
 
 
 
 
     /* types of tasks */
-
-    var practice_abrupt = {
-        //type: 'animation',
-        type: 'animation-feedback',
-        stimuli: abrupt_img('stimuli/10/000030.jpg','stimuli/10/000100.jpg', 15, 30),
-        frame_time: 200,
-        frame_isi: 300,
-        prompt: '<p style="color:#a6a6a6;"> empty </p>',
-        choices: ['space'],
-        on_finish: function() {
-            // at the end of each trial, update the progress bar
-            // based on the current value and the proportion to update for each trial
-            var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
-            jsPsych.setProgressBar(curr_progress_bar_value + (1/num_trials));
-        }
-    }
 
     var start = {
         type: "html-keyboard-response",
@@ -211,6 +218,21 @@
         ///trial_duration: 3000
     }
 
+    var fixation = {
+      type: 'html-keyboard-response',
+      stimulus: '<div style="font-size:60px;">+</div>'+
+                '<p style="color:#a6a6a6"> empty </p>',
+      choices: jsPsych.NO_KEYS,
+      trial_duration: 700
+    }
+
+    
+    var exposure = {
+        type: 'html-keyboard-response',
+        stimulus: jsPsych.timelineVariable('exposure'),
+        choices:jsPsych.NO_KEYS,
+        trial_duration: 2500
+    }
 
     var test = {
         //type: 'animation',
@@ -239,22 +261,33 @@
       choices: ['space']
     }
 
-    var fixation = {
-      type: 'html-keyboard-response',
-      stimulus: '<div style="font-size:60px;">+</div>'+
-                '<p style="color:#a6a6a6"> empty </p>',
-      choices: jsPsych.NO_KEYS,
-      trial_duration: 700
+
+
+    var practice_abrupt = {
+        //type: 'animation',
+        type: 'animation-feedback',
+        stimuli: abrupt_img('stimuli/10/000030.jpg','stimuli/10/000100.jpg', 15, 30),
+        frame_time: 200,
+        frame_isi: 300,
+        prompt: '<p style="color:#a6a6a6;"> empty </p>',
+        choices: ['space'],
+        on_finish: function() {
+            // at the end of each trial, update the progress bar
+            // based on the current value and the proportion to update for each trial
+            var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
+            jsPsych.setProgressBar(curr_progress_bar_value + (1/num_trials));
+        }
     }
 
 
-    // setting up procedures for part a-e
+    // setting up procedures 
 
-    var variation_procedure = {
-      timeline: [gap,fixation, test],
-      timeline_variables:variation_stimuli,
+    var exposure_procedure = {
+      timeline: [gap,exposure,fixation,test],
+      timeline_variables:stimuli,
       randomize_order: true
     }
+
 
     var abrupt_procedure = {
         timeline: [gap,fixation,test],
@@ -262,12 +295,12 @@
         randomize_order: true
     }
 
-    var practice_procedure = {
-        timeline: [gap,fixation,test],
+
+    var practice_exposure_procedure = {
+        timeline: [gap,exposure,fixation, test],
         timeline_variables: practice_stimuli,
         randomize_order: true
     }
-
 
     var save_data = {
         type: "html-keyboard-response",
@@ -282,7 +315,7 @@
             var dbpath = firebase.auth().currentUser.uid+'/'+tmp;
             firebase.database().ref(dbpath).set({
                 data: jsPsych.data.get().values(),
-                study: '2020winter-experiment1',
+                study: 'hysteresis-ambiguity-stage2',
                 date: Date()
             });
 
@@ -293,7 +326,7 @@
 
     var finish = {
         type: "html-keyboard-response",
-        stimulus:  "<p>Now please press any key to the debriefing page. ",
+        stimulus:  "<p>Now please press any key to the debriefing page. Don't close the page. ",
         post_trial_gap: 500,
         choices: null
     }
@@ -305,8 +338,8 @@
         return `<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;text-align:center;'><strong><span style="font-size:21px;line-height:107%;">The perceptual ambiguity of in-door scenes</span></strong></p>
         <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><span style='font-family:"Calibri",sans-serif;color:black;'>(You can press any key to end the experiment)</span></p>
         <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;'>&nbsp;</p>
-        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><span style='font-family:"Calibri",sans-serif;color:black;'>The experiment you just completed is about the general topic of perception of scenes. The specific topic here is the perceptual ambiguity of discrete scene categories. How your perception of scene categories influenced by the stimuli presented when there is ambiguity? Hysteresis is an interesting effect found in perceptual ambiguities. It means the dependence of the previous state in a system. In psychophysics, hysteresis refers to the phenomenon that the perception of stimuli is influenced by prior stimuli. People tend to stick with the perception brought by previous stimuli until the later stimuli propose a large enough change in perception. Therefore, in categorical judgements, the threshold of perception on category change can depend on the direction of presenting the stimuli. Hysteresis effect has been found in many studies, such as geometric and emotional ambiguities, figure-ground transitions, linguistic ambiguities, and so on. Here we are interested to see if we can also find the hysteresis effect in judgements of scene categories, and how this gives inferences on scene perception.</span></p>
-        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><span style='font-family:"Calibri",sans-serif;color:black;'>In the experiment, you completed many parts. In part A of the experiment, you were presented with image sequences, and your task was to decide a change in terms of category. All transitions between categories were presented to you in both directions, and we will see your perceptions of changes in categories differ on the same image sequence, but presented in opposite directions. We hypothesize that your judgement of change in categories will be different in two directions, as, in each direction, you tend to stick longer to the previous category you saw.  without seeing the transition, this gives us information on categorical judgement without hysteresis effect. We also explore how does the size of hysteresis effect change when conditions vary by changing the length of the trials. In part B of the experiment, we asked you to respond to immediate changes, to collect your response time. This response time will be extracted from the data we collected from part A, so the effect of response time can be eliminated.</span></p>
+        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><span style='font-family:"Calibri",sans-serif;color:black;'>The experiment you just completed is about the general topic of perception and memory of scenes. The specific topic here is the perceptual ambiguity of discrete scene categories. How your perception of scene categories influenced by the stimuli presented when there is ambiguity? Hysteresis is an interesting effect found in perceptual ambiguities. It means the dependence of the previous state in a system. In psychophysics, hysteresis refers to the phenomenon that the perception of stimuli is influenced by prior stimuli. People tend to stick with the perception brought by previous stimuli until the later stimuli propose a large enough change in perception. Therefore, in categorical judgements, the threshold of perception on category change can depend on the direction of presenting the stimuli. Hysteresis effect has been found in many studies, such as geometric and emotional ambiguities, figure-ground transitions, linguistic ambiguities, and so on. Here we are interested to see if we can also find the hysteresis effect in judgements of scene categories, and how this gives inferences on scene perception.</span></p>
+        <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><span style='font-family:"Calibri",sans-serif;color:black;'>In the experiment, you completed many parts. In part A of the experiment, you were presented with image sequences, and your task was to decide a change in terms of category. All transitions between categories were presented to you in both directions, and we will see your perceptions of changes in categories differ on the same image sequence, but presented in opposite directions. We hypothesize that your judgement of change in categories will be different in two directions, as, in each direction, you tend to stick longer to the previous category you saw. In part B, we asked you to categoriza the images without seeing the transition, this gives us information on categorical judgement without hysteresis effect. Then in part C and D we explore what may influence hysteresis and how does the size of hysteresis effect change when conditions vary. In partIn part E of the experiment, we asked you to respond to immediate changes, to collect your response time. This response time will be extracted from the data we collected from part A, so the effect of response time can be eliminated.</span></p>
         <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><span style='font-family:"Calibri",sans-serif;color:black;'>This experiment will inform us on how scene perception is similar or different from other perceptions. It can also give implications on the experiment paradigms including presenting stimuli in a specific order, and how the order of presenting may influence the results.</span></p>
         <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><span style='font-family:"Calibri",sans-serif;color:black;'>Thank you for participating! You can now press any key to end the experiment!</span></p>
         <p style='margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;line-height:106%;font-size:15px;font-family:"Times New Roman",serif;text-align:justify;'><br></p>
@@ -333,14 +366,14 @@
         trial_duration: 1000
     }
 
-
-
     /* timeline arrangement*/
 
 
+    timeline.push(welcome);
+    
     /* consent*/
-    timeline.push(consent_inst);
-    timeline.push(consent_page);
+    // timeline.push(consent_inst);
+    // timeline.push(consent_page);
 
     timeline.push({
         type: 'fullscreen',
@@ -348,21 +381,20 @@
     });
 
     /* biographic*/
-    timeline.push(survey);
+    //timeline.push(survey);
 
     /*part A*/
-    // timeline.push(instructions_a);
-    // timeline.push(practice_procedure);
-    // timeline.push(start);
-    // timeline.push(variation_procedure);
+    timeline.push(instructions_a);
+    timeline.push(practice_exposure_procedure);
+    timeline.push(start);
+    timeline.push(exposure_procedure);
 
-
-    // // /*part B*/
-    // timeline.push(instructions_b);
-    // timeline.push(fixation);
-    // timeline.push(practice_abrupt);
-    // timeline.push(start);
-    // timeline.push(abrupt_procedure);
+    /*part B*/
+    timeline.push(instructions_b);
+    timeline.push(fixation);
+    timeline.push(practice_abrupt);
+    timeline.push(start);
+    timeline.push(abrupt_procedure);
 
     /*save data*/
     timeline.push(save_data);
